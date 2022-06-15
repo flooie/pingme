@@ -15,3 +15,4 @@ jobs:
       - run: | 
           pip install requests
           python hash.py
+          python code/hasher.py
