@@ -10,9 +10,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
-      - run: |
-          curl -s --form-string "token=${{ secrets.TOKEN }}" --form-string "user=${{ secrets.USER }}" --form-string "message=website changed"  https://api.pushover.net/1/messages.json
-      - run: | 
+      - id: step1
+        continue-on-error: true
+        run: | 
           pip install requests
-          python hash.py
           python code/hasher.py
+      - name: Ping Me
+        if: steps.step1.outcome != 'success'
+      - run: |
+          curl -s --form-string "token=${{ secrets.TOKEN }}" --form-string "user=${{ secrets.USER }}" --form-string "message=The West Cambridge Pediatrics Website changed."  https://api.pushover.net/1/messages.json
