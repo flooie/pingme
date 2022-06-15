@@ -4,6 +4,11 @@ on:
     branches:
       - main
 
+#on:
+#  schedule:
+#    # Runs "at minute 55 past every hour" (see https://crontab.guru)
+#    - cron: '55 * * * *'
+
 jobs:
   build:
     runs-on: ubuntu-latest

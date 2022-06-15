@@ -27,7 +27,7 @@ if __name__ == '__main__':
     url = "https://www.westcambridgepediatrics.com/covid19"
     r = requests.get(url).content
     soup = fromstring(r)
-    r = soup.xpath(".//body")[0].text_content()
-    if sha1(r) != "58169a993e530ef69df77093369174ca9824c4e8":
-        print(sha1(r), "!=", "58169a993e530ef69df77093369174ca9824c4e8")
+    r = soup.xpath(".//section")[3].text_content()
+    if sha1(r) != "89a1de7b2b0a743eafaa44fbbf5f8f3d5cf0c309":
+        print(sha1(r), "!=", "89a1de7b2b0a743eafaa44fbbf5f8f3d5cf0c309")
         raise "The website changed."
