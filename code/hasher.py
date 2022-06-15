@@ -25,6 +25,6 @@ def sha1(s):
 if __name__ == '__main__':
     url = "https://www.westcambridgepediatrics.com/covid19"
     r = requests.get(url).content
-    if sha1(r) != "03aebf8e01acf9720518df6af0422782d70ccaf3":
-        print(sha1(r), "!=", "03aebf8e01acf9720518df6af0422782d70ccaf3")
+    if sha1(r) != "3f70bbfb66c87c8025f5355abdd31729bdf89b0a":
+        print(sha1(r), "!=", "3f70bbfb66c87c8025f5355abdd31729bdf89b0a")
         raise "The website changed."
