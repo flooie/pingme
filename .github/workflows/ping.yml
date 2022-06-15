@@ -24,6 +24,7 @@ jobs:
         continue-on-error: true
         run: |
           pip install requests
+          pip install lxml
           python code/hasher.py
       - name: Build and Push
         if: steps.step2.outcome != 'success'
