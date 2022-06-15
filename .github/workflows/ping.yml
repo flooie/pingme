@@ -12,6 +12,7 @@ jobs:
       - uses: actions/setup-python@v2
       - id: step1
         continue-on-error: true
+      - name: Check Hash
       - run: | 
           pip install requests
           python code/hasher.py
