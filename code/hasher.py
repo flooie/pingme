@@ -1,5 +1,6 @@
 import requests
 import hashlib
+from lxml.html import fromstring
 
 
 def sha1(s):
@@ -25,6 +26,8 @@ def sha1(s):
 if __name__ == '__main__':
     url = "https://www.westcambridgepediatrics.com/covid19"
     r = requests.get(url).content
-    if sha1(r) != "3f70bbfb66c87c8025f5355abdd31729bdf89b0a":
-        print(sha1(r), "!=", "3f70bbfb66c87c8025f5355abdd31729bdf89b0a")
+    soup = fromstring(r)
+    r = soup.xpath(".//body")[0].text_content()
+    if sha1(r) != "58169a993e530ef69df77093369174ca9824c4e8":
+        print(sha1(r), "!=", "58169a993e530ef69df77093369174ca9824c4e8")
         raise "The website changed."
