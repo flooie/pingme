@@ -1,13 +1,13 @@
 name: Ping
-on:
-  push:
-    branches:
-      - main
-
 #on:
-#  schedule:
-#    # Runs "at minute 55 past every hour" (see https://crontab.guru)
-#    - cron: '55 * * * *'
+#  push:
+#    branches:
+#      - main
+
+on:
+  schedule:
+    # Runs "at minute 55 past every hour" (see https://crontab.guru)
+    - cron: "*/15 * * * *"
 
 jobs:
   build:
