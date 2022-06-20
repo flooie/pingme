@@ -1,9 +1,3 @@
-#name: Ping
-#on:
-#  push:
-#    branches:
-#      - main
-
 name: Check every 15 minutes
 on:
   schedule:
