@@ -1,0 +1,31 @@
+#name: Ping
+#on:
+#  push:
+#    branches:
+#      - main
+
+name: Check every 15 minutes
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - name: Set Variables
+        id: step1
+        run: |
+          echo "OK"
+      - id: step2
+        continue-on-error: true
+        run: |
+          pip install requests
+          pip install lxml
+          python code/hasher.py
+      - name: Build and Push
+        if: steps.step2.outcome != 'success'
+        run: |
+          curl -s --form-string "token=${{ secrets.TOKEN }}" --form-string "user=${{ secrets.USER }}" --form-string "message=The West Cambridge Pediatrics Website changed."  https://api.pushover.net/1/messages.json
