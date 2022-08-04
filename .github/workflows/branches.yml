@@ -1,6 +1,5 @@
 name: Compare to Main Branch
-on:
-  push:
+on: ["push"]
 
 jobs:
   build:
