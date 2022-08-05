@@ -99,6 +99,7 @@ class Benchmark(object):
         """"""
         dfA = pd.read_csv(Path.joinpath(self.root, "corpus", "plotted_A.csv"))
         dfB = pd.read_csv(Path.joinpath(self.root, "plotted_A.csv"))
+        dfB.columns = self.dfB.columns.str.replace('Total', 'TotalB')
 
         head_count = min([len(dfA), len(dfB)])
 
