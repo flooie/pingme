@@ -78,7 +78,7 @@ class Benchmark(object):
     def one_percent_sample(self):
         """"""
         self.size = Size.SMALL
-        print(Path.joinpath(self.root, "corpus", "plotted.csv"))
+        # print(Path.joinpath(self.root, "corpus", "plotted_A.csv"))
         sample = self.unzip()
 
     def plot_charts(self):

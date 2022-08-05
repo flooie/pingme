@@ -20,5 +20,7 @@ jobs:
 
       - run: | 
           ls 
+          cd corpus
+          ls
           cat /home/runner/work/pingme/pingme/corpus/plotted_A.csv
           cat /home/runner/work/pingme/pingme/corpus/plotted_B.csv
