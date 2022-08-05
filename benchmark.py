@@ -5,6 +5,7 @@
 
 import bz2
 import datetime
+import glob
 import io
 from pathlib import Path
 
@@ -117,11 +118,15 @@ class Benchmark(object):
 if __name__ == "__main__":
     print("STARTING UP ---- new branch ...")
     Benchmark().one_percent_sample()
-    import os
-    if os.path.exists("/home/runner/work/pingme/pingme/corpus/plotted_B.csv"):
-        print("Running the Final Charts")
-        Benchmark().plot_charts()
-        Benchmark().compare_dataframes()
-        print("SHUTTING DOWN ---- new branch")
-    else:
-        print("NO PLOTTED B?????")
+    root = Path(__file__).parent.absolute()
+    csv_files = glob.glob(Path.joinpath(root, "corpus", f"*.csv"))
+    print(csv_files)
+    # Upload and save the plotted values ... here...
+    # import os
+    # if os.path.exists("/home/runner/work/pingme/pingme/corpus/plotted_B.csv"):
+    #     print("Running the Final Charts")
+    #     Benchmark().plot_charts()
+    #     Benchmark().compare_dataframes()
+    #     print("SHUTTING DOWN ---- new branch")
+    # else:
+    #     print("NO PLOTTED B?????")
