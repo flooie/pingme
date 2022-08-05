@@ -1,7 +1,7 @@
 name: Download and process artifact
 on:
   pull_request:
-    types: [opened, reopened, edited, closed]
+    types: [opened, reopened, edited, closed, assigned, unassigned]
 jobs:
   Build:
     runs-on: ubuntu-latest
