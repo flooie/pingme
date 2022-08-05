@@ -1,0 +1,107 @@
+name: Download and process artifact
+on:
+  pull_request:
+    types: [opened, reopened, edited, closed, assigned, unassigned]
+
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Display structure of downloaded files (again again)
+        run: |
+          ls -R
+
+      - name: Download artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+      #    # Optional, GitHub token, a Personal Access Token with `public_repo` scope if needed
+      #    # Required, if the artifact is from a different repo
+      #    # Required, if the repo is private a Personal Access Token with `repo` scope is needed
+      #    github_token: ${{secrets.GITHUB_TOKEN}}
+          # Optional, workflow file name or ID
+          # If not specified, will be inferred from run_id (if run_id is specified), or will be the current workflow
+          workflow: branches.yml
+          # Optional, the status or conclusion of a completed workflow to search for
+          # Can be one of a workflow conclusion:
+          #   "failure", "success", "neutral", "cancelled", "skipped", "timed_out", "action_required"
+          # Or a workflow status:
+          #   "completed", "in_progress", "queued"
+          workflow_conclusion: success
+          # Optional, will get head commit SHA
+      #    pr: ${{github.event.pull_request.number}}
+          # Optional, no need to specify if PR is
+      #    commit: ${{github.event.pull_request.head.sha}}
+          # Optional, will use the branch
+          branch: main
+          # Optional, defaults to all types
+      #    event: push
+          # Optional, will use specified workflow run
+      #    run_id: 1122334455
+          # Optional, run number from the workflow
+      #    run_number: 34
+          # Optional, uploaded artifact name,
+          # will download all artifacts if not specified
+          # and extract them into respective subdirectories
+          # https://github.com/actions/download-artifact#download-all-artifacts
+          name: my-artifact
+          # Optional, a directory where to extract artifact(s), defaults to the current directory
+      #    path: extract_here
+          # Optional, defaults to current repo
+      #    repo: ${{github.repository}}
+          # Optional, check the workflow run to whether it has an artifact
+          # then will get the last available artifact from the previous workflow
+          # default false, just try to download from the last one
+          check_artifacts:  false
+          # Optional, search for the last workflow run whose stored an artifact named as in `name` input
+          # default false
+      #    search_artifacts: false
+          # Optional, choose to skip unpacking the downloaded artifact(s)
+          # default false
+      #    skip_unpack: false
+
+      - name: Display structure of downloaded files
+        run: ls -R
+
+      - name: Install Requirements
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run Benchmarks
+        run: |
+          python3 benchmark.py
+
+      - name: Display structure of downloaded files (again)
+        run: |
+          ls -R
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: time-chart
+          path: /home/runner/work/pingme/pingme/foo.png
+
+      - name: Cat Foo Image
+        run: |
+          base64 /home/runner/work/pingme/pingme/foo.png
+
+      - run: mkdir -p output/
+      - run: echo "This is fancy a comment" > output/results.txt
+      - uses: actions/upload-artifact@v1
+        with:
+          name: results
+          path: output
+      - uses: actions/download-artifact@v1
+        with:
+          name: results
+
+
+      - name: Comment on the PR with file PR
+        uses: machine-learning-apps/pr-comment@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          path: results/results.txt
+
+
