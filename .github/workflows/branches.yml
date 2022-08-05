@@ -14,7 +14,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: my-artifact
-          path: pingme/pingme/corpus/plotted_A.csv
+          path: /home/runner/work/pingme/pingme/corpus/plotted_A.csv
 
 
 #      - uses: actions/checkout@v3
