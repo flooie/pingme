@@ -63,7 +63,15 @@ class Benchmark(object):
 
         columns = ["OpinionID", "Time", f"Total", "Opinions"]
         dfx = pd.DataFrame(list(zip(opinion_ids, times, totals, opinions)), columns=columns)
-        dfx.to_csv(Path.joinpath(self.root, "corpus", f"plotted.csv"), sep=",")
+        import os
+        if os.path.isfile("/home/runner/work/pingme/pingme/corpus/plotted_A.csv"):
+            print("The file exists ... dont overwrite it.")
+            dfx.to_csv(Path.joinpath(self.root, "corpus", f"plotted_A.csv"),
+                       sep=",")
+
+        else:
+            print("The file doesn't exist... write it down")
+            dfx.to_csv(Path.joinpath(self.root, "corpus", f"plotted_B.csv"), sep=",")
 
         return True
 
@@ -75,37 +83,37 @@ class Benchmark(object):
 
     def plot_charts(self):
         """"""
-        self.dfA = pd.read_csv(Path.joinpath(self.root, "corpus", "plotted.csv"))
-        # self.dfB = pd.read_csv(Path.joinpath(self.root, "corpus", "plottedB.csv"))
+        self.dfA = pd.read_csv(Path.joinpath(self.root, "corpus", "plotted_A.csv"))
+        self.dfB = pd.read_csv(Path.joinpath(self.root, "corpus", "plotted_B.csv"))
 
-        # df = pd.merge_asof(self.dfA, self.dfB, on='Time')
-        # df.plot(x="Time", y=["TotalA", "TotalB"])
-        # plt.show()
+        df = pd.merge_asof(self.dfA, self.dfB, on='Time')
+        df.plot(x="Time", y=["TotalA", "TotalB"])
+        plt.show()
 
     def compare_dataframes(self):
         """"""
-        dfA = pd.read_csv(Path.joinpath(self.root, "corpus", "plotted.csv"))
-        # dfB = pd.read_csv(Path.joinpath(self.root, "corpus", "plottedB.csv"))
+        dfA = pd.read_csv(Path.joinpath(self.root, "corpus", "plotted_A.csv"))
+        dfB = pd.read_csv(Path.joinpath(self.root, "corpus", "plotted_B.csv"))
 
-        # head_count = min([len(dfA), len(dfB)])
+        head_count = min([len(dfA), len(dfB)])
 
-        # dfA = dfA.head(head_count)
-        # dfB = dfB.head(head_count)
+        dfA = dfA.head(head_count)
+        dfB = dfB.head(head_count)
 
-        # del dfA['Time']
-        # del dfB['Time']
-        # del dfA['Total']
-        # del dfB['TotalB']
+        del dfA['Time']
+        del dfB['Time']
+        del dfA['Total']
+        del dfB['TotalB']
 
-        # print(dfA.compare(dfB))
+        print(dfA.compare(dfB))
 
 
 if __name__ == "__main__":
     print("STARTING UP ---- new branch")
     Benchmark().one_percent_sample()
 
-    # Benchmark().plot_charts()
-    # Benchmark().compare_dataframes()
+    Benchmark().plot_charts()
+    Benchmark().compare_dataframes()
     print("SHUTTING DOWN ---- new branch")
 
     with open("/home/runner/work/pingme/pingme/corpus/plotted.csv", "r") as f:
