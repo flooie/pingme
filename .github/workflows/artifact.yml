@@ -73,7 +73,6 @@ jobs:
       - name: Display structure of downloaded files (again)
         run: |
           ls -R
-      
 
       - uses: actions/upload-artifact@v3
         with:
