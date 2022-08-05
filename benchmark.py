@@ -103,7 +103,8 @@ class Benchmark(object):
         """"""
         dfA = pd.read_csv(Path.joinpath(self.root, "corpus", "plotted_A.csv"))
         dfB = pd.read_csv(Path.joinpath(self.root, "plotted_A.csv"))
-        dfB.columns = self.dfB.columns.str.replace('Total', 'TotalB')
+
+        # dfB.columns = dfB.columns.str.replace('Total', 'TotalB')
 
         head_count = min([len(dfA), len(dfB)])
 
@@ -112,8 +113,8 @@ class Benchmark(object):
 
         del dfA['Time']
         del dfB['Time']
-        del dfA['Total']
-        del dfB['TotalB']
+        # del dfA['Total']
+        # del dfB['Total']
 
         print(dfA.compare(dfB))
 
