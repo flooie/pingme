@@ -72,7 +72,7 @@ class Benchmark(object):
 
         # if os.path.exists("/home/runner/work/pingme/pingme/corpus/plotted_{}.csv"):
         #     # print("The file exists ... dont overwrite it.")
-        dfx.to_csv(Path.joinpath(self.root, "corpus", f"plotted_{self.file_append}.csv"), sep=",")
+        dfx.to_csv(Path.joinpath(self.root, "corpus", f"plotted_A.csv"), sep=",")
 
         # else:
         #     # print("The file  A exists  B")
@@ -88,7 +88,7 @@ class Benchmark(object):
     def plot_charts(self):
         """"""
         self.dfA = pd.read_csv(Path.joinpath(self.root, "corpus", "plotted_A.csv"))
-        self.dfB = pd.read_csv(Path.joinpath(self.root, "corpus", "plotted_B.csv"))
+        self.dfB = pd.read_csv(Path.joinpath(self.root, "plotted_A.csv"))
 
         df = pd.merge_asof(self.dfA, self.dfB, on='Time')
         df.plot(x="Time", y=["TotalA", "TotalB"])
@@ -97,7 +97,7 @@ class Benchmark(object):
     def compare_dataframes(self):
         """"""
         dfA = pd.read_csv(Path.joinpath(self.root, "corpus", "plotted_A.csv"))
-        dfB = pd.read_csv(Path.joinpath(self.root, "corpus", "plotted_B.csv"))
+        dfB = pd.read_csv(Path.joinpath(self.root, "plotted_A.csv"))
 
         head_count = min([len(dfA), len(dfB)])
 
@@ -109,7 +109,7 @@ class Benchmark(object):
         del dfA['Total']
         del dfB['TotalB']
 
-        # print(dfA.compare(dfB))
+        print(dfA.compare(dfB))
 
 
 if __name__ == "__main__":
@@ -118,6 +118,8 @@ if __name__ == "__main__":
 
     benchmark = Benchmark()
     benchmark.unzip()
+    benchmark.plot_charts()
+    benchmark.compare_dataframes()
 
     # csv_files = glob.glob(Path.joinpath(benchmark.root, "corpus", f"*.csv").as_posix())
     # print(csv_files, "BEFORE")
