@@ -89,9 +89,11 @@ class Benchmark(object):
         # with open(csv_files[0], "r") as f:
         #     print(f.read())
         self.dfB = pd.read_csv(csv_files[0])
+
+
         print(self.dfA.head())
         self.dfB.rename(columns={'Total': 'TotalB'}, inplace=True)
-        print(self.dfb.head())
+        print(self.dfB.head())
 
         df = pd.merge_asof(self.dfA, self.dfB, on='Time')
         df.plot(x="Time", y=["Total", "TotalB"])
