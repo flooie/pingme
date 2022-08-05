@@ -117,6 +117,3 @@ if __name__ == "__main__":
         Benchmark().plot_charts()
         Benchmark().compare_dataframes()
         print("SHUTTING DOWN ---- new branch")
-
-        # with open("/home/runner/work/pingme/pingme/corpus/plotted.csv", "r") as f:
-        #     print(f.read())
