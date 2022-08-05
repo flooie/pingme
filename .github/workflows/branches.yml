@@ -7,9 +7,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
-      - run: |
-          pip install -r requirements.txt
-          python3 benchmark.py
+#      - run: |
+#          pip install -r requirements.txt
+#          python3 benchmark.py
 
 #      - uses: actions/upload-artifact@v3
 #        with:
@@ -19,7 +19,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: my-artifact
-          path: /home/runner/work/pingme/pingme/corpus/
+          path: /home/runner/work/pingme/pingme/corpus/plotted_A.csv
 
       - name: Display structure of downloaded files
         run: ls -R
