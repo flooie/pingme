@@ -22,3 +22,12 @@ jobs:
       - run: |
           pip install -r requirements.txt
           python3 benchmark.py
+
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Switch to Main
+      - uses: actions/setup-python@v2
+      - uses: actions/checkout@main
+      - run: |
+          pip install -r requirements.txt
+          python3 benchmark.py
