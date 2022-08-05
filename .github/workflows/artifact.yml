@@ -79,9 +79,9 @@ jobs:
           name: time-chart
           path: /home/runner/work/pingme/pingme/foo.png
 
-      - name: Cat Foo Image
-        run: |
-          base64 /home/runner/work/pingme/pingme/foo.png
+#      - name: Cat Foo Image
+#        run: |
+#          base64 /home/runner/work/pingme/pingme/foo.png
 
       - name: Comment PR
         uses: machine-learning-apps/pr-comment@master
