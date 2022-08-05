@@ -100,8 +100,8 @@ class Benchmark(object):
 
 
 if __name__ == "__main__":
-    print("STARTING UP")
+    print("STARTING UP ---- new branch")
     Benchmark().one_percent_sample()
     # Benchmark().plot_charts()
     # Benchmark().compare_dataframes()
-    print("SHUTTING DOWN")
+    print("SHUTTING DOWN ---- new branch")
