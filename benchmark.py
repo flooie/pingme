@@ -127,7 +127,7 @@ if __name__ == "__main__":
 
     benchmark.unzip()
     csv_files = glob.glob(Path.joinpath(benchmark.root, "corpus", f"*.csv").as_posix())
-    print(csv_files, "NOW... and later....")
+    print(csv_files, "NOW... and later")
 
     # Upload and save the plotted values ... here...
     # import os
