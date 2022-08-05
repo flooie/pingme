@@ -7,6 +7,7 @@ import bz2
 import datetime
 import glob
 import io
+import os
 from pathlib import Path
 
 from eyecite import get_citations
@@ -116,8 +117,6 @@ if __name__ == "__main__":
     # Benchmark().one_percent_sample()
 
     benchmark = Benchmark()
-    # benchmark.root = Path(__file__).parent.absolute()
-    print(benchmark.root)
     csv_files = glob.glob(Path.joinpath(benchmark.root, "corpus", f"*.csv").as_posix())
     print(csv_files, "BEFORE")
     if "/home/runner/work/pingme/pingme/corpus/plotted_A.csv" not in csv_files:

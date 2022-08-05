@@ -10,17 +10,22 @@ jobs:
       - run: |
           pip install -r requirements.txt
           python3 benchmark.py
-#          cat /home/runner/work/pingme/pingme/corpus/plotted.csv
 
-      - uses: actions/checkout@v3
+      - uses: actions/upload-artifact@v3
         with:
-          ref: main
-      - run: |
-          python3 benchmark.py
+          name: my-artifact
+          path: pingme/corpus/plotted_A.csv
 
-      - run: | 
-          ls 
-          cd corpus
-          ls
+
+#      - uses: actions/checkout@v3
+#        with:
+#          ref: main
+#      - run: |
+#          python3 benchmark.py
+#
+#      - run: |
+#          ls
+#          cd corpus
+#          ls
 #          cat /home/runner/work/pingme/pingme/corpus/plotted_A.csv
 #          cat /home/runner/work/pingme/pingme/corpus/plotted_B.csv
