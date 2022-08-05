@@ -11,30 +11,30 @@ jobs:
       - run: |
           ls
 
-      - name: Comment PR
-        uses: thollander/actions-comment-pull-request@v1
-        with:
-          message: |
-            Hello world ! :wave:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Edit PR comment
-        uses: thollander/actions-comment-pull-request@v1
-        with:
-          message: 'Content loaded ! (edited)'
-          comment_includes: 'Loading'
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Comment a pull_request
-        uses: mb2dev/github-action-comment-pull-request@1.0.0
-        with:
-          message: "Hello, It's my first comment with Github action !"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          reactions: "+1 | -1 | laugh | hooray | confused | heart | rocket | eyes"
+#      - name: Comment PR
+#        uses: thollander/actions-comment-pull-request@v1
+#        with:
+#          message: |
+#            Hello world ! :wave:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#
+#      - name: Edit PR comment
+#        uses: thollander/actions-comment-pull-request@v1
+#        with:
+#          message: 'Content loaded ! (edited)'
+#          comment_includes: 'Loading'
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#
+#      - name: Comment a pull_request
+#        uses: mb2dev/github-action-comment-pull-request@1.0.0
+#        with:
+#          message: "Hello, It's my first comment with Github action !"
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          reactions: "+1 | -1 | laugh | hooray | confused | heart | rocket | eyes"
 
 
       - run: mkdir -p output/
-      - run: echo "This is fancy a comment" > output/results.txt
+      - run: echo "**this is bold and this is a markdown link**\n\n`asdfasdfadsf`" > output/results.txt
       - uses: actions/upload-artifact@v1
         with:
           name: results
