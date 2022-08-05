@@ -119,7 +119,7 @@ if __name__ == "__main__":
     print("STARTING UP ---- new branch ...")
     Benchmark().one_percent_sample()
     root = Path(__file__).parent.absolute()
-    csv_files = glob.glob(Path.joinpath(root, "corpus", f"*.csv"))
+    csv_files = glob.glob(Path.joinpath(root, "corpus", f"*.csv").as_posix())
     print(csv_files)
     # Upload and save the plotted values ... here...
     # import os
