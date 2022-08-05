@@ -109,11 +109,11 @@ class Benchmark(object):
 
 
 if __name__ == "__main__":
-    print("STARTING UP ---- new branch")
+    print("STARTING UP ---- main branch")
     Benchmark().one_percent_sample()
     import os
     if os.path.exists("/home/runner/work/pingme/pingme/corpus/plotted_B.csv"):
 
         Benchmark().plot_charts()
         Benchmark().compare_dataframes()
-        print("SHUTTING DOWN ---- new branch")
+        print("SHUTTING DOWN ---- Main Branch")
