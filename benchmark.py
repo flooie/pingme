@@ -70,6 +70,7 @@ class Benchmark(object):
     def one_percent_sample(self):
         """"""
         self.size = Size.SMALL
+        print(Path.joinpath(self.root, "corpus", "plotted.csv"))
         sample = self.unzip()
 
     def plot_charts(self):
@@ -102,6 +103,7 @@ class Benchmark(object):
 if __name__ == "__main__":
     print("STARTING UP ---- new branch")
     Benchmark().one_percent_sample()
+
     # Benchmark().plot_charts()
     # Benchmark().compare_dataframes()
     print("SHUTTING DOWN ---- new branch")

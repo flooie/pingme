@@ -1,15 +1,3 @@
-#name: Compare to Main Branch
-#on: ["push"]
-#
-#jobs:
-#  build:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v2
-#      - uses: actions/setup-python@v2
-#        run: |
-#          pip install -r requirements.txt
-#          python3 benchmark.py
 
 name: GitHub Actions Demo
 on: [push]
@@ -28,3 +16,6 @@ jobs:
           ref: main
       - run: |
           python3 benchmark.py
+
+      - run: | 
+          ls 
