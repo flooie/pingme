@@ -66,3 +66,8 @@ jobs:
       - name: Display structure of downloaded files (again)
         run: |
           ls -R
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: time-chart
+          path: /home/runner/work/pingme/pingme/foo.png

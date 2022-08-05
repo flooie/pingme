@@ -97,7 +97,8 @@ class Benchmark(object):
 
         df = pd.merge_asof(self.dfA, self.dfB, on='Time')
         df.plot(x="Time", y=["Total", "TotalB"])
-        plt.show()
+        # plt.show()
+        plt.savefig('foo.png')
 
     def compare_dataframes(self):
         """"""
