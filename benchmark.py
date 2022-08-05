@@ -89,7 +89,7 @@ class Benchmark(object):
         """"""
         self.dfA = pd.read_csv(Path.joinpath(self.root, "corpus", "plotted_A.csv"))
         self.dfB = pd.read_csv(Path.joinpath(self.root, "plotted_A.csv"))
-        print(self.dfb.head())
+        print(self.dfA.head())
         self.dfB.rename(columns={'Total': 'TotalB'}, inplace=True)
         print(self.dfb.head())
 
