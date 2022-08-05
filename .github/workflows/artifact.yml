@@ -146,12 +146,3 @@ jobs:
 #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #          reactions: "+1 | -1 | laugh | hooray | confused | heart | rocket | eyes"
 
-
-#curl \
-#  -H "Accept: application/vnd.github+json" \
-#  -H "Authorization: token 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" \
-#  https://api.github.com/repos/flooie/ping/actions/artifacts/7690089592
-
-
-#https://github:
-#  com/flooie/pingme/suites/7690089592/artifacts/321165259:
