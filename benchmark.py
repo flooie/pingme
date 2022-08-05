@@ -113,6 +113,7 @@ class Benchmark(object):
 
         del dfA['Time']
         del dfB['Time']
+        dfB.loc[0, 'Opinions'] = ['15 U.S.C. 2']
         # del dfA['Total']
         # del dfB['Total']
 
