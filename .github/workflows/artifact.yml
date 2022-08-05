@@ -59,7 +59,9 @@ jobs:
         run: ls -R
 
       - name: Run Benchmarks
-        run python3 benchmark.py
+        run: |
+          python3 benchmark.py
 
       - name: Display structure of downloaded files (again)
-        run: ls -R
+        run: |
+          ls -R
