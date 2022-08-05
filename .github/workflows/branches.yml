@@ -1,5 +1,8 @@
-name: GitHub Actions Demo
-on: [push]
+name: GitHub Actions Branches... upload...
+on:
+  push:
+    branches: [ main ]
+
 jobs:
   Build:
     runs-on: ubuntu-latest
