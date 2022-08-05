@@ -109,7 +109,7 @@ class Benchmark(object):
 
 
 if __name__ == "__main__":
-    print("STARTING UP ---- new branch")
+    print("STARTING UP ---- new branch ...")
     Benchmark().one_percent_sample()
     import os
     if os.path.exists("/home/runner/work/pingme/pingme/corpus/plotted_B.csv"):
