@@ -73,31 +73,62 @@ jobs:
       - name: Display structure of downloaded files (again)
         run: |
           ls -R
+      
 
       - uses: actions/upload-artifact@v3
         with:
           name: time-chart
           path: /home/runner/work/pingme/pingme/foo.png
 
-      - name: Comment PR
-        uses: thollander/actions-comment-pull-request@v1
-        with:
-          message: |
-            Hello world ! :wave:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Cat Foo Image
+        run: |
+          cat /home/runner/work/pingme/pingme/foo.png
+          base64 /home/runner/work/pingme/pingme/foo.png
+          
 
-      - name: Edit PR comment
-        uses: thollander/actions-comment-pull-request@v1
-        with:
-          message: 'Content loaded ! (edited)'
-          comment_includes: 'Loading'
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Comment a pull_request
-        uses: mb2dev/github-action-comment-pull-request@1.0.0
-        with:
-          message: "Hello, It's my first comment with Github action !"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          reactions: "+1 | -1 | laugh | hooray | confused | heart | rocket | eyes"
+#      - name: Download artifact
+#        uses: dawidd6/action-download-artifact@v2
+#        with:
+#          workflow: branches.yml
+#          workflow_conclusion: success
+##          branch: main
+#          name: my-artifact
+#          check_artifacts:  false
 
 
+
+#      - uses: actions/upload-artifact@v3
+#        with:
+#          name: time-chart
+#          path: /home/runner/work/pingme/pingme/foo.png
+#
+#      - name: Comment PR
+#        uses: thollander/actions-comment-pull-request@v1
+#        with:
+#          message: |
+#            Hello world ! :wave:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#
+#      - name: Edit PR comment
+#        uses: thollander/actions-comment-pull-request@v1
+#        with:
+#          message: 'Content loaded ! (edited)'
+#          comment_includes: 'Loading'
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#
+#      - name: Comment a pull_request
+#        uses: mb2dev/github-action-comment-pull-request@1.0.0
+#        with:
+#          message: "Hello, It's my first comment with Github action !"
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          reactions: "+1 | -1 | laugh | hooray | confused | heart | rocket | eyes"
+
+
+#curl \
+#  -H "Accept: application/vnd.github+json" \
+#  -H "Authorization: token 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" \
+#  https://api.github.com/repos/flooie/ping/actions/artifacts/7690089592
+
+
+#https://github:
+#  com/flooie/pingme/suites/7690089592/artifacts/321165259:
