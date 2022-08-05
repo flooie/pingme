@@ -67,17 +67,17 @@ class Benchmark(object):
         import os
         import glob
 
-        print("\n\n\n")
-        print(glob.glob("/home/runner/work/pingme/pingme/corpus/*"))
-        print("\n\n\n")
+        # print("\n\n\n")
+        # print(glob.glob("/home/runner/work/pingme/pingme/corpus/*"))
+        # print("\n\n\n")
 
         if os.path.exists("/home/runner/work/pingme/pingme/corpus/plotted_A.csv"):
-            print("The file exists ... dont overwrite it.")
+            # print("The file exists ... dont overwrite it.")
             dfx.to_csv(Path.joinpath(self.root, "corpus", f"plotted_B.csv"),
                        sep=",")
 
         else:
-            print("The file  A exists  B")
+            # print("The file  A exists  B")
             dfx.to_csv(Path.joinpath(self.root, "corpus", f"plotted_A.csv"), sep=",")
 
         return True
@@ -112,13 +112,14 @@ class Benchmark(object):
         del dfA['Total']
         del dfB['TotalB']
 
-        print(dfA.compare(dfB))
+        # print(dfA.compare(dfB))
 
 
 if __name__ == "__main__":
     print("STARTING UP ---- new branch ...")
     Benchmark().one_percent_sample()
     root = Path(__file__).parent.absolute()
+    print("GET CSV FILES")
     csv_files = glob.glob(Path.joinpath(root, "corpus", f"*.csv").as_posix())
     print(csv_files)
     # Upload and save the plotted values ... here...
