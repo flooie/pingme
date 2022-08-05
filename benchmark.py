@@ -101,14 +101,6 @@ class Benchmark(object):
         # plt.show()
         plt.savefig('foo.png')
 
-        # print(climage.convert("foo.png", width=100))
-        c = climage.convert("foo.png", is_unicode=True, width=100)
-        print(c)
-
-        c = climage.convert("foo.png", is_8color=False, is_unicode=False,
-                            is_16color=False, is_256color=False,
-                            is_truecolor=True, width=150)
-        print(c)
 
     def compare_dataframes(self):
         """"""
@@ -130,33 +122,15 @@ class Benchmark(object):
 
         print(dfA.compare(dfB))
 
+    def generate_report(self):
+        """"""
 
 if __name__ == "__main__":
     print("STARTING UP ---- new branch ...")
-    # Benchmark().one_percent_sample()
 
     benchmark = Benchmark()
     benchmark.unzip()
     benchmark.plot_charts()
     benchmark.compare_dataframes()
+    benchmark.generate_report()
 
-    # csv_files = glob.glob(Path.joinpath(benchmark.root, "corpus", f"*.csv").as_posix())
-    # print(csv_files, "BEFORE")
-    # if "/home/runner/work/pingme/pingme/corpus/plotted_A.csv" not in csv_files:
-    #     benchmark.file_append = "A"
-    # else:
-    #     benchmark.file_append = "B"
-    #
-    # benchmark.unzip()
-    # csv_files = glob.glob(Path.joinpath(benchmark.root, "corpus", f"*.csv").as_posix())
-    # print(csv_files, "NOW... and later")
-
-    # Upload and save the plotted values ... here...
-    # import os
-    # if os.path.exists("/home/runner/work/pingme/pingme/corpus/plotted_B.csv"):
-    #     print("Running the Final Charts")
-    #     Benchmark().plot_charts()
-    #     Benchmark().compare_dataframes()
-    #     print("SHUTTING DOWN ---- new branch")
-    # else:
-    #     print("NO PLOTTED B?????")
