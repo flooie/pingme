@@ -86,6 +86,8 @@ class Benchmark(object):
 
         csv_files = glob.glob(Path.joinpath(self.root, f"*.csv").as_posix())
         print(csv_files)
+        with open(csv_files[0], "r") as f:
+            print(f.read())
         self.dfB = pd.read_csv(Path.joinpath(self.root, "plotted_A.csv"))
         print(self.dfA.head())
         self.dfB.rename(columns={'Total': 'TotalB'}, inplace=True)
