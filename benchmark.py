@@ -127,12 +127,18 @@ class Benchmark(object):
 if __name__ == "__main__":
     print("STARTING UP ---- new branch ...")
     # Benchmark().one_percent_sample()
+    import climage
 
-    benchmark = Benchmark()
+    c = climage.convert("foo.png", is_unicode=True, width=100)
+    print(c)
 
-    benchmark.unzip()
-    benchmark.plot_charts()
-    benchmark.compare_dataframes()
+    c = climage.convert("foo.png", is_unicode=True)
+    print(c)
+
+    # benchmark = Benchmark()
+    # benchmark.unzip()
+    # benchmark.plot_charts()
+    # benchmark.compare_dataframes()
 
     # csv_files = glob.glob(Path.joinpath(benchmark.root, "corpus", f"*.csv").as_posix())
     # print(csv_files, "BEFORE")
