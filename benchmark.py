@@ -63,8 +63,8 @@ class Benchmark(object):
 
         columns = ["OpinionID", "Time", f"Total", "Opinions"]
         dfx = pd.DataFrame(list(zip(opinion_ids, times, totals, opinions)), columns=columns)
-        import os
-        import glob
+        # import os
+        # import glob
 
         # print("\n\n\n")
         # print(glob.glob("/home/runner/work/pingme/pingme/corpus/*"))
@@ -80,14 +80,12 @@ class Benchmark(object):
 
         return True
 
-    def one_percent_sample(self):
-        """"""
-        self.size = Size.SMALL
-        self.unzip()
-
     def plot_charts(self):
         """"""
         self.dfA = pd.read_csv(Path.joinpath(self.root, "corpus", "plotted_A.csv"))
+
+        csv_files = glob.glob(Path.joinpath(self.root, f"*.csv").as_posix())
+        print(csv_files)
         self.dfB = pd.read_csv(Path.joinpath(self.root, "plotted_A.csv"))
         print(self.dfA.head())
         self.dfB.rename(columns={'Total': 'TotalB'}, inplace=True)
@@ -121,6 +119,7 @@ if __name__ == "__main__":
     # Benchmark().one_percent_sample()
 
     benchmark = Benchmark()
+
     benchmark.unzip()
     benchmark.plot_charts()
     benchmark.compare_dataframes()
