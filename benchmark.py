@@ -70,7 +70,7 @@ class Benchmark(object):
                        sep=",")
 
         else:
-            print("The file doesn't exist... write it down")
+            print("The file  A exists  B")
             dfx.to_csv(Path.joinpath(self.root, "corpus", f"plotted_A.csv"), sep=",")
 
         return True
@@ -113,7 +113,9 @@ if __name__ == "__main__":
     Benchmark().one_percent_sample()
     import os
     if os.path.exists("/home/runner/work/pingme/pingme/corpus/plotted_B.csv"):
-
+        print("Running the Final Charts")
         Benchmark().plot_charts()
         Benchmark().compare_dataframes()
         print("SHUTTING DOWN ---- new branch")
+    else:
+        print("NO PLOTTED B>?????")
