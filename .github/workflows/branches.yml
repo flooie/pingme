@@ -1,20 +1,7 @@
-#name: Compare to Main Branch
-#on: ["push"]
-#
-#jobs:
-#  build:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v2
-#      - uses: actions/setup-python@v2
-#        run: |
-#          pip install -r requirements.txt
-#          python3 benchmark.py
-
 name: GitHub Actions Demo
 on: [push]
 jobs:
-  Explore-GitHub-Actions:
+  Build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -23,8 +10,7 @@ jobs:
           pip install -r requirements.txt
           python3 benchmark.py
 
-      - uses: actions/setup-python@v2
-      - uses: actions/checkout@main
-      - run: |
-          pip install -r requirements.txt
-          python3 benchmark.py
+      - uses: actions/upload-artifact@v3
+        with:
+          name: my-artifact
+          path: /home/runner/work/pingme/pingme/corpus/plotted_A.csv
