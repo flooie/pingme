@@ -114,7 +114,7 @@ class Benchmark(object):
 
         del dfA['Time']
         del dfB['Time']
-        dfB.loc[0, 'Opinions'] = ['15 U.S.C. 2']
+        # dfB.loc[0, 'Opinions'] = ['15 U.S.C. 2']
         # del dfA['Total']
         # del dfB['Total']
 
@@ -134,3 +134,5 @@ if __name__ == "__main__":
         benchmark.plot_charts()
         benchmark.compare_dataframes()
         benchmark.generate_report()
+
+        print("OOO")
