@@ -28,13 +28,11 @@ class Benchmark(object):
         self.root = Path(__file__).parent.absolute()
         self.dfa = None
         self.dfb = None
+        self.file_append = None
 
     def unzip(self):
         """"""
-        # if self.size:
         zipfile = bz2.BZ2File(Path.joinpath(self.root, "corpus", "one-percent.csv.bz2"))
-        # else:
-        #     zipfile = bz2.BZ2File(Path.joinpath(self.root, "corpus", "ten-percent.csv.bz2"))
 
         df = pd.read_csv(io.BytesIO(zipfile.read()))
         fields = list(df)[1:]
@@ -71,22 +69,20 @@ class Benchmark(object):
         # print(glob.glob("/home/runner/work/pingme/pingme/corpus/*"))
         # print("\n\n\n")
 
-        if os.path.exists("/home/runner/work/pingme/pingme/corpus/plotted_A.csv"):
-            # print("The file exists ... dont overwrite it.")
-            dfx.to_csv(Path.joinpath(self.root, "corpus", f"plotted_B.csv"),
-                       sep=",")
+        # if os.path.exists("/home/runner/work/pingme/pingme/corpus/plotted_{}.csv"):
+        #     # print("The file exists ... dont overwrite it.")
+        dfx.to_csv(Path.joinpath(self.root, "corpus", f"plotted_{self.file_append}.csv"), sep=",")
 
-        else:
-            # print("The file  A exists  B")
-            dfx.to_csv(Path.joinpath(self.root, "corpus", f"plotted_A.csv"), sep=",")
+        # else:
+        #     # print("The file  A exists  B")
+        #     dfx.to_csv(Path.joinpath(self.root, "corpus", f"plotted_A.csv"), sep=",")
 
         return True
 
     def one_percent_sample(self):
         """"""
         self.size = Size.SMALL
-        # print(Path.joinpath(self.root, "corpus", "plotted_A.csv"))
-        sample = self.unzip()
+        self.unzip()
 
     def plot_charts(self):
         """"""
@@ -117,11 +113,17 @@ class Benchmark(object):
 
 if __name__ == "__main__":
     print("STARTING UP ---- new branch ...")
-    Benchmark().one_percent_sample()
-    root = Path(__file__).parent.absolute()
-    print("GET CSV FILES")
-    csv_files = glob.glob(Path.joinpath(root, "corpus", f"*.csv").as_posix())
-    print(csv_files)
+    # Benchmark().one_percent_sample()
+    benchmark = Benchmark().__init__()
+    csv_files = glob.glob(Path.joinpath(benchmark.root, "corpus", f"*.csv").as_posix())
+    if "/home/runner/work/pingme/pingme/corpus/plotted_A.csv" in csv_files:
+        benchmark.file_append = "A"
+    else:
+        benchmark.file_append = "B"
+    benchmark.unzip()
+    csv_files = glob.glob(Path.joinpath(benchmark.root, "corpus", f"*.csv").as_posix())
+    print(csv_files, "NOW")
+
     # Upload and save the plotted values ... here...
     # import os
     # if os.path.exists("/home/runner/work/pingme/pingme/corpus/plotted_B.csv"):
