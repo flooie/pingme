@@ -62,8 +62,8 @@ class Benchmark(object):
 
         columns = ["OpinionID", "Time", f"Total", "Opinions"]
         dfx = pd.DataFrame(list(zip(opinion_ids, times, totals, opinions)), columns=columns)
-        import os
-        import glob
+        # import os
+        # import glob
 
         # print("\n\n\n")
         # print(glob.glob("/home/runner/work/pingme/pingme/corpus/*"))
@@ -71,7 +71,7 @@ class Benchmark(object):
 
         # if os.path.exists("/home/runner/work/pingme/pingme/corpus/plotted_{}.csv"):
         #     # print("The file exists ... dont overwrite it.")
-        dfx.to_csv(Path.joinpath(self.root, "corpus", f"plotted_{self.file_append}.csv"), sep=",")
+        dfx.to_csv(Path.joinpath(self.root, "corpus", f"plotted_A.csv"), sep=",")
 
         # else:
         #     # print("The file  A exists  B")
@@ -79,24 +79,33 @@ class Benchmark(object):
 
         return True
 
-    def one_percent_sample(self):
-        """"""
-        self.size = Size.SMALL
-        self.unzip()
-
     def plot_charts(self):
         """"""
         self.dfA = pd.read_csv(Path.joinpath(self.root, "corpus", "plotted_A.csv"))
-        self.dfB = pd.read_csv(Path.joinpath(self.root, "corpus", "plotted_B.csv"))
+
+        csv_files = glob.glob(Path.joinpath(self.root, f"*.csv").as_posix())
+        # print(csv_files)
+        # with open(csv_files[0], "r") as f:
+        #     print(f.read())
+        self.dfB = pd.read_csv(csv_files[0])
+
+
+        print(self.dfA.head())
+        self.dfB.rename(columns={'Total': 'TotalB'}, inplace=True)
+        print(self.dfB.head())
 
         df = pd.merge_asof(self.dfA, self.dfB, on='Time')
-        df.plot(x="Time", y=["TotalA", "TotalB"])
-        plt.show()
+        df.plot(x="Time", y=["Total", "TotalB"])
+        # plt.show()
+        plt.savefig('foo.png')
+
 
     def compare_dataframes(self):
         """"""
         dfA = pd.read_csv(Path.joinpath(self.root, "corpus", "plotted_A.csv"))
-        dfB = pd.read_csv(Path.joinpath(self.root, "corpus", "plotted_B.csv"))
+        dfB = pd.read_csv(Path.joinpath(self.root, "plotted_A.csv"))
+
+        # dfB.columns = dfB.columns.str.replace('Total', 'TotalB')
 
         head_count = min([len(dfA), len(dfB)])
 
@@ -105,36 +114,19 @@ class Benchmark(object):
 
         del dfA['Time']
         del dfB['Time']
-        del dfA['Total']
-        del dfB['TotalB']
+        # dfB.loc[0, 'Opinions'] = ['15 U.S.C. 2']
+        # del dfA['Total']
+        # del dfB['Total']
 
-        # print(dfA.compare(dfB))
+        print(dfA.compare(dfB))
 
+    def generate_report(self):
+        """"""
 
 if __name__ == "__main__":
-    print("STARTING UP ---- new branch ...")
-    # Benchmark().one_percent_sample()
 
     benchmark = Benchmark()
-    benchmark.root = Path(__file__).parent.absolute()
-    print(benchmark.root)
-    csv_files = glob.glob(Path.joinpath(benchmark.root, "corpus", f"*.csv").as_posix())
-    print(csv_files, "BEFORE")
-    if "/home/runner/work/pingme/pingme/corpus/plotted_A.csv" not in csv_files:
-        benchmark.file_append = "A"
-    else:
-        benchmark.file_append = "B"
-
     benchmark.unzip()
-    csv_files = glob.glob(Path.joinpath(benchmark.root, "corpus", f"*.csv").as_posix())
-    print(csv_files, "NOW... and later....")
-
-    # Upload and save the plotted values ... here...
-    # import os
-    # if os.path.exists("/home/runner/work/pingme/pingme/corpus/plotted_B.csv"):
-    #     print("Running the Final Charts")
-    #     Benchmark().plot_charts()
-    #     Benchmark().compare_dataframes()
-    #     print("SHUTTING DOWN ---- new branch")
-    # else:
-    #     print("NO PLOTTED B?????")
+    benchmark.plot_charts()
+    benchmark.compare_dataframes()
+    benchmark.generate_report()
