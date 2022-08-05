@@ -1,4 +1,4 @@
-name: GitHub Actions Branches... upload...
+name: Branches Upload on Main
 on:
   push:
     branches: [ main ]
