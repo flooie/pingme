@@ -11,10 +11,19 @@ jobs:
           pip install -r requirements.txt
           python3 benchmark.py
 
-      - uses: actions/upload-artifact@v3
+#      - uses: actions/upload-artifact@v3
+#        with:
+#          name: my-artifact
+#          path: /home/runner/work/pingme/pingme/corpus/plotted_A.csv
+
+      - uses: actions/download-artifact@v3
         with:
           name: my-artifact
-          path: /home/runner/work/pingme/pingme/corpus/plotted_A.csv
+          path: /home/runner/work/pingme/pingme/corpus/
+
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: /home/runner/work/pingme/pingme/corpus/
 
 
 #      - uses: actions/checkout@v3
