@@ -10,6 +10,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Display structure of downloaded files (again again)
+        run: |
+          ls -R
 
       - name: Download artifact
         uses: dawidd6/action-download-artifact@v2
