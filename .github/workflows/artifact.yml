@@ -94,7 +94,7 @@ jobs:
           name: results
 
 
-      - name: comment PR
+      - name: Comment on the PR with file PR
         uses: machine-learning-apps/pr-comment@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
