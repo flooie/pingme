@@ -114,16 +114,20 @@ class Benchmark(object):
 if __name__ == "__main__":
     print("STARTING UP ---- new branch ...")
     # Benchmark().one_percent_sample()
-    benchmark = Benchmark().__init__()
+
+    benchmark = Benchmark()
+    benchmark.root = Path(__file__).parent.absolute()
+    print(benchmark.root)
     csv_files = glob.glob(Path.joinpath(benchmark.root, "corpus", f"*.csv").as_posix())
     print(csv_files, "BEFORE")
     if "/home/runner/work/pingme/pingme/corpus/plotted_A.csv" not in csv_files:
         benchmark.file_append = "A"
     else:
         benchmark.file_append = "B"
+
     benchmark.unzip()
     csv_files = glob.glob(Path.joinpath(benchmark.root, "corpus", f"*.csv").as_posix())
-    print(csv_files, "NOW")
+    print(csv_files, "NOW... and later....")
 
     # Upload and save the plotted values ... here...
     # import os
