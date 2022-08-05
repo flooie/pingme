@@ -2,7 +2,7 @@
 # Auto commenting on PR thoughts
 
 # Beep Boop
-
+import argparse
 import bz2
 import datetime
 import glob
@@ -124,9 +124,13 @@ class Benchmark(object):
         """"""
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='A test program.')
+    parser.add_argument('--main', action='store_true')
+    args = parser.parse_args()
 
     benchmark = Benchmark()
     benchmark.unzip()
-    benchmark.plot_charts()
-    benchmark.compare_dataframes()
-    benchmark.generate_report()
+    if not args.main:
+        benchmark.plot_charts()
+        benchmark.compare_dataframes()
+        benchmark.generate_report()

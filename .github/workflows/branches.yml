@@ -11,46 +11,9 @@ jobs:
       - uses: actions/setup-python@v2
       - run: |
           pip install -r requirements.txt
-          python3 benchmark.py
+          python3 benchmark.py --main
 
       - uses: actions/upload-artifact@v3
         with:
           name: my-artifact
           path: /home/runner/work/pingme/pingme/corpus/plotted_A.csv
-
-#    steps:
-#      - uses: actions/checkout@v2
-
-#      - run: mkdir -p path/to/artifact
-
-#      - run: echo hello > path/to/artifact/world.txt
-
-#      - uses: actions/upload-artifact@v3
-#        with:
-#          name: my-artifact
-#          path: path/to/artifact/world.txt
-
-#      - uses: actions/download-artifact@v3
-#        with:
-#          name: my-artifact
-#
-#      - name: Display structure of downloaded files
-#        run: ls -R
-
-
-#    steps:
-#    - uses: actions/checkout@v2
-#
-
-#      - uses: actions/checkout@v3
-#        with:
-#          ref: main
-#      - run: |
-#          python3 benchmark.py
-#
-#      - run: |
-#          ls
-#          cd corpus
-#          ls
-#          cat /home/runner/work/pingme/pingme/corpus/plotted_A.csv
-#          cat /home/runner/work/pingme/pingme/corpus/plotted_B.csv
