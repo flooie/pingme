@@ -89,9 +89,10 @@ class Benchmark(object):
         """"""
         self.dfA = pd.read_csv(Path.joinpath(self.root, "corpus", "plotted_A.csv"))
         self.dfB = pd.read_csv(Path.joinpath(self.root, "plotted_A.csv"))
+        self.dfB.columns = self.dfB.columns.str.replace('Total', 'TotalB')
 
         df = pd.merge_asof(self.dfA, self.dfB, on='Time')
-        df.plot(x="Time", y=["TotalA", "TotalB"])
+        df.plot(x="Time", y=["Total", "TotalB"])
         plt.show()
 
     def compare_dataframes(self):
