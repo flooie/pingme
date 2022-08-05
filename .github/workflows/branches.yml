@@ -23,8 +23,9 @@ jobs:
           pip install -r requirements.txt
           python3 benchmark.py
 
-      - uses: actions/setup-python@v2
-      - uses: actions/checkout@main
+      - uses: actions/checkout@v3
+        with:
+          ref: main
       - run: |
           pip install -r requirements.txt
           python3 benchmark.py
