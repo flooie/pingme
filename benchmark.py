@@ -7,9 +7,7 @@ import bz2
 import datetime
 import glob
 import io
-import os
 from pathlib import Path
-import climage
 
 from eyecite import get_citations
 import pandas as pd
