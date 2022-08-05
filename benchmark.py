@@ -66,12 +66,12 @@ class Benchmark(object):
         import os
         if os.path.exists("/home/runner/work/pingme/pingme/corpus/plotted_A.csv"):
             print("The file exists ... dont overwrite it.")
-            dfx.to_csv(Path.joinpath(self.root, "corpus", f"plotted_A.csv"),
+            dfx.to_csv(Path.joinpath(self.root, "corpus", f"plotted_B.csv"),
                        sep=",")
 
         else:
             print("The file doesn't exist... write it down")
-            dfx.to_csv(Path.joinpath(self.root, "corpus", f"plotted_B.csv"), sep=",")
+            dfx.to_csv(Path.joinpath(self.root, "corpus", f"plotted_A.csv"), sep=",")
 
         return True
 
@@ -111,10 +111,12 @@ class Benchmark(object):
 if __name__ == "__main__":
     print("STARTING UP ---- new branch")
     Benchmark().one_percent_sample()
+    import os
+    if os.path.exists("/home/runner/work/pingme/pingme/corpus/plotted_A.csv"):
 
-    Benchmark().plot_charts()
-    Benchmark().compare_dataframes()
-    print("SHUTTING DOWN ---- new branch")
+        Benchmark().plot_charts()
+        Benchmark().compare_dataframes()
+        print("SHUTTING DOWN ---- new branch")
 
-    with open("/home/runner/work/pingme/pingme/corpus/plotted.csv", "r") as f:
-        print(f.read())
+        # with open("/home/runner/work/pingme/pingme/corpus/plotted.csv", "r") as f:
+        #     print(f.read())
