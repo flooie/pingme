@@ -3,19 +3,20 @@ on: [push]
 jobs:
   Build:
     runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v2
-#      - uses: actions/setup-python@v2
-#      - run: |
-#          pip install -r requirements.txt
-#          python3 benchmark.py
-
-#      - uses: actions/upload-artifact@v3
-#        with:
-#          name: my-artifact
-#          path: /home/runner/work/pingme/pingme/corpus/plotted_A.csv
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - run: |
+          pip install -r requirements.txt
+          python3 benchmark.py
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: my-artifact
+          path: /home/runner/work/pingme/pingme/corpus/plotted_A.csv
+
+#    steps:
+#      - uses: actions/checkout@v2
 
 #      - run: mkdir -p path/to/artifact
 
@@ -26,12 +27,12 @@ jobs:
 #          name: my-artifact
 #          path: path/to/artifact/world.txt
 
-      - uses: actions/download-artifact@v3
-        with:
-          name: my-artifact
-
-      - name: Display structure of downloaded files
-        run: ls -R
+#      - uses: actions/download-artifact@v3
+#        with:
+#          name: my-artifact
+#
+#      - name: Display structure of downloaded files
+#        run: ls -R
 
 
 #    steps:
