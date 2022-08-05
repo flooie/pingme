@@ -9,6 +9,7 @@ import glob
 import io
 import os
 from pathlib import Path
+import climage
 
 from eyecite import get_citations
 import pandas as pd
@@ -99,6 +100,8 @@ class Benchmark(object):
         df.plot(x="Time", y=["Total", "TotalB"])
         # plt.show()
         plt.savefig('foo.png')
+
+        print(climage.convert("foo.png", width=100))
 
     def compare_dataframes(self):
         """"""
