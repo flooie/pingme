@@ -64,7 +64,7 @@ class Benchmark(object):
         columns = ["OpinionID", "Time", f"Total", "Opinions"]
         dfx = pd.DataFrame(list(zip(opinion_ids, times, totals, opinions)), columns=columns)
         import os
-        if os.path.isfile("/home/runner/work/pingme/pingme/corpus/plotted_A.csv"):
+        if os.path.exists("/home/runner/work/pingme/pingme/corpus/plotted_A.csv"):
             print("The file exists ... dont overwrite it.")
             dfx.to_csv(Path.joinpath(self.root, "corpus", f"plotted_A.csv"),
                        sep=",")
