@@ -105,7 +105,9 @@ class Benchmark(object):
         c = climage.convert("foo.png", is_unicode=True, width=100)
         print(c)
 
-        c = climage.convert("foo.png", is_unicode=True)
+        c = climage.convert("foo.png", is_8color=False, is_unicode=False,
+                            is_16color=False, is_256color=False,
+                            is_truecolor=True, width=150)
         print(c)
 
     def compare_dataframes(self):

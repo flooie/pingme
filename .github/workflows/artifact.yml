@@ -58,9 +58,12 @@ jobs:
       - name: Display structure of downloaded files
         run: ls -R
 
-      - name: Run Benchmarks
+      - name: Install Requirements
         run: |
           pip install -r requirements.txt
+
+      - name: Run Benchmarks
+        run: |
           python3 benchmark.py
 
       - name: Display structure of downloaded files (again)
