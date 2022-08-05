@@ -81,9 +81,14 @@ jobs:
 
       - name: Cat Foo Image
         run: |
-          cat /home/runner/work/pingme/pingme/foo.png
           base64 /home/runner/work/pingme/pingme/foo.png
-          
+
+      - name: Comment PR
+        uses: machine-learning-apps/pr-comment@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          path: /home/runner/work/pingme/pingme/foo.png
 
 #      - name: Download artifact
 #        uses: dawidd6/action-download-artifact@v2
