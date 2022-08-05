@@ -115,7 +115,7 @@ if __name__ == "__main__":
     print("STARTING UP ---- new branch ...")
     # Benchmark().one_percent_sample()
 
-    benchmark = Benchmark().__init__()
+    benchmark = Benchmark()
     benchmark.root = Path(__file__).parent.absolute()
     print(benchmark.root)
     csv_files = glob.glob(Path.joinpath(benchmark.root, "corpus", f"*.csv").as_posix())
