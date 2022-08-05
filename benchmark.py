@@ -101,7 +101,12 @@ class Benchmark(object):
         # plt.show()
         plt.savefig('foo.png')
 
-        print(climage.convert("foo.png", width=100))
+        # print(climage.convert("foo.png", width=100))
+        c = climage.convert("foo.png", is_unicode=True, width=100)
+        print(c)
+
+        c = climage.convert("foo.png", is_unicode=True)
+        print(c)
 
     def compare_dataframes(self):
         """"""
@@ -127,18 +132,11 @@ class Benchmark(object):
 if __name__ == "__main__":
     print("STARTING UP ---- new branch ...")
     # Benchmark().one_percent_sample()
-    import climage
 
-    c = climage.convert("foo.png", is_unicode=True, width=100)
-    print(c)
-
-    c = climage.convert("foo.png", is_unicode=True)
-    print(c)
-
-    # benchmark = Benchmark()
-    # benchmark.unzip()
-    # benchmark.plot_charts()
-    # benchmark.compare_dataframes()
+    benchmark = Benchmark()
+    benchmark.unzip()
+    benchmark.plot_charts()
+    benchmark.compare_dataframes()
 
     # csv_files = glob.glob(Path.joinpath(benchmark.root, "corpus", f"*.csv").as_posix())
     # print(csv_files, "BEFORE")
