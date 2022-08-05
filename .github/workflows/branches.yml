@@ -14,17 +14,15 @@
 name: GitHub Actions Demo
 on: [push]
 jobs:
-  Explore-GitHub-Actions:
+  Build:
     runs-on: ubuntu-latest
     steps:
-      - name: Current Branch
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
       - run: |
           pip install -r requirements.txt
           python3 benchmark.py
 
-      - name: Main Branch
       - uses: actions/checkout@v3
         with:
           ref: main
