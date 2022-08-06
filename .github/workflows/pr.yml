@@ -143,6 +143,6 @@ jobs:
             unexpected changes
             `${{github.event.number}}`
             ${{github.event.number}}
-            "![image](https://github.com/flooie/pingme/blob/main/pr`$pull_number`-foo.png?raw=true) :wave:"
+            "![image](https://github.com/flooie/pingme/blob/main/pr${{github.event.number}}-foo.png?raw=true) :wave:"
           reactions: eyes, rocket
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
