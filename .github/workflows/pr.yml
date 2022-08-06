@@ -31,6 +31,9 @@ jobs:
 #          message: "Hello, It's my first comment with Github action !"
 #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #          reactions: "+1 | -1 | laugh | hooray | confused | heart | rocket | eyes"
+      - name: Install Requirements
+        run: |
+          pip install -r requirements.txt
 
       - name: Run Benchmarks
         run: |
