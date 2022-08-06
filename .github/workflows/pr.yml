@@ -134,6 +134,9 @@ jobs:
         uses: thollander/actions-comment-pull-request@v1
         with:
           message: |
+            This is the output of the speed comparison between the main branch and your PR.  
+            Please take the time to review the chart for slow downs, speedups or 
+            unexpected changes
             ![image](https://github.com/flooie/pingme/blob/main/pr5-foo.png?raw=true) :wave:
           reactions: eyes, rocket
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
