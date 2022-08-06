@@ -63,8 +63,10 @@ jobs:
       #    skip_unpack: false
 
       - name: Display structure of downloaded files
-        run: ls -R
-
+        run: |
+          ls -R
+          pull_number=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+          echo pull_number
       #      - name: Comment PR
 #        uses: thollander/actions-comment-pull-request@v1
 #        with:
@@ -132,11 +134,15 @@ jobs:
 
       - name: PR comment with reactions
         uses: thollander/actions-comment-pull-request@v1
+        env:
+          pull_number: ${{github.event.number}}
+          URL: ${{ format('{0}{1}{2}', ![image](https://github.com/flooie/pingme/blob/main/pr, ${{github.event.number}}, 5-foo.png?raw=true) }}
         with:
           message: |
             This is the output of the speed comparison between the main branch and your PR.  
             Please take the time to review the chart for slow downs, speedups or 
             unexpected changes
+            ${{URL}}
             ![image](https://github.com/flooie/pingme/blob/main/pr5-foo.png?raw=true) :wave:
           reactions: eyes, rocket
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
