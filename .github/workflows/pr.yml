@@ -136,13 +136,11 @@ jobs:
         uses: thollander/actions-comment-pull-request@v1
         env:
           pull_number: ${{github.event.number}}
-          URL: ${{ format('{0}{1}{2}', ![image](https://github.com/flooie/pingme/blob/main/pr, ${{github.event.number}}, 5-foo.png?raw=true) }}
         with:
           message: |
             This is the output of the speed comparison between the main branch and your PR.  
             Please take the time to review the chart for slow downs, speedups or 
             unexpected changes
-            ${{URL}}
-            ![image](https://github.com/flooie/pingme/blob/main/pr5-foo.png?raw=true) :wave:
+            ![image](https://github.com/flooie/pingme/blob/main/pr${{pull_number}}-foo.png?raw=true) :wave:
           reactions: eyes, rocket
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
