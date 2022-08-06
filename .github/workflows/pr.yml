@@ -113,7 +113,6 @@ jobs:
         with:
           name: results
 
-
       - name: Comment on the PR with file PR
         uses: machine-learning-apps/pr-comment@master
         env:
@@ -130,3 +129,11 @@ jobs:
           artifacts: |
             results/results.txt
             /home/runner/work/pingme/pingme/foo.png
+
+      - name: PR comment with reactions
+        uses: thollander/actions-comment-pull-request@v1
+        with:
+          message: |
+            ![image](https://github.com/flooie/pingme/blob/main/pr5-foo.png?raw=true) :wave:
+          reactions: eyes, rocket
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
