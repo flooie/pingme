@@ -9,8 +9,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
+
+      - name: Current Commit ID
+      - run: |
+          git_hash=$(git rev-parse --short "$GITHUB_SHA")
+          echo "${{ git_hash }}"
+          echo "git_hash=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_HASH
+
       - run: |
           pip install -r requirements.txt
+          pip install git+https://github.com/freelawproject/eyecite@${{ env.hash }}
           python3 benchmark.py --main
 
       - uses: actions/upload-artifact@v3
