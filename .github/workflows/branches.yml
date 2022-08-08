@@ -10,13 +10,11 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
 
-      - name: Current Commit ID
       - run: |
           git_hash=$(git rev-parse --short "$GITHUB_SHA")
           echo "${{ git_hash }}"
           echo "git_hash=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_HASH
 
-      - name: Benchmark
       - run: |
           pip install -r requirements.txt
           pip install git+https://github.com/freelawproject/eyecite@${{ env.hash }}
