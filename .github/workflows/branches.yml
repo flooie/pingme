@@ -16,6 +16,7 @@ jobs:
           echo "${{ git_hash }}"
           echo "git_hash=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_HASH
 
+      - name: Benchmark
       - run: |
           pip install -r requirements.txt
           pip install git+https://github.com/freelawproject/eyecite@${{ env.hash }}
