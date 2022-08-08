@@ -11,7 +11,7 @@ jobs:
       - uses: actions/setup-python@v2
 
       - run: |
-          echo "git_hash=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_HASH
+          echo "${{ env.hash }}"
 
       - run: |
           pip install -r requirements.txt
