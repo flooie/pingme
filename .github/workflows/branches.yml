@@ -10,16 +10,15 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
 
-
       - name: Set outputs
         id: vars
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+        run: echo "::set-output name=sha_short::$(git rev-parse --verify HEAD)"
       - name: Check outputs
         run: echo ${{ steps.vars.outputs.sha_short }}
 
       - run: |
           pip install -r requirements.txt
-          pip install git+https://github.com/freelawproject/eyecite@${{ env.hash }}
+          "pip install git+https://github.com/freelawproject/eyecite@${{ steps.vars.outputs.sha_short }}"
           python3 benchmark.py --main
 
       - uses: actions/upload-artifact@v3
