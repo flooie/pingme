@@ -1,15 +1,15 @@
 name: Download and process artifact
 on:
   pull_request:
-    types: [opened, reopened, edited, closed, assigned, unassigned]
-
 
 jobs:
   Build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
+      - uses: actions/setup-python@v2
+      - run: |
+          ls
       - name: Display structure of downloaded files (again again)
         run: |
           ls -R
@@ -17,10 +17,10 @@ jobs:
       - name: Download artifact
         uses: dawidd6/action-download-artifact@v2
         with:
-      #    # Optional, GitHub token, a Personal Access Token with `public_repo` scope if needed
-      #    # Required, if the artifact is from a different repo
-      #    # Required, if the repo is private a Personal Access Token with `repo` scope is needed
-      #    github_token: ${{secrets.GITHUB_TOKEN}}
+          #    # Optional, GitHub token, a Personal Access Token with `public_repo` scope if needed
+          #    # Required, if the artifact is from a different repo
+          #    # Required, if the repo is private a Personal Access Token with `repo` scope is needed
+          #    github_token: ${{secrets.GITHUB_TOKEN}}
           # Optional, workflow file name or ID
           # If not specified, will be inferred from run_id (if run_id is specified), or will be the current workflow
           workflow: branches.yml
@@ -31,39 +31,62 @@ jobs:
           #   "completed", "in_progress", "queued"
           workflow_conclusion: success
           # Optional, will get head commit SHA
-      #    pr: ${{github.event.pull_request.number}}
+          #    pr: ${{github.event.pull_request.number}}
           # Optional, no need to specify if PR is
-      #    commit: ${{github.event.pull_request.head.sha}}
+          #    commit: ${{github.event.pull_request.head.sha}}
           # Optional, will use the branch
           branch: main
           # Optional, defaults to all types
-      #    event: push
+          #    event: push
           # Optional, will use specified workflow run
-      #    run_id: 1122334455
+          #    run_id: 1122334455
           # Optional, run number from the workflow
-      #    run_number: 34
+          #    run_number: 34
           # Optional, uploaded artifact name,
           # will download all artifacts if not specified
           # and extract them into respective subdirectories
           # https://github.com/actions/download-artifact#download-all-artifacts
           name: my-artifact
           # Optional, a directory where to extract artifact(s), defaults to the current directory
-      #    path: extract_here
+          #    path: extract_here
           # Optional, defaults to current repo
-      #    repo: ${{github.repository}}
+          #    repo: ${{github.repository}}
           # Optional, check the workflow run to whether it has an artifact
           # then will get the last available artifact from the previous workflow
           # default false, just try to download from the last one
-          check_artifacts:  false
+          check_artifacts: false
           # Optional, search for the last workflow run whose stored an artifact named as in `name` input
           # default false
-      #    search_artifacts: false
+          #    search_artifacts: false
           # Optional, choose to skip unpacking the downloaded artifact(s)
           # default false
       #    skip_unpack: false
 
       - name: Display structure of downloaded files
-        run: ls -R
+        run: |
+          ls -R
+          pull_number=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+          echo pull_number
+      #      - name: Comment PR
+#        uses: thollander/actions-comment-pull-request@v1
+#        with:
+#          message: |
+#            Hello world ! :wave:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#
+#      - name: Edit PR comment
+#        uses: thollander/actions-comment-pull-request@v1
+#        with:
+#          message: 'Content loaded ! (edited)'
+#          comment_includes: 'Loading'
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#
+#      - name: Comment a pull_request
+#        uses: mb2dev/github-action-comment-pull-request@1.0.0
+#        with:
+#          message: "Hello, It's my first comment with Github action !"
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          reactions: "+1 | -1 | laugh | hooray | confused | heart | rocket | eyes"
 
       - name: Install Requirements
         run: |
@@ -82,12 +105,9 @@ jobs:
           name: time-chart
           path: /home/runner/work/pingme/pingme/foo.png
 
-      - name: Cat Foo Image
-        run: |
-          base64 /home/runner/work/pingme/pingme/foo.png
 
       - run: mkdir -p output/
-      - run: echo "This is fancy a comment" > output/results.txt
+      - run: echo "**this is bold and this is a markdown link**\n\n`asdfasdfadsf`" > output/results.txt
       - uses: actions/upload-artifact@v1
         with:
           name: results
@@ -96,7 +116,6 @@ jobs:
         with:
           name: results
 
-
       - name: Comment on the PR with file PR
         uses: machine-learning-apps/pr-comment@master
         env:
@@ -104,4 +123,25 @@ jobs:
         with:
           path: results/results.txt
 
+      - name: Pull request artifacts
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: gavv/pull-request-artifacts@v1.0.0
+        with:
+          commit: ${{ github.event.pull_request.head.sha }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          artifacts: |
+            results/results.txt
+            /home/runner/work/pingme/pingme/foo.png
 
+      - name: PR comment with reactions
+        uses: thollander/actions-comment-pull-request@v1
+        env:
+          pull_number: ${{github.event.number}}
+        with:
+          message: |
+            This is the output of the speed comparison between the main branch and your PR.  
+            Please take the time to review the chart for slow downs, speedups or 
+            unexpected changes
+            "![image](https://github.com/flooie/pingme/blob/main/pr${{github.event.number}}-foo.png?raw=true) :wave:"
+          reactions: eyes, rocket
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

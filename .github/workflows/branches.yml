@@ -17,3 +17,4 @@ jobs:
         with:
           name: my-artifact
           path: /home/runner/work/pingme/pingme/corpus/plotted_A.csv
+

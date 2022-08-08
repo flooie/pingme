@@ -57,8 +57,8 @@ class Benchmark(object):
                     continue
                 # print(op[0])
             times.append((datetime.datetime.now() - now).total_seconds())
-            if (datetime.datetime.now() - now).total_seconds() > 10:
-                break
+            # if (datetime.datetime.now() - now).total_seconds() > 10:
+            #     break
 
         columns = ["OpinionID", "Time", f"Total", "Opinions"]
         dfx = pd.DataFrame(list(zip(opinion_ids, times, totals, opinions)), columns=columns)
