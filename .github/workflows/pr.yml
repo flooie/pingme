@@ -87,6 +87,7 @@ jobs:
 #          message: "Hello, It's my first comment with Github action !"
 #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #          reactions: "+1 | -1 | laugh | hooray | confused | heart | rocket | eyes"
+
       - name: Install Requirements
         run: |
           pip install -r requirements.txt
@@ -141,8 +142,6 @@ jobs:
             This is the output of the speed comparison between the main branch and your PR.  
             Please take the time to review the chart for slow downs, speedups or 
             unexpected changes
-            `${{github.event.number}}`
-            ${{github.event.number}}
             "![image](https://github.com/flooie/pingme/blob/main/pr${{github.event.number}}-foo.png?raw=true) :wave:"
           reactions: eyes, rocket
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
