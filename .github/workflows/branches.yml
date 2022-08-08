@@ -20,7 +20,7 @@ jobs:
           pip install -r requirements.txt
           pip install git+https://github.com/freelawproject/eyecite@3e2a031c11e69523eb71450d3c20e4856c85c9a5
           python3 corpus/benchmark.py --main
-          pip uninstall eyecite
+          pip uninstall eyecite -y
           pip install eyecite
           python3 corpus/benchmark.py
 
