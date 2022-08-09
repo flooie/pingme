@@ -1,0 +1,15 @@
+name: Make File Testing
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+
+      - name: Check outputs
+        run: |
+          make development --file other/Makefile -e ref1=update-courts-reporters-db ref2=main

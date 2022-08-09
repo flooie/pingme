@@ -31,6 +31,7 @@ class Benchmark(object):
         self.opinions = []
         self.count = 0
         self.fields = []
+        self.branch = None
 
 
     def fetch_citations(self, row):
@@ -64,9 +65,8 @@ class Benchmark(object):
 
         columns = ["OpinionID", "Time", f"Total", "Opinions"]
         dfx = pd.DataFrame(list(zip(self.list_of_ids, self.times, self.totals, self.opinions)), columns=columns)
-        dfx.to_csv(Path.joinpath(self.root, f"plotted.csv"), sep=",")
+        dfx.to_csv(Path.joinpath(self.root, "..", f"plotted-{self.branch}.csv"), sep=",")
 
-        return True
 
     def plot_charts(self):
         """"""
@@ -89,7 +89,7 @@ class Benchmark(object):
 
     def compare_dataframes(self):
         """"""
-        dfA = pd.read_csv(Path.joinpath(self.root, "", "plotted_A.csv"))
+        dfA = pd.read_csv(Path.joinpath(self.root, "other", "plotted_A.csv"))
         dfB = pd.read_csv(Path.joinpath(self.root, "plotted_B.csv"))
 
         # dfB.columns = dfB.columns.str.replace('Total', 'TotalB')
@@ -113,9 +113,18 @@ class Benchmark(object):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='A test program.')
     parser.add_argument('--main', action='store_true')
+    parser.add_argument('--branch')
     args = parser.parse_args()
+
+
     benchmark = Benchmark()
+    benchmark.branch = args.branch
     benchmark.unzip()
+    print(benchmark.branch)
+
+    # print(get_citations("2021COA112"))
+    # print(get_citations("2021COA112M"))
+    # print(get_citations("2021 COA 112"))
 
 
     # if not args.main:
