@@ -22,6 +22,7 @@ development:
 	cd other/eyecite && poetry add matplotlib
 	cd other/eyecite && poetry install
 	cd other/eyecite && pwd && ls
+	cd other/eyecite && poetry show
 	cd other/eyecite && poetry run python benchmark.py --branch $(ref1)
 
 developmenty:
