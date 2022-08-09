@@ -16,6 +16,6 @@ jobs:
           virtualenvs-in-project: true
       - name: Check outputs
         run: |
-          apt-get install python3.9-dev
+          apt-get install python3-dev
           poetry --version
           make development --file other/Makefile -e ref1=update-courts-reporters-db ref2=main
