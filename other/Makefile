@@ -14,7 +14,6 @@ endif
 development:
 	pwd
 	ls
-
 	git clone -b $(ref1) https://github.com/freelawproject/eyecite.git other/eyecite
 	cd other/eyecite && poetry install
 	cp other/benchmark.py other/eyecite/
