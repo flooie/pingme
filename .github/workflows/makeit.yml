@@ -19,4 +19,5 @@ jobs:
       - name: Install Poetry and Run Make File
         run: |
           poetry --version
+          echo "hello world"
           make development --file other/Makefile -e ref1=update-courts-reporters-db ref2=main
