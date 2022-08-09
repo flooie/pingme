@@ -12,12 +12,12 @@ endif
 
 
 development:
-	poetry env use 3.9
 	pwd
 	git clone -b $(ref1) https://github.com/freelawproject/eyecite.git other/eyecite
 	cd other/eyecite && poetry install
 	cp other/benchmark.py other/eyecite/
 	cp other/one-percent.csv.bz2 other/eyecite/
+	poetry env use 3.9
 	cd other/eyecite && poetry add --extras=benchmark pandas
 	cd other/eyecite && poetry add --extras=benchmark matplotlib
 	poetry run python other/eyecite/benchmark.py --branch $(ref1)
