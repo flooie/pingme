@@ -12,6 +12,7 @@ endif
 
 
 development:
+	poetry env use 3.9
 	pwd
 	git clone -b $(ref1) https://github.com/freelawproject/eyecite.git other/eyecite
 	cd other/eyecite && poetry install
