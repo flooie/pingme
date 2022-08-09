@@ -15,11 +15,12 @@ development:
 	pwd
 	ls
 	git clone -b $(ref1) https://github.com/freelawproject/eyecite.git other/eyecite
-	cd other/eyecite && poetry install
 	cp other/benchmark.py other/eyecite/
 	cp other/one-percent.csv.bz2 other/eyecite/
 	cd other/eyecite && poetry add pandas --python 3.9
+	cd other/eyecite && poetry add pandas --python 3.8
 	cd other/eyecite && poetry add matplotlib
+	cd other/eyecite && poetry install
 	cd other/eyecite && pwd && ls
 	cd other/eyecite && poetry run python benchmark.py --branch $(ref1)
 
