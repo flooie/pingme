@@ -13,4 +13,5 @@ jobs:
       - name: Check outputs
         run: |
           curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
-          make development --file other/Makefile -e ref1=update-courts-reporters-db ref2=main
+          poetry --version
+#          make development --file other/Makefile -e ref1=update-courts-reporters-db ref2=main
