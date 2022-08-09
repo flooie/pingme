@@ -17,9 +17,8 @@ development:
 	cd other/eyecite && poetry install
 	cp other/benchmark.py other/eyecite/
 	cp other/one-percent.csv.bz2 other/eyecite/
-	cd other/eyecite && poetry env use 3.9
-	cd other/eyecite && poetry add --extras=benchmark pandas
-	cd other/eyecite && poetry add --extras=benchmark matplotlib
+	cd other/eyecite && poetry add pandas --python 3.9
+	cd other/eyecite && poetry add matplotlib
 	poetry run python other/eyecite/benchmark.py --branch $(ref1)
 
 developmenty:
