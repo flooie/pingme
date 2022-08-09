@@ -12,14 +12,14 @@ endif
 
 
 development:
-	git clone -b $(ref1) https://github.com/freelawproject/eyecite.git eyecite
-	cd eyecite && poetry install
-	cp benchmark.py eyecite/
-	cp one-percent.csv.bz2 eyecite/
+	pwd
+	git clone -b $(ref1) https://github.com/freelawproject/eyecite.git other/eyecite
+	cd other/eyecite && poetry install
+	cp other/benchmark.py other/eyecite/
+	cp other/one-percent.csv.bz2 other/eyecite/
 	poetry add --extras=benchmark pandas
 	poetry add --extras=benchmark matplotlib
-	poetry install --no-dev --extras=benchmark
-	poetry run python eyecite/benchmark.py --branch $(ref1)
+	poetry run python other/eyecite/benchmark.py --branch $(ref1)
 
 developmenty:
 	git clone -b $(ref1) https://github.com/freelawproject/eyecite.git eyecite
