@@ -8,7 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
       - uses: snok/install-poetry@v1
         with:
           version: 1.1.13
@@ -16,6 +18,5 @@ jobs:
           virtualenvs-in-project: true
       - name: Check outputs
         run: |
-          sudo apt-get install python3-dev
           poetry --version
           make development --file other/Makefile -e ref1=update-courts-reporters-db ref2=main
