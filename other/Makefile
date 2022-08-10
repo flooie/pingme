@@ -24,6 +24,8 @@ development:
 	cd other/eyecite && poetry show
 	cd other/eyecite && poetry run python -V
 	cd other/eyecite && poetry run python -V
+    cd other/eyecite && poetry add pandas
+    cd other/eyecite && poetry show
 	cd other/eyecite && poetry run python benchmark.py --branch $(ref1)
 
 developmenty:
