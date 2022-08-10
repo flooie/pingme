@@ -8,10 +8,16 @@ import datetime
 import glob
 import io
 from pathlib import Path
+import csv
+from io import StringIO
+import sys
 
-from eyecite import get_citations
+csv.field_size_limit(sys.maxsize)
+
+# from eyecite import get_citations
 # import pandas as pd
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
+from eyecite import get_citations
 
 
 class Benchmark(object):
@@ -35,8 +41,11 @@ class Benchmark(object):
 
 
     def fetch_citations(self, row):
-        row_id = row[1][0]
-        non_empty_rows = [row[1][field] for field in self.fields if type(row[1][field]) == str]
+        row_id = row[0]
+        # print(row_id)
+        row = dict(zip(self.fields, row))
+        # print(row)
+        non_empty_rows = [row[field] for field in self.fields if type(row[field]) == str]
         if len(non_empty_rows) == 0:
             return None
 
@@ -47,7 +56,6 @@ class Benchmark(object):
             found_citations = get_citations(op)
             cites = [cite.token.data for cite in found_citations if cite.token]
             found_cites.extend(cites)
-
         self.opinions.append(found_cites)
         self.count += len(found_cites)
         self.totals.append(self.count)
@@ -57,14 +65,22 @@ class Benchmark(object):
     def unzip(self):
         """"""
         zipfile = bz2.BZ2File(Path.joinpath(self.root, "one-percent.csv.bz2"))
-        # df = pd.read_csv(io.BytesIO(zipfile.read()))
-        # self.fields = list(df)[1:]
-        #
-        # for row in df.iterrows():
-        #     self.fetch_citations(row)
-        #
-        # columns = ["OpinionID", "Time", f"Total", "Opinions"]
-        # dfx = pd.DataFrame(list(zip(self.list_of_ids, self.times, self.totals, self.opinions)), columns=columns)
+
+        byte_content = zipfile.read()
+        content = byte_content.decode()
+        file = StringIO(content)
+        csv_data = csv.reader(file, delimiter=",")
+        self.fields = next(csv_data)
+        for row in csv_data:
+            self.fetch_citations(row)
+        columns = ["OpinionID", "Time", f"Total", "Opinions"]
+        rows = zip(self.list_of_ids, self.times, self.totals, self.opinions)
+        with open(f"plotted-{self.branch}.csv", "w") as f:
+            writer = csv.writer(f)
+            writer.writerow(columns)
+            for row in rows:
+                writer.writerow(row)
+
         # dfx.to_csv(Path.joinpath(self.root, "..", f"plotted-{self.branch}.csv"), sep=",")
 
 
@@ -115,7 +131,6 @@ if __name__ == "__main__":
     parser.add_argument('--main', action='store_true')
     parser.add_argument('--branch')
     args = parser.parse_args()
-
 
     benchmark = Benchmark()
     benchmark.branch = args.branch
