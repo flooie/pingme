@@ -14,7 +14,8 @@ development:
 	git clone -b $(ref1) https://github.com/freelawproject/eyecite.git other/eyecite
 	cp other/benchmark.py other/eyecite/
 	cp other/one-percent.csv.bz2 other/eyecite/
-	cd other/eyecite && poetry add pandas --python 3.9
+	cp opther/pyproject.toml other/eyecite/
+	cd other/eyecite && poetry add pandas
 	cd other/eyecite && poetry add matplotlib
 	cd other/eyecite && pwd && ls
 	cd other/eyecite && poetry show
@@ -44,6 +45,7 @@ developmentx:
 other:
 	cp benchmark.py eyecite/
 	cp one-percent.csv.bz2 eyecite/
+	cp pyproject.toml eyecite/
 	&& poetry run python eyecite/benchmark.py --branch $(ref1)
 	cp benchmark.py eyecite/
 	cp one-percent.csv.bz2 eyecite/
