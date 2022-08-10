@@ -61,7 +61,5 @@ other:
 	poetry init --no-interaction
 	poetry run python eyecite/benchmark.py --branch $(ref2)
 	rm pyproject.toml
-	chmod -R +w eyecite
-	rm -rf eyecite
 
 
