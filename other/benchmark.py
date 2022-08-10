@@ -10,7 +10,7 @@ import io
 from pathlib import Path
 
 from eyecite import get_citations
-import pandas as pd
+# import pandas as pd
 import matplotlib.pyplot as plt
 
 
@@ -57,55 +57,55 @@ class Benchmark(object):
     def unzip(self):
         """"""
         zipfile = bz2.BZ2File(Path.joinpath(self.root, "one-percent.csv.bz2"))
-        df = pd.read_csv(io.BytesIO(zipfile.read()))
-        self.fields = list(df)[1:]
-
-        for row in df.iterrows():
-            self.fetch_citations(row)
-
-        columns = ["OpinionID", "Time", f"Total", "Opinions"]
-        dfx = pd.DataFrame(list(zip(self.list_of_ids, self.times, self.totals, self.opinions)), columns=columns)
-        dfx.to_csv(Path.joinpath(self.root, "..", f"plotted-{self.branch}.csv"), sep=",")
+        # df = pd.read_csv(io.BytesIO(zipfile.read()))
+        # self.fields = list(df)[1:]
+        #
+        # for row in df.iterrows():
+        #     self.fetch_citations(row)
+        #
+        # columns = ["OpinionID", "Time", f"Total", "Opinions"]
+        # dfx = pd.DataFrame(list(zip(self.list_of_ids, self.times, self.totals, self.opinions)), columns=columns)
+        # dfx.to_csv(Path.joinpath(self.root, "..", f"plotted-{self.branch}.csv"), sep=",")
 
 
     def plot_charts(self):
         """"""
-        self.dfA = pd.read_csv(Path.joinpath(self.root, "", "plotted_A.csv"))
+        # self.dfA = pd.read_csv(Path.joinpath(self.root, "", "plotted_A.csv"))
+        #
+        # csv_files = glob.glob(Path.joinpath(self.root, f"*.csv").as_posix())
+        # # self.dfB = pd.read_csv(csv_files[0])
+        # self.dfB = pd.read_csv(Path.joinpath(self.root, "", "plotted_B.csv"))
 
-        csv_files = glob.glob(Path.joinpath(self.root, f"*.csv").as_posix())
-        # self.dfB = pd.read_csv(csv_files[0])
-        self.dfB = pd.read_csv(Path.joinpath(self.root, "", "plotted_B.csv"))
 
-
-        print(self.dfA.head())
-        self.dfB.rename(columns={'Total': 'TotalB'}, inplace=True)
-        print(self.dfB.head())
-
-        df = pd.merge_asof(self.dfA, self.dfB, on='Time')
-        df.plot(x="Time", y=["Total", "TotalB"])
-        # plt.show()
-        plt.savefig('foo.png')
+        # print(self.dfA.head())
+        # self.dfB.rename(columns={'Total': 'TotalB'}, inplace=True)
+        # print(self.dfB.head())
+        #
+        # df = pd.merge_asof(self.dfA, self.dfB, on='Time')
+        # df.plot(x="Time", y=["Total", "TotalB"])
+        # # plt.show()
+        # plt.savefig('foo.png')
 
 
     def compare_dataframes(self):
         """"""
-        dfA = pd.read_csv(Path.joinpath(self.root, "other", "plotted_A.csv"))
-        dfB = pd.read_csv(Path.joinpath(self.root, "plotted_B.csv"))
-
-        # dfB.columns = dfB.columns.str.replace('Total', 'TotalB')
-
-        head_count = min([len(dfA), len(dfB)])
-
-        dfA = dfA.head(head_count)
-        dfB = dfB.head(head_count)
-
-        del dfA['Time']
-        del dfB['Time']
-        dfB.loc[0, 'Opinions'] = ['15 U.S.C. 2']
-        # del dfA['Total']
+        # dfA = pd.read_csv(Path.joinpath(self.root, "other", "plotted_A.csv"))
+        # dfB = pd.read_csv(Path.joinpath(self.root, "plotted_B.csv"))
+        #
+        # # dfB.columns = dfB.columns.str.replace('Total', 'TotalB')
+        #
+        # head_count = min([len(dfA), len(dfB)])
+        #
+        # dfA = dfA.head(head_count)
+        # dfB = dfB.head(head_count)
+        #
+        # del dfA['Time']
+        # del dfB['Time']
+        # dfB.loc[0, 'Opinions'] = ['15 U.S.C. 2']
+        # # del dfA['Total']
         # del dfB['Total']
 
-        print(dfA.compare(dfB))
+        # print(dfA.compare(dfB))
 
     def generate_report(self):
         """"""
