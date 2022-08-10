@@ -63,5 +63,3 @@ other:
 	poetry init --no-interaction
 	poetry run python eyecite/benchmark.py --branch $(ref2)
 	rm pyproject.toml
-
-
