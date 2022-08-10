@@ -12,8 +12,6 @@ endif
 
 
 development:
-	pwd
-	ls
 	git clone -b $(ref1) https://github.com/freelawproject/eyecite.git other/eyecite
 	cp other/benchmark.py other/eyecite/
 	cp other/one-percent.csv.bz2 other/eyecite/
