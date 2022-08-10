@@ -10,7 +10,6 @@ ifndef ref1
 $(error BRANCH variable is not set. Use -e BRANCH=XYZ to proceed.)
 endif
 
-
 development:
 	git clone -b $(ref1) https://github.com/freelawproject/eyecite.git other/eyecite
 	cp other/benchmark.py other/eyecite/
