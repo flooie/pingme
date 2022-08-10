@@ -16,7 +16,7 @@ development:
 	cp other/benchmark.py other/eyecite/
 	cp other/one-percent.csv.bz2 other/eyecite/
 	cp other/pyproject.toml other/eyecite/
-	cd other/eyecite && poetry add pandas
+	cd other/eyecite && poetry add pandas==1.1.0
 	cd other/eyecite && poetry add matplotlib
 	cd other/eyecite && pwd && ls
 	cd other/eyecite && poetry show
