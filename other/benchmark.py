@@ -81,6 +81,8 @@ class Benchmark(object):
             for row in rows:
                 writer.writerow(row)
 
+        with open(f"plotted-{self.branch}.csv", "r") as f:
+            print(f.read())
         # dfx.to_csv(Path.joinpath(self.root, "..", f"plotted-{self.branch}.csv"), sep=",")
 
 
