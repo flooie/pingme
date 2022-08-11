@@ -1,0 +1,86 @@
+name: Download and process artifact
+on:
+  pull_request:
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - uses: snok/install-poetry@v1
+        with:
+          version: 1.1.13
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Read and assign
+        id: output_test
+        run: |
+          echo "value" >> new.txt
+          input_file="new.txt"
+          while read line
+          do
+            file_text=$line
+          done < "$input_file"
+          echo ::set-output name=new_value::$file_text
+
+      # test to see if done correctly - should echo "value"
+      - run: echo ${{ steps.output_test.outputs.new_value }}
+
+      - name: Install Poetry and Run Make File
+        run: |
+          echo ${{ github.base_ref }}
+          echo ${{ github.head_ref }}
+          echo ${{ github.ref_name }}
+          cd benchmark/
+          sh benchmark.sh main 117-benchmarking
+      - run: |
+          echo ${{ github.event.pull_request.base.ref }}
+          echo ${GITHUB_REF#refs/heads/}
+          echo " - ${{ env.GITHUB_REF_SLUG }}"    
+          echo " - ${{ env.GITHUB_HEAD_REF_SLUG }}"
+          echo " - ${{ env.GITHUB_BASE_REF_SLUG }}"
+          echo " - ${{ env.GITHUB_REPOSITORY_SLUG }}"
+          echo "\n\n# Speed Comparison" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
+          echo "-------------------" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
+          echo "### Main Branch vs. Current Branch" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
+          echo "![image](https://github.com/flooie/pingme/blob/main/pr${{github.event.number}}-time-comparison.png?raw=true)" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
+
+      - name: Pull request artifacts
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: gavv/pull-request-artifacts@v1.0.0
+        with:
+          commit: ${{ github.event.pull_request.head.sha }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          artifacts: |
+            /home/runner/work/pingme/pingme/benchmark/outputs/time-comparison.png
+            /home/runner/work/pingme/pingme/benchmark/outputs/report.md
+            benchmark/outputs/output.csv
+
+      - name: Comment on the PR with file PR
+        uses: machine-learning-apps/pr-comment@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          path: benchmark/outputs/report.md
+
+      - name: Read and assign 2
+        id: markdown_output
+        run: |
+          input_file="/home/runner/work/pingme/pingme/benchmark/outputs/report.md"
+          while read line
+          do
+            file_text=$line
+          done < "$input_file"
+          echo ::set-output name=new_value::$file_text
+
+      # test to see if done correctly - should echo "value"
+      - run: echo ${{ steps.output_test.outputs.new_value }}
+
+      - name: Edit PR comment
+        uses: thollander/actions-comment-pull-request@v1
+        with:
+          message: ${{ steps.markdown_output.outputs.new_value }}
+          comment_includes: 'The Eyecite Report'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
