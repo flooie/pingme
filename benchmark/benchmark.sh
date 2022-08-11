@@ -19,11 +19,12 @@ do
 done
 
 echo "Now lets compare our files and generate a graph we can use"
-
+cd outputs && ls
+cd ../
 poetry init --no-interaction
 poetry add matplotlib pandas
 poetry install --no-dev
-poetry run python graph.py --branch1 $1 --branch2 $2
+poetry run python chart.py --branch1 $1 --branch2 $2
 
 # Clean up and remove miscellaneous material
 rm poetry.lock
