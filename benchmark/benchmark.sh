@@ -23,7 +23,7 @@ echo "Now lets compare our files and generate a graph we can use"
 cd outputs && ls
 cd ../
 poetry init --no-interaction
-poetry add matplotlib pandas
+poetry add matplotlib pandas tables tabulate
 poetry install --no-dev
 poetry run python chart.py --branch1 $1 --branch2 $2
 

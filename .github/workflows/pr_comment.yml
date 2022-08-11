@@ -33,7 +33,6 @@ jobs:
           echo "### Main Branch vs. Current Branch" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
           echo "![image](https://github.com/flooie/pingme/blob/main/pr${{github.event.number}}-time-comparison.png?raw=true)" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
 
-
       - name: Pull request artifacts
         if: ${{ github.event_name == 'pull_request' }}
         uses: gavv/pull-request-artifacts@v1.0.0
@@ -41,8 +40,8 @@ jobs:
           commit: ${{ github.event.pull_request.head.sha }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: |
-            /home/runner/work/pingme/pingme/benchmark/outputs/report.md
-            /home/runner/work/pingme/pingme/benchmark/outputs/time-comparison.png
+            benchmark/outputs/report.md
+            benchmark/outputs/time-comparison.png
             benchmark/outputs/output.csv
 
 #      - name: Comment on the PR with file PR
