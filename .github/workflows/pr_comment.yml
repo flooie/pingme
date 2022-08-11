@@ -40,10 +40,9 @@ jobs:
             /home/runner/work/pingme/pingme/benchmark/outputs/report.md
             benchmark/outputs/output.csv
 
-
       - name: Edit PR comment
         uses: thollander/actions-comment-pull-request@v1
         with:
-          message: "${{ steps.markdown_output.outputs.new_value }}"
+          message: "this is the message"
           comment_includes: 'The Eyecite Report'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
