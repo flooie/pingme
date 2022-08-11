@@ -22,6 +22,10 @@ jobs:
           cd benchmark/
           sh benchmark.sh main 117-benchmarking
 
+      - name: Display structure of downloaded files
+        run: ls -R
+
+
       - name: Pull request artifacts
         if: ${{ github.event_name == 'pull_request' }}
         uses: gavv/pull-request-artifacts@v1.0.0
