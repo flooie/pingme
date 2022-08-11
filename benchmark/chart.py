@@ -73,7 +73,7 @@ class Benchmark(object):
         df = pd.read_csv("outputs/output.csv")
         with open("outputs/report.md", 'a') as md:
             df.to_markdown(buf=md)
-        with open("outputs/reports.md", "r+") as f:
+        with open("outputs/report.md", "r+") as f:
             file = f.read()
             file = re.sub("nan", "   ", file)
             f.seek(0)
