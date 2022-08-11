@@ -18,15 +18,12 @@ class Benchmark(object):
     def __init__(self):
         """"""
         self.root = Path(__file__).parent.absolute()
-        self.dfa = None
-        self.dfb = None
         self.branch1 = None
         self.branch2 = None
 
 
     def compare_dataframes(self):
         """"""
-        ids = []
         gains = []
         losses = []
         dfA = pd.read_csv(Path.joinpath(self.root, "outputs", f"plotted-{self.branch1}.csv"))
@@ -59,6 +56,7 @@ class Benchmark(object):
                         row_to_add = [row[0], "", item, dfA.iat[row[0],0]]
                     writer.writerow(row_to_add)
 
+
         # Generate our report based on the provided information.
         with open("outputs/report.md", "w") as f:
             f.write("# The Eyecite Report :eye:\n")
@@ -68,8 +66,6 @@ class Benchmark(object):
             f.write(f"# Output\n")
             f.write(f"---------\n\n")
             f.write(f"The following chart illustrates the gains and losses (if any) from the current pr.\n")
-
-
 
         df = pd.read_csv("outputs/output.csv")
         with open("outputs/report.md", 'a') as md:
@@ -84,6 +80,7 @@ class Benchmark(object):
 
         with open("outputs/report.md", "a") as f:
             f.write("\n\n# Speed Comparison\n### Main Branch vs. Current Branch\n")
+
 
     def generate_report(self):
         """"""

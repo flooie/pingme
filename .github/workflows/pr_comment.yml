@@ -14,18 +14,14 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
 
-      - name: Identify Variables
-        run: |
-          echo ${{ github.head_ref }}
-
-      - name: Install Poetry and Run Make File
+      - name: Install Poetry and Run Make File # ${{ github.head_ref }}
         run: |
           cd benchmark/
-          sh benchmark.sh main ${{ github.head_ref }}
+          sh benchmark.sh main 117-benchmarking
 
       - name: Embed Timing Chart into Markdown Post
         run: |
-          echo "![image](https://github.com/flooie/pingme/blob/main/pr${{github.event.number}}-time-comparison.png?raw=true)" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
+          echo "![image](https://github.com/flooie/pingme/blob/main/pr${{github.event.number}}-time-comparison.png?raw=true)" >> benchmark/outputs/report.md
 
       - name: Upload and Post Files to PR
         if: ${{ github.event_name == 'pull_request' }}
@@ -42,5 +38,5 @@ jobs:
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           recreate: true
-          path: /home/runner/work/pingme/pingme/benchmark/outputs/report.md
+          path: benchmark/outputs/report.md
 
