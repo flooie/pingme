@@ -64,7 +64,14 @@ class Benchmark(object):
             f.write("The output here was most likely good.\n")
             f.write(f"There were {len(gains)} gains and {len(losses)} losses.\n")
             f.write(f"You can verify any losses by using the cluster id generated\n")
-            f.write(f"With the following IDs... oh great. None.\n")
+            f.write(f"With the following IDs... oh great. None.\n\n")
+            f.write(f"# Output\n")
+            f.write(f"---------")
+
+
+        df = pd.read_csv("outputs/output.csv")
+        with open("outputs/report.md", 'a') as md:
+            df.to_markdown(buf=md, tablefmt="grid")
 
     def generate_report(self):
         """"""
@@ -85,13 +92,9 @@ if __name__ == "__main__":
     parser.add_argument('--markdown')
     args = parser.parse_args()
 
-    if args.markdown != None:
-        with open("outputs/report.md", "a") as f:
-            f.write(f"![image](https://github.com/flooie/pingme/blob/main/pr{args.markdown}-time-comparison.png?raw=true).\n")
-    else:
-        benchmark = Benchmark()
-        benchmark.branch1 = args.branch1
-        benchmark.branch2 = args.branch2
-        benchmark.compare_dataframes()
-        benchmark.generate_report()
+    benchmark = Benchmark()
+    benchmark.branch1 = args.branch1
+    benchmark.branch2 = args.branch2
+    benchmark.compare_dataframes()
+    benchmark.generate_report()
 
