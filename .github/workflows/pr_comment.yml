@@ -25,6 +25,14 @@ jobs:
       - name: Display structure of downloaded files
         run: ls -R
 
+      - name: Update Report MD
+        run: |
+          echo "\n\n" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
+          echo "# Speed Comparison" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
+          echo "-------------------" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
+          echo "### Main Branch vs. Current Branch" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
+          echo "![image](https://github.com/flooie/pingme/blob/main/pr${{github.event.number}}-time-comparison.png?raw=true)" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
+
 
       - name: Pull request artifacts
         if: ${{ github.event_name == 'pull_request' }}
@@ -36,15 +44,6 @@ jobs:
             /home/runner/work/pingme/pingme/benchmark/outputs/report.md
             /home/runner/work/pingme/pingme/benchmark/outputs/time-comparison.png
             benchmark/outputs/output.csv
-
-      - name: Update Report MD
-        run: |
-          echo "\n\n" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
-          echo "# Speed Comparison" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
-          echo "-------------------" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
-          echo "### Main Branch vs. Current Branch" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
-          echo "![image](https://github.com/flooie/pingme/blob/main/pr${{github.event.number}}-time-comparison.png?raw=true)" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
-
 
 #      - name: Comment on the PR with file PR
 #        uses: machine-learning-apps/pr-comment@master
