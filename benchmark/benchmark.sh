@@ -17,7 +17,8 @@ do
     cd ..
     rm -rf eyecite/
 done
-
+pwd
+ls
 echo "Now lets compare our files and generate a graph we can use"
 cd outputs && ls
 cd ../
