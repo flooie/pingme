@@ -62,22 +62,27 @@ jobs:
 #        run: cat /home/runner/work/pingme/pingme/benchmark/outputs/report.md
 
 
-      - name: Get version
-        id: vars
-        run: echo ::set-output name=version::$(cat /home/runner/work/pingme/pingme/benchmark/outputs/report.md)
-      - name: Test output
-        run: echo ${{ steps.vars.outputs.version }}
+#      - name: Get version
+#        id: vars
+#        run: echo ::set-output name=version::$(cat /home/runner/work/pingme/pingme/benchmark/outputs/report.md)
+#      - name: Test output
+#        run: echo ${{ steps.vars.outputs.version }}
+#
+#      - name: Read file contents
+#        id: read_file
+#        uses: andstor/file-reader-action@v1
+#        with:
+#          path: "/home/runner/work/pingme/pingme/benchmark/outputs/report.md"
+#
+#
+#      - name: Edit PR comment
+#        uses: thollander/actions-comment-pull-request@v1
+#        with:
+#          message: ${{ steps.read_file.outputs.contents }}
+#          comment_includes: 'The Eyecite Report'
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Read file contents
-        id: read_file
-        uses: andstor/file-reader-action@v1
-        with:
-          path: "/home/runner/work/pingme/pingme/benchmark/outputs/report.md"
-
-
-      - name: Edit PR comment
-        uses: thollander/actions-comment-pull-request@v1
-        with:
-          message: ${{ steps.read_file.outputs.contents }}
-          comment_includes: 'The Eyecite Report'
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: marocchino/sticky-pull-request-comment@v2
+      with:
+        recreate: true
+        path: /home/runner/work/pingme/pingme/benchmark/outputs/report.md
