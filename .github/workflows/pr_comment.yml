@@ -75,12 +75,12 @@ jobs:
           path: "/home/runner/work/pingme/pingme/benchmark/outputs/report.md"
 
       - name: File contents
-        run: echo "${ steps.read_file.outputs.contents }"
+        run: echo ${{ steps.read_file.outputs.contents }}
 
 
       - name: Edit PR comment
         uses: thollander/actions-comment-pull-request@v1
         with:
-          message: ${{ steps.vars.outputs.version }}
+          message: ${{ steps.read_file.outputs.contents }}
           comment_includes: 'The Eyecite Report'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
