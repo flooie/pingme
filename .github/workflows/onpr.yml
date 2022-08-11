@@ -1,4 +1,4 @@
-name: Download and process artifact
+name: Comment on PR
 on:
   pull_request:
 
@@ -15,16 +15,9 @@ jobs:
           virtualenvs-in-project: true
       - name: Install Poetry and Run Make File
         run: |
-          echo ${{ github.ref_name }}
           cd benchmark/
-          sh benchmark.sh main 117-benchmarking
+          sh benchmark.sh main ${{ github.ref_name }}
       - run: |
-          echo ${{ github.event.pull_request.base.ref }}
-          echo ${GITHUB_REF#refs/heads/}
-          echo " - ${{ env.GITHUB_REF_SLUG }}"    
-          echo " - ${{ env.GITHUB_HEAD_REF_SLUG }}"
-          echo " - ${{ env.GITHUB_BASE_REF_SLUG }}"
-          echo " - ${{ env.GITHUB_REPOSITORY_SLUG }}"
           echo "\n\n# Speed Comparison" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
           echo "-------------------" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
           echo "### Main Branch vs. Current Branch" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
@@ -41,79 +34,9 @@ jobs:
             /home/runner/work/pingme/pingme/benchmark/outputs/report.md
             /home/runner/work/pingme/pingme/benchmark/outputs/output.csv
 
-
-      - name: Comment on the PR with file PR  # this is good because it displays much of the report, which we can and should just embed the final image chart to the pull
+      - name: Comment on the PR with file PR
         uses: machine-learning-apps/pr-comment@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: benchmark/outputs/report.md
-
-#      - name: Comment PR
-#        uses: thollander/actions-comment-pull-request@v1
-#        with:
-#          message: |
-#            Hello world ! :wave:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-#      - name: Edit PR comment
-#        uses: thollander/actions-comment-pull-request@v1
-#        with:
-#          message: 'Content loaded ! (edited)'
-#          comment_includes: 'Loading'
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-#      - name: Comment a pull_request
-#        uses: mb2dev/github-action-comment-pull-request@1.0.0
-#        with:
-#          message: "Hello, It's my first comment with Github action !"
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          reactions: "+1 | -1 | laugh | hooray | confused | heart | rocket | eyes"
-
-#      - uses: actions/upload-artifact@v3
-#        with:
-#          name: time-chart
-#          path: /home/runner/work/pingme/pingme/benchmark/outputs/time-comparison.png
-
-#      - name: Pull request artifacts
-#        if: ${{ github.event_name == 'pull_request' }}
-#        uses: gavv/pull-request-artifacts@v1.0.0
-#        with:
-#          commit: ${{ github.event.pull_request.head.sha }}
-#          repo-token: ${{ secrets.GITHUB_TOKEN }}
-#          artifacts: |
-#            /home/runner/work/pingme/pingme/benchmark/outputs/time-comparison.png
-#            /home/runner/work/pingme/pingme/benchmark/outputs/report.md
-#            /home/runner/work/pingme/pingme/benchmark/outputs/output.csv
-
-
-#      - name: Display structure of downloaded files
-#        run: |
-#          ls -R
-#          pull_number=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
-#          echo pull_number
-
-#      - name: Pull request artifacts
-#        if: ${{ github.event_name == 'pull_request' }}
-#        uses: gavv/pull-request-artifacts@v1.0.0
-#        with:
-#          commit: ${{ github.event.pull_request.head.sha }}
-#          repo-token: ${{ secrets.GITHUB_TOKEN }}
-#          artifacts: |
-#            /home/runner/work/pingme/pingme/benchmark/outputs/time-comparison.png
-#            /home/runner/work/pingme/pingme/benchmark/outputs/report.md
-#            /home/runner/work/pingme/pingme/benchmark/outputs/output.csv
-
-
-#      - name: PR comment with reactions
-#        uses: thollander/actions-comment-pull-request@v1
-#        env:
-#          pull_number: ${{github.event.number}}
-#        with:
-#          message: |
-#            This is the output of the speed comparison between the main branch and your PR.
-#            Please take the time to review the chart for slow downs, speedups or
-#            unexpected changes
-#            "![image](https://github.com/flooie/pingme/blob/main/pr${{github.event.number}}-time-comparison.png?raw=true) :wave:"
-#          reactions: eyes, rocket
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
