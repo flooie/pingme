@@ -14,13 +14,6 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
 
-      - name: Get version
-        id: vars
-        run: echo ::set-output name=version::$(cat benchmark/benchmark.py)
-      - name: Test output
-        run: echo ${{ steps.vars.outputs.version }}
-
-
       - name: Install Poetry and Run Make File
         run: |
           echo ${{ github.base_ref }}
@@ -67,18 +60,24 @@ jobs:
       # test to see if done correctly - should echo "value"
       - run: echo ${{ steps.output_test.outputs.new_value }}
 
-      - name: Read file contents
-        id: read_file
-        uses: andstor/file-reader-action@v1
-        with:
-          path: "/home/runner/work/pingme/pingme/benchmark/outputs/report.md"
+#      - name: Read file contents
+#        id: read_file
+#        uses: andstor/file-reader-action@v1
+#        with:
+#          path: "/home/runner/work/pingme/pingme/benchmark/outputs/report.md"
+#
+#      - name: File contents
+#        run: cat /home/runner/work/pingme/pingme/benchmark/outputs/report.md
 
-      - name: File contents
-        run: cat /home/runner/work/pingme/pingme/benchmark/outputs/report.md
+      - name: Get version
+        id: vars
+        run: echo ::set-output name=version::$(cat /home/runner/work/pingme/pingme/benchmark/outputs/report.md)
+      - name: Test output
+        run: echo ${{ steps.vars.outputs.version }}
 
       - name: Edit PR comment
         uses: thollander/actions-comment-pull-request@v1
         with:
-          message: ${{ steps.read_file.outputs.contents }}
+          message: ${{ steps.vars.outputs.version }}
           comment_includes: 'The Eyecite Report'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
