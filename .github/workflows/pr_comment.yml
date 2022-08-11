@@ -74,9 +74,6 @@ jobs:
         with:
           path: "/home/runner/work/pingme/pingme/benchmark/outputs/report.md"
 
-      - name: File contents
-        run: echo ${{ steps.read_file.outputs.contents }}
-
 
       - name: Edit PR comment
         uses: thollander/actions-comment-pull-request@v1
