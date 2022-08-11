@@ -68,6 +68,16 @@ jobs:
       - name: Test output
         run: echo ${{ steps.vars.outputs.version }}
 
+      - name: Read file contents
+        id: read_file
+        uses: andstor/file-reader-action@v1
+        with:
+          path: "/home/runner/work/pingme/pingme/benchmark/outputs/report.md"
+
+      - name: File contents
+        run: echo "${ steps.read_file.outputs.contents }"
+
+
       - name: Edit PR comment
         uses: thollander/actions-comment-pull-request@v1
         with:
