@@ -44,6 +44,12 @@ jobs:
             benchmark/outputs/time-comparison.png
             benchmark/outputs/output.csv
 
+      - name: Something
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          recreate: true
+          path: /home/runner/work/pingme/pingme/benchmark/outputs/report.md
+
 #      - name: Comment on the PR with file PR
 #        uses: machine-learning-apps/pr-comment@master
 #        env:
@@ -82,7 +88,3 @@ jobs:
 #          comment_includes: 'The Eyecite Report'
 #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      uses: marocchino/sticky-pull-request-comment@v2
-      with:
-        recreate: true
-        path: /home/runner/work/pingme/pingme/benchmark/outputs/report.md
