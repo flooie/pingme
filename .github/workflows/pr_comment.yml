@@ -1,4 +1,4 @@
-name: Download and process artifact
+name: Generate Report on Eyecite PR
 on:
   pull_request:
 
@@ -14,22 +14,20 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
 
+      - name: Identify Variables
+        run: |
+          echo ${{ github.head_ref }}
+
       - name: Install Poetry and Run Make File
         run: |
-          echo ${{ github.base_ref }}
-          echo ${{ github.head_ref }}
-          echo ${{ github.ref_name }}
           cd benchmark/
-          sh benchmark.sh main 117-benchmarking
+          sh benchmark.sh main ${{ github.head_ref }}
 
-      - name: Display structure of downloaded files
-        run: ls -R
-
-      - name: Update Report MD
+      - name: Embed Timing Chart into Markdown Post
         run: |
           echo "![image](https://github.com/flooie/pingme/blob/main/pr${{github.event.number}}-time-comparison.png?raw=true)" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
 
-      - name: Pull request artifacts
+      - name: Upload and Post Files to PR
         if: ${{ github.event_name == 'pull_request' }}
         uses: gavv/pull-request-artifacts@v1.0.0
         with:
@@ -40,47 +38,9 @@ jobs:
             benchmark/outputs/time-comparison.png
             benchmark/outputs/output.csv
 
-      - name: Something
+      - name: Add or Update PR Comment from Generated Report
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           recreate: true
           path: /home/runner/work/pingme/pingme/benchmark/outputs/report.md
-
-#      - name: Comment on the PR with file PR
-#        uses: machine-learning-apps/pr-comment@master
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          path: benchmark/outputs/report.md
-
-
-#      - name: Read file contents
-#        id: read_file
-#        uses: andstor/file-reader-action@v1
-#        with:
-#          path: "/home/runner/work/pingme/pingme/benchmark/outputs/report.md"
-#
-#      - name: File contents
-#        run: cat /home/runner/work/pingme/pingme/benchmark/outputs/report.md
-
-
-#      - name: Get version
-#        id: vars
-#        run: echo ::set-output name=version::$(cat /home/runner/work/pingme/pingme/benchmark/outputs/report.md)
-#      - name: Test output
-#        run: echo ${{ steps.vars.outputs.version }}
-#
-#      - name: Read file contents
-#        id: read_file
-#        uses: andstor/file-reader-action@v1
-#        with:
-#          path: "/home/runner/work/pingme/pingme/benchmark/outputs/report.md"
-#
-#
-#      - name: Edit PR comment
-#        uses: thollander/actions-comment-pull-request@v1
-#        with:
-#          message: ${{ steps.read_file.outputs.contents }}
-#          comment_includes: 'The Eyecite Report'
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
