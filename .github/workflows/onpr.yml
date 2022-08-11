@@ -19,6 +19,14 @@ jobs:
           sh benchmark.sh main 117-benchmarking
       - run: |
           ls
+
+      - name: Comment on the PR with file PR
+        uses: machine-learning-apps/pr-comment@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          path: benchmark/outputs/report.md
+
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@v1
         with:
@@ -39,3 +47,25 @@ jobs:
           message: "Hello, It's my first comment with Github action !"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           reactions: "+1 | -1 | laugh | hooray | confused | heart | rocket | eyes"
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: time-chart
+          path: /home/runner/work/pingme/pingme/benchmark/outputs/time-comparison.png
+
+
+      - name: PR comment with reactions
+        uses: thollander/actions-comment-pull-request@v1
+        env:
+          pull_number: ${{github.event.number}}
+        with:
+          message: |
+            This is the output of the speed comparison between the main branch and your PR.  
+            Please take the time to review the chart for slow downs, speedups or 
+            unexpected changes
+            `$pull_number`
+            ${{pull_number}}
+            `${{pull_number}}`
+            "![image](https://github.com/flooie/pingme/blob/main/pr`$pull_number`-time-comparison.png?raw=true) :wave:"
+          reactions: eyes, rocket
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
