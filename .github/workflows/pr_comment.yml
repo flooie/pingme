@@ -47,11 +47,6 @@ jobs:
 #        with:
 #          path: benchmark/outputs/report.md
 
-      - name: Read file contents
-        id: read_file
-        uses: andstor/file-reader-action@v1
-        with:
-          path: "/home/runner/work/pingme/pingme/benchmark/outputs/report.md"
 
       - name: Read and assign 2
         id: markdown_output
