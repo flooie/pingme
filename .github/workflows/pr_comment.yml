@@ -61,6 +61,7 @@ jobs:
 #      - name: File contents
 #        run: cat /home/runner/work/pingme/pingme/benchmark/outputs/report.md
 
+
       - name: Get version
         id: vars
         run: echo ::set-output name=version::$(cat /home/runner/work/pingme/pingme/benchmark/outputs/report.md)
