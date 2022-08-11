@@ -19,7 +19,7 @@ jobs:
           echo ${{ github.head_ref }}
           echo ${{ github.ref_name }}
           cd benchmark/
-          sh benchmark.sh main 117-benchmarking
+          sh benchmark.sh ${{ github.base_ref }} ${{ github.head_ref }}
       - run: |
           echo ${{ github.event.pull_request.base.ref }}
           echo ${GITHUB_REF#refs/heads/}
@@ -41,9 +41,9 @@ jobs:
           artifacts: |
             /home/runner/work/pingme/pingme/benchmark/outputs/time-comparison.png
             /home/runner/work/pingme/pingme/benchmark/outputs/report.md
-            /home/runner/work/pingme/pingme/benchmark/outputs/output.csv
+            benchmark/outputs/output.csv
 
-      - name: Comment on the PR with file PR  # this is good because it displays much of the report, which we can and should just embed the final image chart to the pull
+      - name: Comment on the PR with file PR
         uses: machine-learning-apps/pr-comment@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
