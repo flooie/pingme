@@ -24,7 +24,8 @@ jobs:
 
       - name: Update Report MD
         run: |
-          echo "\n\n# Speed Comparison" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
+          echo "\n\n" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
+          echo "# Speed Comparison" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
           echo "-------------------" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
           echo "### Main Branch vs. Current Branch" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
           echo "![image](https://github.com/flooie/pingme/blob/main/pr${{github.event.number}}-time-comparison.png?raw=true)" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
@@ -36,9 +37,9 @@ jobs:
           commit: ${{ github.event.pull_request.head.sha }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: |
-            benchmark/outputs/time-comparison.png
-            benchmark/outputs/report.md
-            benchmark/outputs/output.csv
+            /home/runner/work/pingme/pingme/benchmark/outputs/time-comparison.png
+            /home/runner/work/pingme/pingme/benchmark/outputs/report.md
+            /home/runner/work/pingme/pingme/benchmark/outputs/output.csv
 
 #      - name: Comment on the PR with file PR
 #        uses: machine-learning-apps/pr-comment@master
