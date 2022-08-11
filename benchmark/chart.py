@@ -82,11 +82,16 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='A test program.')
     parser.add_argument('--branch1')
     parser.add_argument('--branch2')
+    parser.add_argument('--markdown')
     args = parser.parse_args()
 
-    benchmark = Benchmark()
-    benchmark.branch1 = args.branch1
-    benchmark.branch2 = args.branch2
-    benchmark.compare_dataframes()
-    benchmark.generate_report()
+    if args.markdown != None:
+        with open("outputs/report.md", "a") as f:
+            f.write(f"![image](https://github.com/flooie/pingme/blob/main/pr{args.markdown}-time-comparison.png?raw=true).\n")
+    else:
+        benchmark = Benchmark()
+        benchmark.branch1 = args.branch1
+        benchmark.branch2 = args.branch2
+        benchmark.compare_dataframes()
+        benchmark.generate_report()
 
