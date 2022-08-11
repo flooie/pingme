@@ -78,6 +78,6 @@ jobs:
       - name: Edit PR comment
         uses: thollander/actions-comment-pull-request@v1
         with:
-          message: "${{ steps.read_file.outputs.contents }}"
+          message: ${{ steps.read_file.outputs.contents }}
           comment_includes: 'The Eyecite Report'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
