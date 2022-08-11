@@ -49,18 +49,6 @@ jobs:
 #        with:
 #          path: benchmark/outputs/report.md
 
-      - name: Read and assign 2
-        id: markdown_output
-        run: |
-          input_file="/home/runner/work/pingme/pingme/benchmark/outputs/report.md"
-          while read line
-          do
-            file_text=$line
-          done < "$input_file"
-          echo ::set-output name=new_value::$file_text
-
-      # test to see if done correctly - should echo "value"
-      - run: echo ${{ steps.output_test.outputs.new_value }}
 
 #      - name: Read file contents
 #        id: read_file
