@@ -69,9 +69,6 @@ jobs:
             This is the output of the speed comparison between the main branch and your PR.  
             Please take the time to review the chart for slow downs, speedups or 
             unexpected changes
-            `$pull_number`
-            ${{pull_number}}
-            `${{pull_number}}`
-            "![image](https://github.com/flooie/pingme/blob/main/pr`$pull_number`-time-comparison.png?raw=true) :wave:"
+            "![image](https://github.com/flooie/pingme/blob/main/pr${{github.event.number}}-foo.png?raw=true) :wave:"
           reactions: eyes, rocket
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
