@@ -21,7 +21,9 @@ jobs:
           echo ${{ github.ref_name }}
           cd benchmark/
           sh benchmark.sh main 117-benchmarking
-      - run: |
+
+      - name: Update Report MD
+        run: |
           echo "\n\n# Speed Comparison" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
           echo "-------------------" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
           echo "### Main Branch vs. Current Branch" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
@@ -34,8 +36,8 @@ jobs:
           commit: ${{ github.event.pull_request.head.sha }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: |
-            /home/runner/work/pingme/pingme/benchmark/outputs/time-comparison.png
-            /home/runner/work/pingme/pingme/benchmark/outputs/report.md
+            benchmark/outputs/time-comparison.png
+            benchmark/outputs/report.md
             benchmark/outputs/output.csv
 
 #      - name: Comment on the PR with file PR
@@ -65,7 +67,7 @@ jobs:
           path: "/home/runner/work/pingme/pingme/benchmark/outputs/report.md"
 
       - name: File contents
-        run: echo "${ steps.read_file.outputs.contents }"
+        run: echo ${{ steps.read_file.outputs.contents }}
 
       - name: Edit PR comment
         uses: thollander/actions-comment-pull-request@v1
