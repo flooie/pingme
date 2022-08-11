@@ -74,6 +74,7 @@ class Benchmark(object):
         df = pd.read_csv("outputs/output.csv")
         with open("outputs/report.md", 'a') as md:
             df.to_markdown(buf=md)
+
         with open("outputs/report.md", "r+") as f:
             file = f.read()
             file = re.sub("nan", "   ", file)
@@ -81,7 +82,7 @@ class Benchmark(object):
             f.write(file)
             f.truncate()
 
-        with open("outputs/report.md", "w") as f:
+        with open("outputs/report.md", "a") as f:
             f.write("\n\n# Speed Comparison\n### Main Branch vs. Current Branch\n")
 
     def generate_report(self):
