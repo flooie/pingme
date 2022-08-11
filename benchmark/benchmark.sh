@@ -31,3 +31,6 @@ poetry run python chart.py --branch1 $1 --branch2 $2
 rm poetry.lock
 rm pyproject.toml
 
+cd outputs && ls
+
+
