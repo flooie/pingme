@@ -92,6 +92,7 @@ class Benchmark(object):
         df.plot(x="Time", y=[f'Total {self.branch1}', f'Total {self.branch2}'])
         plt.savefig('outputs/time-comparison.png')
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='A test program.')
     parser.add_argument('--branch1')
