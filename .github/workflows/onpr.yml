@@ -18,7 +18,7 @@ jobs:
           cd benchmark/
           sh benchmark.sh main 117-benchmarking
       - run: |
-          echo "# Speed Comparison" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
+          echo "\n\n# Speed Comparison" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
           echo "-------------------" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
           echo "### Main Branch vs. Current Branch" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
           echo "![image](https://github.com/flooie/pingme/blob/main/pr${{github.event.number}}-time-comparison.png?raw=true)" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
