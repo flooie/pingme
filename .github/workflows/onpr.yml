@@ -18,6 +18,7 @@ jobs:
           cd benchmark/
           sh benchmark.sh main 117-benchmarking
       - run: |
+          echo ${{ github.event.pull_request.base.ref }}
           echo "\n\n# Speed Comparison" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
           echo "-------------------" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
           echo "### Main Branch vs. Current Branch" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
