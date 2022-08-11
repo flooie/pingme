@@ -21,6 +21,8 @@ jobs:
           echo ${{ github.ref_name }}
           cd benchmark/
           sh benchmark.sh main 117-benchmarking
+
+      - name: Update report and add link to chart
       - run: |
           echo "\n\n# Speed Comparison" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
           echo "-------------------" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
@@ -45,22 +47,29 @@ jobs:
 #        with:
 #          path: benchmark/outputs/report.md
 
-      - name: Read and assign 2
-        id: markdown_output
-        run: |
-          input_file="/home/runner/work/pingme/pingme/benchmark/outputs/report.md"
-          while read line
-          do
-            file_text=$line
-          done < "$input_file"
-          echo ::set-output name=new_value::$file_text
+      - name: Read file contents
+        id: read_file
+        uses: andstor/file-reader-action@v1
+        with:
+          path: "/home/runner/work/pingme/pingme/benchmark/outputs/report.md"
+
+#      - name: Read and assign 2
+#        id: markdown_output
+#        run: |
+#          input_file="/home/runner/work/pingme/pingme/benchmark/outputs/report.md"
+#          while read line
+#          do
+#            file_text=$line
+#          done < "$input_file"
+#          echo ::set-output name=new_value::$file_text
 
       # test to see if done correctly - should echo "value"
-      - run: echo ${{ steps.output_test.outputs.new_value }}
+      - name: Echo Contents of file
+        run: echo "${ steps.read_file.outputs.contents }"
 
       - name: Edit PR comment
         uses: thollander/actions-comment-pull-request@v1
         with:
-          message: ${{ steps.markdown_output.outputs.new_value }}
+          message: ${ steps.read_file.outputs.contents }
           comment_includes: 'The Eyecite Report'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
