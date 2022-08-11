@@ -65,9 +65,10 @@ class Benchmark(object):
             f.write("")
             f.write(f"There were {len(gains)} gains and {len(losses)} losses.\n")
             f.write(f"You can verify any losses by using the cluster id generated\n")
-            f.write(f"With the following IDs... oh great. None.\n\n")
             f.write(f"# Output\n")
             f.write(f"---------\n\n")
+            f.write(f"The following chart illustrates the gains and losses (if any) from the current pr.\n")
+
 
 
         df = pd.read_csv("outputs/output.csv")
@@ -79,6 +80,9 @@ class Benchmark(object):
             f.seek(0)
             f.write(file)
             f.truncate()
+
+        with open("outputs/report.md", "w") as f:
+            f.write("\n\n# Speed Comparison\n### Main Branch vs. Current Branch\n")
 
     def generate_report(self):
         """"""
