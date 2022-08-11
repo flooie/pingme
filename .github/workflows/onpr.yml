@@ -16,8 +16,11 @@ jobs:
       - name: Install Poetry and Run Make File
         run: |
           cd benchmark/
-          sh benchmark.sh main ${{ github.ref }}
+          sh benchmark.sh main 117-benchmarking
+      - run: |
+          ls
           echo "![image](https://github.com/flooie/pingme/blob/main/pr${{github.event.number}}-time-comparison.png?raw=true) :wave:" >> /home/runner/work/pingme/pingme/benchmark/outputs/report.md
+
 
       - name: Comment on the PR with file PR  # this is good because it displays much of the report, which we can and should just embed the final image chart to the pull
         uses: machine-learning-apps/pr-comment@master
