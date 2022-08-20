@@ -10,7 +10,7 @@ jobs:
         run: |
           echo "Event '${{ github.event.action }}' received from '${{ github.event.client_payload.repository }}'"
       - name: PONG - Dispatch response to received PING
-        if: github.event.action == 'ping'
+        if: github.event.action == 'pr1'
         run: |
           echo "I certainly am going to run something"
           echo "Event '${{ github.event.action }}' received from '${{ github.event.client_payload.repository }}'"
