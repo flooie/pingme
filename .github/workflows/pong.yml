@@ -6,7 +6,7 @@ jobs:
   ping-pong:
     runs-on: ubuntu-latest
     steps:
-      - name: Event Information
+      - name: Event Information xxxx
         run: |
           echo "Event '${{ github.event.action }}' received from '${{ github.event.client_payload.repository }}'"
           echo ${{ github.event.action }}
