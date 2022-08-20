@@ -6,13 +6,11 @@ jobs:
   ping-pong:
     runs-on: ubuntu-latest
     steps:
-      - name: Event Information xxxx
+      - name: Event Information
         run: |
           echo "Event '${{ github.event.action }}' received from '${{ github.event.client_payload.repository }}'"
-          echo ${{ github.event.action }}
-
       - name: PONG - Dispatch response to received PING
-        if: github.event.action == "pr1"
+        if: github.event.action == 'pr1'
         run: |
           echo "I certainly am going to run something"
           echo "Event '${{ github.event.action }}' received from '${{ github.event.client_payload.repository }}'"
