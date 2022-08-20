@@ -12,7 +12,5 @@ jobs:
       - name: PONG - Dispatch response to received PING
         if: github.event.action == 'ping'
         run: |
-          curl -X POST https://api.github.com/repos/flooie/crosspingme/dispatches \
-          -H 'Accept: application/vnd.github.everest-preview+json' \
-          -u ${{ secrets.ACCESS_TOKEN }} \
-          --data '{"event_type": "pong", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
+          echo "I certainly am going to run something"
+          echo "Event '${{ github.event.action }}' received from '${{ github.event.client_payload.repository }}'"
