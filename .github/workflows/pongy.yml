@@ -18,3 +18,4 @@ jobs:
           recreate: true
           repo: flooie/crosspingme
           message: "Hello world...."
+          number: 1
