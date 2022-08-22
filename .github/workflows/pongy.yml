@@ -12,3 +12,4 @@ jobs:
       - run: |
           echo ${{ github.event.client_payload.sha }}
           echo "hello world"
+          echo ${{ github.event.client_payload.ref }}
