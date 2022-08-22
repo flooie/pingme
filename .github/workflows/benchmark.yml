@@ -23,9 +23,8 @@ jobs:
           cp benchmark.py eyecite/
           cd eyecite/
           poetry install --no-dev
+          
           poetry run python benchmark.py --branch main
-      
-          echo "Cloning ${{ github.head_ref }} branch"
           git checkout ${{ github.head_ref }}
           
           poetry install --no-dev
@@ -37,6 +36,7 @@ jobs:
           poetry install --no-dev
           pwd
           ls
+          
           poetry run python chart.py --branch1 main --branch2 ${{ github.head_ref }}
 
       - name: Embed Timing Chart into Markdown Post
