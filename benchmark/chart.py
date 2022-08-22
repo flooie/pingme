@@ -127,7 +127,6 @@ if __name__ == "__main__":
     parser.add_argument("--branch")
 
     args = parser.parse_args()
-    branch = args.branch1
 
     # Process the report
     compare_dataframes(args.branch)
