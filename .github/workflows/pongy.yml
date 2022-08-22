@@ -10,5 +10,5 @@ jobs:
         with:
           ref: ${{ github.event.client_payload.ref }}
       - run: |
-        echo ${{ github.event.client_payload.sha }}
-        echo ${{ github.event.client_payload.ref }}
+      echo ${{ github.event.client_payload.sha }}
+      echo ${{ github.event.client_payload.ref }}
