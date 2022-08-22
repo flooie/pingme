@@ -28,7 +28,7 @@ jobs:
           rm -rf eyecite/
       
           echo "Cloning ${{ github.head_ref }} branch"
-          git clone -b ${{ github.head_ref }} https://github.com/freelawproject/eyecite.git
+          git checkout ${{ github.head_ref }}
           cp benchmark.py eyecite/
           cd eyecite/
           poetry install --no-dev
