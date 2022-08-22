@@ -1,5 +1,6 @@
 
 
 
-git clone https://github.com/flooie/crosspingme/tree/$1
+git clone https://github.com/flooie/crosspingme.git
+git reset --hard $1
 ls
