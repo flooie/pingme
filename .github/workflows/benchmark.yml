@@ -14,8 +14,9 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
 
-      - name: Run benchmarking script
+      - name: Run benchmarking Script
         run: |
+          cd benchmark/
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output bulk-file.csv.bz2
           git clone https://github.com/freelawproject/eyecite.git
           cp benchmark.py eyecite/
@@ -25,8 +26,8 @@ jobs:
           cd ..
           rm -rf eyecite/
       
-          echo "Cloning $branch2 branch"
-          git clone -b $branch2 https://github.com/freelawproject/eyecite.git
+          echo "Cloning ${{ github.head_ref }} branch"
+          git clone -b ${{ github.head_ref }} https://github.com/freelawproject/eyecite.git
           cp benchmark.py eyecite/
           cd eyecite/
           poetry install --no-dev
