@@ -1,7 +1,7 @@
 name: Repository Dispatch
 on:
   repository_dispatch:
-    types: [my-event] # this is tagged event type to do the soemthing or other
+    types: [reporters-db-pr] # this is tagged event type to do the soemthing or other
 jobs:
   myEvent:
     runs-on: ubuntu-latest
@@ -11,6 +11,11 @@ jobs:
           echo ${{ github.event.client_payload.sha }}
           echo "hello world"
           echo ${{ github.event.client_payload.ref }}
+
+      - run: |
+          cd benchmark/
+          sh justso.sh ${{ github.event.client_payload.sha }}
+          ls 
 
       - name: Add or Update PR Comment from Generated Report
         uses: marocchino/sticky-pull-request-comment@v2
