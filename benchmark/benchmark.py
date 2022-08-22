@@ -1,28 +1,21 @@
-# Download the sample files ... one
-# Auto commenting on PR thoughts
-
 import argparse
 import bz2
-import datetime
-from pathlib import Path
 import csv
-from io import StringIO
+import datetime
 import sys
+from io import StringIO
+from pathlib import Path
+
+from eyecite import get_citations
 
 csv.field_size_limit(sys.maxsize)
-from eyecite import get_citations
 
 
 class Benchmark(object):
-    """"""
+    """Benchmark the different eyecite branches"""
 
     def __init__(self):
-        """"""
-        self.size = None
         self.root = Path(__file__).parent.absolute()
-        self.dfa = None
-        self.dfb = None
-        self.file_append = None
         self.now = datetime.datetime.now()
         self.times = []
         self.totals = []
@@ -30,14 +23,17 @@ class Benchmark(object):
         self.opinions = []
         self.count = 0
         self.fields = []
-        self.branch = None
 
+    def fetch_citations(self, row) -> None:
+        """Fetch citations from rows opinion data
 
-    def fetch_citations(self, row):
-        """"""
+        return: None
+        """
         row_id = row[0]
         row = dict(zip(self.fields, row))
-        non_empty_rows = [row[field] for field in self.fields if type(row[field]) == str]
+        non_empty_rows = [
+            row[field] for field in self.fields if type(row[field]) == str
+        ]
         if len(non_empty_rows) == 0:
             return None
 
@@ -47,38 +43,36 @@ class Benchmark(object):
             found_citations = get_citations(op)
             cites = [cite.token.data for cite in found_citations if cite.token]
             found_cites.extend(cites)
+
         self.opinions.append(found_cites)
         self.count += len(found_cites)
         self.totals.append(self.count)
         self.times.append((datetime.datetime.now() - self.now).total_seconds())
 
+    def generate_branch_report(self, branch: str) -> None:
+        """Generate Branch v Main Report
 
-    def unzip(self):
-        """"""
-        zipfile = bz2.BZ2File(Path.joinpath(self.root, "..", "one-percent.csv.bz2"))
-        byte_content = zipfile.read()
-        content = byte_content.decode()
-        file = StringIO(content)
-        csv_data = csv.reader(file, delimiter=",")
+        return: None
+        """
+        zipfile = bz2.BZ2File(
+            Path.joinpath(self.root, "..", "bulk-file.csv.bz2")
+        )
+        csv_data = csv.reader(StringIO(zipfile.read().decode()), delimiter=",")
         self.fields = next(csv_data)
         for row in csv_data:
             self.fetch_citations(row)
-        columns = ["OpinionID", "Time", f"Total", "Opinions"]
         rows = zip(self.list_of_ids, self.times, self.totals, self.opinions)
-        with open(f"../outputs/plotted-{self.branch}.csv", "w") as f:
+        with open(f"../outputs/data-{branch}.csv", "w") as f:
             writer = csv.writer(f)
-            writer.writerow(columns)
-            for row in rows:
-                writer.writerow(row)
+            writer.writerow(["OpinionID", "Time", "Total", "Opinions"])
+            writer.writerows(rows)
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='A test program.')
-    parser.add_argument('--main', action='store_true')
-    parser.add_argument('--branch')
+    parser = argparse.ArgumentParser(description="A test program.")
+    parser.add_argument("--main", action="store_true")
+    parser.add_argument("--branch")
     args = parser.parse_args()
 
     benchmark = Benchmark()
-    benchmark.branch = args.branch
-    benchmark.unzip()
-
+    benchmark.generate_branch_report(branch=args.branch)

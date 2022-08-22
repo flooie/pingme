@@ -26,19 +26,19 @@ jobs:
           cd ..
           rm -rf eyecite/
       
-          echo "Cloning $branch2 branch"
-          git clone -b $branch2 https://github.com/freelawproject/eyecite.git
-          cp benchmark.py eyecite/
-          cd eyecite/
-          poetry install --no-dev
-          poetry run python benchmark.py --branch ${{ github.head_ref }}
-          cd ..
-          rm -rf eyecite/
-
-          poetry init --no-interaction
-          poetry add matplotlib pandas tabulate
-          poetry install --no-dev
-          poetry run python chart.py --branch1 main --branch2 ${{ github.head_ref }}
+#          echo "Cloning $branch2 branch"
+#          git clone -b $branch2 https://github.com/freelawproject/eyecite.git
+#          cp benchmark.py eyecite/
+#          cd eyecite/
+#          poetry install --no-dev
+#          poetry run python benchmark.py --branch ${{ github.head_ref }}
+#          cd ..
+#          rm -rf eyecite/
+#
+#          poetry init --no-interaction
+#          poetry add matplotlib pandas tabulate
+#          poetry install --no-dev
+#          poetry run python chart.py --branch1 main --branch2 ${{ github.head_ref }}
 
       - name: Embed Timing Chart into Markdown Post
         run: |
