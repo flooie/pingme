@@ -9,18 +9,19 @@ jobs:
       - uses: actions/checkout@v3
       - run: |
           echo ${{ github.event.client_payload.sha }}
+          echo ${{ github.event.client_payload.gsha }}
           echo "hello world"
           echo ${{ github.event.client_payload.ref }}
 
       - run: |
           cd benchmark/
-          sh justso.sh ${{ github.event.client_payload.sha }}
+          sh justso.sh '${{ github.event.client_payload.sha }}'
           ls 
 
       - name: Add or Update PR Comment from Generated Report
         uses: marocchino/sticky-pull-request-comment@v2
         with:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
           recreate: true
           repo: crosspingme
           message: "Hello world...."
