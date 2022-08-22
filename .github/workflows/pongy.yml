@@ -1,7 +1,7 @@
 name: Repository Dispatch
 on:
   repository_dispatch:
-    types: [reporters-db-pr] # this is tagged event type to do the soemthing or other
+    types: [reporters-db-pr-x-x-x] # this is tagged event type to do the soemthing or other
 jobs:
   myEvent:
     runs-on: ubuntu-latest
