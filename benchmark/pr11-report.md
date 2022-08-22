@@ -1,0 +1,13 @@
+# The Eyecite Report :eye:
+There were 0 gains and 0 losses.
+You can verify any losses by using the cluster id generated
+# Output
+---------
+
+The following chart illustrates the gains and losses (if any) from the current pr.
+| ID   | GAIN   | LOSS   | OPINION_ID   | --   |
+|------|--------|--------|--------------|------|
+
+# Speed Comparison
+### Main Branch vs. Current Branch
+![image](https://github.com/flooie/pingme/blob/artifacts/benchmark/pr11-time-comparison.png?raw=true)
