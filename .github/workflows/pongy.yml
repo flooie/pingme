@@ -16,6 +16,6 @@ jobs:
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           recreate: true
-          repo: flooie/crosspingme
+          repo: crosspingme
           message: "Hello world...."
           number: 1
