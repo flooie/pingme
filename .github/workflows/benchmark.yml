@@ -21,6 +21,7 @@ jobs:
           git clone https://github.com/freelawproject/eyecite.git benchmark/eyecite
           cp benchmark/benchmark.py benchmark/eyecite/ && cd benchmark/eyecite/
           poetry install --no-dev
+          poetry run pip install pandas
           poetry run python benchmark.py --branch main
 
           git checkout ${{ github.head_ref }}
