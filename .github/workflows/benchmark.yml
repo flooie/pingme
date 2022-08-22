@@ -16,6 +16,7 @@ jobs:
 
       - name: Run benchmarking Script
         run: |
+          cd benchmark/
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output bulk-file.csv.bz2
           git clone https://github.com/freelawproject/eyecite.git
           cp benchmark.py eyecite/
