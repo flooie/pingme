@@ -71,11 +71,9 @@ class Benchmark(object):
         )
         df.to_csv(index=False, path_or_buf=f"../outputs/data-{branch}.csv")
 
-        print(df)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="A test program.")
-    parser.add_argument("--main", action="store_true")
     parser.add_argument("--branch")
     args = parser.parse_args()
 
