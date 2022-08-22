@@ -1,16 +1,14 @@
-name: Remote Dispatch Action Responder
-
-on: [repository_dispatch]
-
+name: Just Comment
+on:
+  push
 jobs:
-  ping-pong:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Event Information
-        run: |
-          echo "Event '${{ github.event.action }}' received from '${{ github.event.client_payload.repository }}'"
-      - name: PONG - Dispatch response to received PING
-        if: github.event.action == 'pr1'
-        run: |
-          echo "I certainly am going to run something"
-          echo "Event '${{ github.event.action }}' received from '${{ github.event.client_payload.repository }}'"
+    push-comment:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Just make a comment
+          uses: marocchino/sticky-pull-request-comment@v2
+          with:
+            recreate: true
+            repo: crosspingme
+            message: "Hello world...."
+            number: 1
