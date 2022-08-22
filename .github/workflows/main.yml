@@ -1,6 +1,8 @@
 name: Just Comment
 on:
-  push
+  push:
+    branches: [ mainx ]
+
 jobs:
     push-comment:
       runs-on: ubuntu-latest
