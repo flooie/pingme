@@ -5,6 +5,7 @@ import datetime
 import sys
 from io import StringIO
 from pathlib import Path
+import pandas as pd
 
 from eyecite import get_citations
 
@@ -54,19 +55,23 @@ class Benchmark(object):
 
         return: None
         """
-        zipfile = bz2.BZ2File(
-            Path.joinpath(self.root, "..", "bulk-file.csv.bz2")
-        )
+        zipfile = bz2.BZ2File(Path.joinpath(self.root, "..", "bulk-file.csv.bz2"))
         csv_data = csv.reader(StringIO(zipfile.read().decode()), delimiter=",")
         self.fields = next(csv_data)
         for row in csv_data:
             self.fetch_citations(row)
-        rows = zip(self.list_of_ids, self.times, self.totals, self.opinions)
-        with open(f"../outputs/data-{branch}.csv", "w") as f:
-            writer = csv.writer(f)
-            writer.writerow(["OpinionID", "Time", "Total", "Opinions"])
-            writer.writerows(rows)
 
+        df = pd.DataFrame(
+            {
+                "OpinionID": self.list_of_ids,
+                "Time": self.times,
+                "Total": self.totals,
+                "Opinions": self.opinions,
+            }
+        )
+        df.to_csv(index=False, path_or_buf=f"../outputs/data-{branch}.csv")
+
+        print(df)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="A test program.")

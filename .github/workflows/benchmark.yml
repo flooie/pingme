@@ -16,11 +16,11 @@ jobs:
 
       - name: Run Benchmarking Script
         run: |
-          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/ten-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
+          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
           
           git clone https://github.com/freelawproject/eyecite.git benchmark/eyecite
           cp benchmark/benchmark.py benchmark/eyecite/ && cd benchmark/eyecite/
-          poetry install --no-dev          
+          poetry install --no-dev
           poetry run python benchmark.py --branch main
 
           git checkout ${{ github.head_ref }}
@@ -32,7 +32,7 @@ jobs:
           poetry add matplotlib pandas tabulate
           poetry install --no-dev
           
-          poetry run python chart.py --branch1 main --branch2 ${{ github.head_ref }}
+          poetry run python chart.py --branch ${{ github.head_ref }}
 
       - name: Embed Timing Chart into Markdown Post
         run: |
