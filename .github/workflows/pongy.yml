@@ -15,7 +15,7 @@ jobs:
 
       - run: |
           cd benchmark/
-          sh justso.sh '${{ github.event.client_payload.sha }}'
+          sh justso.sh '${{ github.event.client_payload.gsha }}'
           ls 
 
       - name: Add or Update PR Comment from Generated Report
