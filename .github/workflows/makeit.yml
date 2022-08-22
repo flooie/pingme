@@ -1,22 +1,22 @@
-#name: Make File Testing Why is this broken?
-#on:
-#  push:
-#    branches: [ main ]
-#
-#jobs:
-#  Build:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v2
-#      - uses: actions/setup-python@v4
-#        with:
-#          python-version: '3.9'
-#      - uses: snok/install-poetry@v1
-#        with:
-#          version: 1.1.13
-#          virtualenvs-create: true
-#          virtualenvs-in-project: true
-#      - name: Install Poetry and Run Make File
-#        run: |
-#          poetry --version
-#          make development --file other/Makefile -e ref1=update-courts-reporters-db ref2=main
+name: Make File Testing Why is this broken?
+on:
+  push:
+    branches: [ mainxxx ]
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - uses: snok/install-poetry@v1
+        with:
+          version: 1.1.13
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+      - name: Install Poetry and Run Make File
+        run: |
+          poetry --version
+          make development --file other/Makefile -e ref1=update-courts-reporters-db ref2=main
