@@ -52,17 +52,15 @@ def compare_dataframes() -> None:
 
     # Generate our report based on the provided information.
     with open("outputs/report.md", "w") as f:
-        f.write("# The Eyecite Report :eye:\n")
-        f.write("")
+        f.write("# The Eyecite Report :eye:\n\n")
         f.write(f"There were {len(gains)} gains and {len(losses)} losses.\n")
         f.write("You can verify any losses by using the cluster id generated\n")
-        f.write("# Output\n")
-        f.write("---------\n\n")
-        f.write(
-            "The following chart illustrates the gains and losses "
-            "(if any) from the current pr.\n"
-        )
+        f.write("\n\nGains and Losses\n")
+        f.write("---------\n")
+        f.write(f"There were {len(gains)} gains and {len(losses)} losses.\n")
+
         f.write("\n<details>\n")
+        f.write("<summary>Click here to see details.</summary>\n\n")
 
     # Add markdown report file outputs
     df = pd.read_csv("outputs/output.csv")
@@ -89,8 +87,8 @@ def compare_dataframes() -> None:
         f.write(file)
         f.truncate()
 
-    with open("outputs/report.md", "r+") as f:
-        f.write("\n</details>\n")
+    with open("outputs/report.md", "a+") as f:
+        f.write("\n\n</details>\n")
 
     # Add header for time chart for PR comment
     with open("outputs/report.md", "a") as f:
