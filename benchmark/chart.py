@@ -64,6 +64,11 @@ def compare_dataframes() -> None:
         )
 
         f.write("<details>")
+        f.write("""| Command | Description |
+| --- | --- |
+| git status | List all new or modified files |
+| git diff | Show file differences that haven't been staged |""")
+        f.write("</details")
 
     # Add markdown report file outputs
     df = pd.read_csv("outputs/output.csv")
@@ -89,7 +94,7 @@ def compare_dataframes() -> None:
         f.seek(0)
         f.write(file)
         f.truncate()
-        f.write("</details>")
+        # f.write("</details>")
 
     # Add header for time chart for PR comment
     with open("outputs/report.md", "a") as f:
