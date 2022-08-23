@@ -31,6 +31,8 @@ class Benchmark(object):
         self.opinions = []
         self.count = 0
         self.fields = []
+        self.gains = []
+        self.losses = []
 
     def fetch_citations(self, row) -> None:
         """Fetch citations from rows opinion data
@@ -58,9 +60,10 @@ class Benchmark(object):
         self.times.append((datetime.datetime.now() - self.now).total_seconds())
 
     def generate_branch_report(self, branch: bool) -> None:
-        """Generate Branch v Main Report
+        """Generate Report
 
-        return: None
+        :param branch: Is a branch from main or not
+        :return: None
         """
         zipfile = bz2.BZ2File(Path.joinpath(self.root, "..", "bulk-file.csv.bz2"))
         csv_data = csv.reader(StringIO(zipfile.read().decode()), delimiter=",")
@@ -86,8 +89,6 @@ class Benchmark(object):
 
         Returns: None
         """
-        gains = []
-        losses = []
         main = pd.read_csv(fp_main, usecols=["OpinionID", "Opinions"])
         branch = pd.read_csv(fp_branch, usecols=["OpinionID", "Opinions"])
 
@@ -107,20 +108,20 @@ class Benchmark(object):
 
                 for item in list(non_overlap):
                     if item in list(row[1][0]):
-                        gains.append(item)
+                        self.gains.append(item)
                         row_to_add = [row[0], item, "", main.iat[row[0], 0]]
                     else:
-                        losses.append(item)
+                        self.losses.append(item)
                         row_to_add = [row[0], "", item, branch.iat[row[0], 0]]
                     writer.writerow(row_to_add)
 
+    def write_report(self):
         # Generate our report based on the provided information.
         with open("../outputs/report.md", "w") as f:
             f.write("# The Eyecite Report :eye:\n\n")
             f.write("\n\nGains and Losses\n")
             f.write("---------\n")
-            f.write(f"There were {len(gains)} gains and {len(losses)} losses.\n")
-
+            f.write(f"There were {len(self.gains)} gains and {len(self.losses)} losses.\n")
             f.write("\n<details>\n")
             f.write("<summary>Click here to see details.</summary>\n\n")
 
@@ -169,11 +170,11 @@ class Benchmark(object):
 
         main.columns = main.columns.str.replace("Total", f"Total Main")
         branch.columns = branch.columns.str.replace("Total", f"Total Branch")
+
         df = pd.merge_asof(main, branch, on="Time")
-
         df.plot(kind="line", x="Time", y=[f"Total Main", f"Total Branch"])
-        plt.ylabel("# Cites Found ", rotation="vertical")
 
+        plt.ylabel("# Cites Found ", rotation="vertical")
         plt.savefig("../outputs/time-comparison.png")
 
 
