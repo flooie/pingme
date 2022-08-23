@@ -115,7 +115,7 @@ class Benchmark(object):
                     writer.writerow(row_to_add)
 
         # Generate our report based on the provided information.
-        with open("outputs/report.md", "w") as f:
+        with open("../outputs/report.md", "w") as f:
             f.write("# The Eyecite Report :eye:\n\n")
             f.write(f"There were {len(gains)} gains and {len(losses)} losses.\n")
             f.write("You can verify any losses by using the cluster id generated\n")
@@ -127,9 +127,9 @@ class Benchmark(object):
             f.write("<summary>Click here to see details.</summary>\n\n")
 
         # Add markdown report file outputs
-        df = pd.read_csv("outputs/output.csv")
+        df = pd.read_csv("../outputs/output.csv")
 
-        with open("outputs/report.md", "a") as md:
+        with open("../outputs/report.md", "a") as md:
             if df.__len__() > 51:
                 with open("outputs/report.md", "a+") as f:
                     f.write(
@@ -144,18 +144,18 @@ class Benchmark(object):
                 df.to_markdown(buf=md)
 
         # Remove NAN from file to make it look cleaner
-        with open("outputs/report.md", "r+") as f:
+        with open("../outputs/report.md", "r+") as f:
             file = f.read()
             file = re.sub("nan", "   ", file)
             f.seek(0)
             f.write(file)
             f.truncate()
 
-        with open("outputs/report.md", "a+") as f:
+        with open("../outputs/report.md", "a+") as f:
             f.write("\n\n</details>\n")
 
         # Add header for time chart for PR comment
-        with open("outputs/report.md", "a") as f:
+        with open("../outputs/report.md", "a") as f:
             f.write("\n\n# Speed Comparison\n### Main Branch vs. PR Branch\n")
 
     def generate_time_chart(self) -> None:
@@ -174,7 +174,7 @@ class Benchmark(object):
         df.plot(kind="line", x="Time", y=[f"Total Main", f"Total Branch"])
         plt.ylabel("# Cites Found ", rotation="vertical")
 
-        plt.savefig("outputs/time-comparison.png")
+        plt.savefig("../outputs/time-comparison.png")
 
 
 if __name__ == "__main__":
