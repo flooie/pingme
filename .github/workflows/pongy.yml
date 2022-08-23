@@ -24,8 +24,8 @@ jobs:
           poetry run pip install matplotlib pandas tabulate
 
           poetry run python benchmark.py
-          git checkout ${{ github.head_ref }}
           poetry install --no-dev
+          poetry run pip install reporters-db@${{ github.event.client_payload.sha }}
           poetry run python benchmark.py --branch
           poetry run python benchmark.py --chart
 
