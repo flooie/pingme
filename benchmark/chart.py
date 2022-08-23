@@ -62,18 +62,8 @@ def compare_dataframes() -> None:
             "The following chart illustrates the gains and losses "
             "(if any) from the current pr.\n"
         )
-        """<details>
-<summary>Click here for example HTML/Markdown.</summary>
-<!-- The fenced code block below must be separated by
-     blank lines on either side to work correctly -->
 
-```bash
-echo "It is possible to include Markdown within HTML tags."
-```
-
-</details>"""
-
-    f.write("<details>")
+        f.write("<details>")
 
     # Add markdown report file outputs
     df = pd.read_csv("outputs/output.csv")
@@ -99,7 +89,7 @@ echo "It is possible to include Markdown within HTML tags."
         f.seek(0)
         f.write(file)
         f.truncate()
-    f.write("</details>")
+        f.write("</details>")
 
     # Add header for time chart for PR comment
     with open("outputs/report.md", "a") as f:
