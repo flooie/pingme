@@ -116,7 +116,11 @@ class Benchmark(object):
                     writer.writerow(row_to_add)
 
     def write_report(self):
-        # Generate our report based on the provided information.
+        """Begin building Report.MD file
+
+        :return: None
+        """
+
         with open("../outputs/report.md", "w") as f:
             f.write("# The Eyecite Report :eye:\n\n")
             f.write("\n\nGains and Losses\n")
@@ -188,6 +192,10 @@ if __name__ == "__main__":
     if args.chart:
         # Process the report
         benchmark.compare_dataframes()
+
+        # Write Report.MD file
+        benchmark.write_report()
+
         # Generate time chart
         benchmark.generate_time_chart()
     else:
