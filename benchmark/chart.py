@@ -26,7 +26,10 @@ def compare_dataframes(branch2: str) -> None:
         Path.joinpath(root, "outputs", f"data-main.csv"),
         usecols=["OpinionID", "Opinions"],
     )
-    dfB = pd.read_csv(Path.joinpath(root, "outputs", f"data-{branch2}.csv"))
+    dfB = pd.read_csv(
+        Path.joinpath(root, "outputs", f"data-{branch2}.csv"),
+        usecols=["OpinionID", "Opinions"],
+    )
 
     # Make the lists equivalent in length
     head_count = min([len(dfA), len(dfB)])
@@ -132,4 +135,3 @@ if __name__ == "__main__":
     compare_dataframes(args.branch)
     # Generate time chart
     generate_time_chart(args.branch)
-
