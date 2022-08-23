@@ -130,9 +130,7 @@ if __name__ == "__main__":
         description="A tool to generate benchmarks in eyecite."
     )
 
-    # # Process the report
-    # compare_dataframes()
-    # # Generate time chart
+    # Process the report
+    compare_dataframes()
+    # Generate time chart
     generate_time_chart()
-
-    # T.C. Memo 1991-239
