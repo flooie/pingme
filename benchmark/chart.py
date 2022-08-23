@@ -1,5 +1,5 @@
 import argparse
-import ast
+from ast import literal_eval as to_list
 import csv
 import re
 import sys
@@ -11,6 +11,8 @@ import pandas as pd
 csv.field_size_limit(sys.maxsize)
 
 root = Path(__file__).parent.absolute()
+fp_main = Path.joinpath(root, "outputs", f"main.csv")
+fp_branch = Path.joinpath(root, "outputs", f"branch.csv")
 
 
 def compare_dataframes() -> None:
@@ -22,28 +24,20 @@ def compare_dataframes() -> None:
     """
     gains = []
     losses = []
-    main = pd.read_csv(
-        Path.joinpath(root, "outputs", f"main.csv"),
-        usecols=["OpinionID", "Opinions"],
-    )
-    branch = pd.read_csv(
-        Path.joinpath(root, "outputs", f"branch.csv"),
-        usecols=["OpinionID", "Opinions"],
-    )
+    main = pd.read_csv(fp_main, usecols=["OpinionID", "Opinions"])
+    branch = pd.read_csv(fp_branch, usecols=["OpinionID", "Opinions"])
 
-    # Make the lists equivalent in length
-    head_count = min([len(main), len(branch)])
-
-    main = main.head(head_count)
-    branch = branch.head(head_count)
     comparison = main.compare(branch)
 
     with open("outputs/output.csv", "w") as f:
         writer = csv.writer(f)
         writer.writerow(["ID", "GAIN", "LOSS", "OPINION_ID", "--"])
-        for row in comparison.iterrows():
-            non_overlap = set(row[1][0]) ^ set(row[1][1])
 
+        for row in comparison.iterrows():
+            if row[1][0] == row[1][1]:
+                continue
+
+            non_overlap = set(to_list(row[1][0])) ^ set(to_list(row[1][1]))
             if len(list(non_overlap)) == 0:
                 continue
 
@@ -68,6 +62,18 @@ def compare_dataframes() -> None:
             "The following chart illustrates the gains and losses "
             "(if any) from the current pr.\n"
         )
+        """<details>
+<summary>Click here for example HTML/Markdown.</summary>
+<!-- The fenced code block below must be separated by
+     blank lines on either side to work correctly -->
+
+```bash
+echo "It is possible to include Markdown within HTML tags."
+```
+
+</details>"""
+
+    f.write("<details>")
 
     # Add markdown report file outputs
     df = pd.read_csv("outputs/output.csv")
@@ -93,10 +99,11 @@ def compare_dataframes() -> None:
         f.seek(0)
         f.write(file)
         f.truncate()
+    f.write("</details>")
 
     # Add header for time chart for PR comment
     with open("outputs/report.md", "a") as f:
-        f.write("\n\n# Speed Comparison\n### Main Branch vs. Current Branch\n")
+        f.write("\n\n# Speed Comparison\n### Main Branch vs. PR Branch\n")
 
 
 def generate_time_chart() -> None:
@@ -105,14 +112,16 @@ def generate_time_chart() -> None:
     return: None
     """
 
-    dfA = pd.read_csv(Path.joinpath(root, "outputs", f"main.csv"))
-    dfB = pd.read_csv(Path.joinpath(root, "outputs", f"branch.csv"))
+    main = pd.read_csv(fp_main)
+    branch = pd.read_csv(fp_branch)
 
-    dfA.columns = dfA.columns.str.replace("Total", f"Total Main")
-    dfB.columns = dfB.columns.str.replace("Total", f"Total Branch")
-    df = pd.merge_asof(dfA, dfB, on="Time")
+    main.columns = main.columns.str.replace("Total", f"Total Main")
+    branch.columns = branch.columns.str.replace("Total", f"Total Branch")
+    df = pd.merge_asof(main, branch, on="Time")
 
     df.plot(kind="line", x="Time", y=[f"Total Main", f"Total Branch"])
+    plt.ylabel("# Cites Found ", rotation="vertical")
+
     plt.savefig("outputs/time-comparison.png")
 
 
@@ -120,11 +129,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="A tool to generate benchmarks in eyecite."
     )
-    parser.add_argument("--branch")
 
-    args = parser.parse_args()
-
-    # Process the report
-    compare_dataframes()
-    # Generate time chart
+    # # Process the report
+    # compare_dataframes()
+    # # Generate time chart
     generate_time_chart()
+
+    # T.C. Memo 1991-239
