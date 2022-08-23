@@ -50,6 +50,8 @@ jobs:
             benchmark/outputs/report.md
             benchmark/outputs/time-comparison.png
             benchmark/outputs/output.csv
+            benchmark/outputs/main.csv
+            benchmark/outputs/branch.csv
 
       - name: Add or Update PR Comment from Generated Report
         uses: marocchino/sticky-pull-request-comment@v2

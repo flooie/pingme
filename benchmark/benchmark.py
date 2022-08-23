@@ -69,7 +69,8 @@ class Benchmark(object):
                 "Opinions": self.opinions,
             }
         )
-        df.to_csv(index=False, path_or_buf=f"../outputs/data-{branch}.csv")
+        fp = f"../outputs/main.csv" if branch == "main" else f"../outputs/branch.csv"
+        df.to_csv(index=False, path_or_buf=fp)
 
 
 if __name__ == "__main__":
