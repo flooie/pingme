@@ -15,8 +15,8 @@ from matplotlib import pyplot as plt
 csv.field_size_limit(sys.maxsize)
 
 root = Path(__file__).parent.absolute()
-fp_main = Path.joinpath(root, "outputs", f"main.csv")
-fp_branch = Path.joinpath(root, "outputs", f"branch.csv")
+fp_main = Path.joinpath(root, "..", "outputs", f"main.csv")
+fp_branch = Path.joinpath(root, "..", "outputs", f"branch.csv")
 
 
 class Benchmark(object):
@@ -77,13 +77,6 @@ class Benchmark(object):
             }
         )
         fp = fp_branch if branch else fp_main
-        print(fp)
-
-        root = Path(__file__).parent.absolute()
-        fp_mainx = Path.joinpath(root, "outputs", f"main.csv")
-        fp_branchx = Path.joinpath(root, "outputs", f"branch.csv")
-
-        print(fp_mainx, fp_branchx)
 
         df.to_csv(index=False, path_or_buf=fp)
 
