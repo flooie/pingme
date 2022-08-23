@@ -1,22 +1,12 @@
 name: Repository Dispatch
 on:
   repository_dispatch:
-    types: [reporters-db-pr-x-x-x] # this is tagged event type to do the soemthing or other
+    types: [reporters-db-pr] # this is tagged event type to do the soemthing or other
 jobs:
   myEvent:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: |
-          echo ${{ github.event.client_payload.sha }}
-          echo ${{ github.event.client_payload.gsha }}
-          echo "hello world"
-          echo ${{ github.event.client_payload.ref }}
-
-      - run: |
-          cd benchmark/
-          sh justso.sh '${{ github.event.client_payload.gsha }}'
-          ls 
 
       - name: Add or Update PR Comment from Generated Report
         uses: marocchino/sticky-pull-request-comment@v2
@@ -24,5 +14,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           recreate: true
           repo: crosspingme
-          message: "Hello world...."
+          message: "Hello world.... and hello more world"
           number: 1
