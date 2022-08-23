@@ -13,7 +13,7 @@ csv.field_size_limit(sys.maxsize)
 root = Path(__file__).parent.absolute()
 
 
-def compare_dataframes(branch2: str) -> None:
+def compare_dataframes() -> None:
     """Compare generated data frames between branches
 
     Generates (mostly) the markdown report for the PR comment
@@ -22,28 +22,21 @@ def compare_dataframes(branch2: str) -> None:
     """
     gains = []
     losses = []
-    dfA = pd.read_csv(
-        Path.joinpath(root, "outputs", f"data-main.csv"),
+    main = pd.read_csv(
+        Path.joinpath(root, "outputs", f"main.csv"),
         usecols=["OpinionID", "Opinions"],
     )
-    dfB = pd.read_csv(
-        Path.joinpath(root, "outputs", f"data-{branch2}.csv"),
+    branch = pd.read_csv(
+        Path.joinpath(root, "outputs", f"branch.csv"),
         usecols=["OpinionID", "Opinions"],
     )
 
     # Make the lists equivalent in length
-    head_count = min([len(dfA), len(dfB)])
+    head_count = min([len(main), len(branch)])
 
-    dfA = dfA.head(head_count)
-    dfB = dfB.head(head_count)
-
-    # # Remove columns to enable comparisons
-    # del dfA["Time"]
-    # del dfB["Time"]
-    # del dfA["Total"]
-    # del dfB["Total"]
-
-    comparison = dfA.compare(dfB)
+    main = main.head(head_count)
+    branch = branch.head(head_count)
+    comparison = main.compare(branch)
 
     with open("outputs/output.csv", "w") as f:
         writer = csv.writer(f)
@@ -57,10 +50,10 @@ def compare_dataframes(branch2: str) -> None:
             for item in list(non_overlap):
                 if item in list(row[1][0]):
                     gains.append(item)
-                    row_to_add = [row[0], item, "", dfA.iat[row[0], 0]]
+                    row_to_add = [row[0], item, "", main.iat[row[0], 0]]
                 else:
                     losses.append(item)
-                    row_to_add = [row[0], "", item, dfA.iat[row[0], 0]]
+                    row_to_add = [row[0], "", item, branch.iat[row[0], 0]]
                 writer.writerow(row_to_add)
 
     # Generate our report based on the provided information.
@@ -106,20 +99,20 @@ def compare_dataframes(branch2: str) -> None:
         f.write("\n\n# Speed Comparison\n### Main Branch vs. Current Branch\n")
 
 
-def generate_time_chart(branch2: str) -> None:
+def generate_time_chart() -> None:
     """Generate time chart showing speed across branches
 
     return: None
     """
 
-    dfA = pd.read_csv(Path.joinpath(root, "outputs", f"data-main.csv"))
-    dfB = pd.read_csv(Path.joinpath(root, "outputs", f"data-{branch2}.csv"))
+    dfA = pd.read_csv(Path.joinpath(root, "outputs", f"main.csv"))
+    dfB = pd.read_csv(Path.joinpath(root, "outputs", f"branch.csv"))
 
     dfA.columns = dfA.columns.str.replace("Total", f"Total Main")
-    dfB.columns = dfB.columns.str.replace("Total", f"Total {branch2}")
+    dfB.columns = dfB.columns.str.replace("Total", f"Total Branch")
     df = pd.merge_asof(dfA, dfB, on="Time")
 
-    df.plot(kind="line", x="Time", y=[f"Total Main", f"Total {branch2}"])
+    df.plot(kind="line", x="Time", y=[f"Total Main", f"Total Branch"])
     plt.savefig("outputs/time-comparison.png")
 
 
@@ -132,6 +125,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Process the report
-    compare_dataframes(args.branch)
+    compare_dataframes()
     # Generate time chart
-    generate_time_chart(args.branch)
+    generate_time_chart()

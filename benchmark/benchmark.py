@@ -74,7 +74,7 @@ class Benchmark(object):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="A test program.")
+    parser = argparse.ArgumentParser(description="")
     parser.add_argument("--branch")
     args = parser.parse_args()
 
