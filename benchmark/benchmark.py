@@ -117,8 +117,6 @@ class Benchmark(object):
         # Generate our report based on the provided information.
         with open("../outputs/report.md", "w") as f:
             f.write("# The Eyecite Report :eye:\n\n")
-            f.write(f"There were {len(gains)} gains and {len(losses)} losses.\n")
-            f.write("You can verify any losses by using the cluster id generated\n")
             f.write("\n\nGains and Losses\n")
             f.write("---------\n")
             f.write(f"There were {len(gains)} gains and {len(losses)} losses.\n")
@@ -156,7 +154,9 @@ class Benchmark(object):
 
         # Add header for time chart for PR comment
         with open("../outputs/report.md", "a") as f:
-            f.write("\n\n# Speed Comparison\n### Main Branch vs. PR Branch\n")
+            f.write("\n\nTime Chart\n")
+            f.write("---------\n")
+
 
     def generate_time_chart(self) -> None:
         """Generate time chart showing speed across branches
