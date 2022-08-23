@@ -77,7 +77,6 @@ class Benchmark(object):
             }
         )
         fp = fp_branch if branch else fp_main
-
         df.to_csv(index=False, path_or_buf=fp)
 
     def compare_dataframes(self) -> None:
@@ -94,7 +93,7 @@ class Benchmark(object):
 
         comparison = main.compare(branch)
 
-        with open("outputs/output.csv", "w") as f:
+        with open("../outputs/output.csv", "w") as f:
             writer = csv.writer(f)
             writer.writerow(["ID", "GAIN", "LOSS", "OPINION_ID", "--"])
 
