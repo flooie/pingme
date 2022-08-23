@@ -1,28 +1,31 @@
-# Download the sample files ... one
-# Auto commenting on PR thoughts
-
 import argparse
 import bz2
-import datetime
-from pathlib import Path
 import csv
-from io import StringIO
+import datetime
+import re
 import sys
+from ast import literal_eval as to_list
+from io import StringIO
+from pathlib import Path
+
+import pandas as pd  # type: ignore
+from matplotlib import pyplot as plt  # type: ignore
+
+from eyecite import get_citations
 
 csv.field_size_limit(sys.maxsize)
-from eyecite import get_citations
+
+root = Path(__file__).parent.parent.absolute()
+fp_main = Path.joinpath(root, "outputs", "main.csv")
+fp_branch = Path.joinpath(root, "outputs", "branch.csv")
+fp_bulk_file = Path.joinpath(root, "bulk-file.csv.bz2")
+MAX_ROWS_IN_MD = 51
 
 
 class Benchmark(object):
-    """"""
+    """Benchmark the different eyecite branches"""
 
     def __init__(self):
-        """"""
-        self.size = None
-        self.root = Path(__file__).parent.absolute()
-        self.dfa = None
-        self.dfb = None
-        self.file_append = None
         self.now = datetime.datetime.now()
         self.times = []
         self.totals = []
@@ -30,14 +33,21 @@ class Benchmark(object):
         self.opinions = []
         self.count = 0
         self.fields = []
-        self.branch = None
+        self.gains = []
+        self.losses = []
 
+    def fetch_citations(self, row) -> None:
+        """Fetch citations from rows opinion data
 
-    def fetch_citations(self, row):
-        """"""
+        return: None
+        """
         row_id = row[0]
         row = dict(zip(self.fields, row))
-        non_empty_rows = [row[field] for field in self.fields if type(row[field]) == str]
+        # Find opinions to test against from the zip file and return
+        # citations found
+        non_empty_rows = [
+            row[field] for field in self.fields if type(row[field]) == str
+        ]
         if len(non_empty_rows) == 0:
             return None
 
@@ -47,38 +57,153 @@ class Benchmark(object):
             found_citations = get_citations(op)
             cites = [cite.token.data for cite in found_citations if cite.token]
             found_cites.extend(cites)
+
         self.opinions.append(found_cites)
         self.count += len(found_cites)
         self.totals.append(self.count)
         self.times.append((datetime.datetime.now() - self.now).total_seconds())
 
+    def generate_branch_report(self, branch: bool) -> None:
+        """Generate Report
 
-    def unzip(self):
-        """"""
-        zipfile = bz2.BZ2File(Path.joinpath(self.root, "..", "one-percent.csv.bz2"))
-        byte_content = zipfile.read()
-        content = byte_content.decode()
-        file = StringIO(content)
-        csv_data = csv.reader(file, delimiter=",")
+        :param branch: Is a branch from main or not
+        :return: None
+        """
+        zipfile = bz2.BZ2File(fp_bulk_file)
+        csv_data = csv.reader(StringIO(zipfile.read().decode()), delimiter=",")
         self.fields = next(csv_data)
         for row in csv_data:
             self.fetch_citations(row)
-        columns = ["OpinionID", "Time", f"Total", "Opinions"]
-        rows = zip(self.list_of_ids, self.times, self.totals, self.opinions)
-        with open(f"../outputs/plotted-{self.branch}.csv", "w") as f:
+
+        df = pd.DataFrame(
+            {
+                "OpinionID": self.list_of_ids,
+                "Time": self.times,
+                "Total": self.totals,
+                "Opinions": self.opinions,
+            }
+        )
+        fp = fp_branch if branch else fp_main
+        df.to_csv(index=False, path_or_buf=fp)
+
+    def compare_dataframes(self) -> None:
+        """Compare generated data frames between branches
+
+        Generates (mostly) the markdown report for the PR comment
+
+        Returns: None
+        """
+        main = pd.read_csv(fp_main, usecols=["OpinionID", "Opinions"])
+        branch = pd.read_csv(fp_branch, usecols=["OpinionID", "Opinions"])
+
+        comparison = main.compare(branch)
+
+        with open("../outputs/output.csv", "w") as f:
             writer = csv.writer(f)
-            writer.writerow(columns)
-            for row in rows:
-                writer.writerow(row)
+            writer.writerow(["ID", "GAIN", "LOSS", "OPINION_ID", "--"])
+
+            for row in comparison.iterrows():
+                if row[1][0] == row[1][1]:
+                    continue
+                # Convert str list of citations back to list to compare across
+                # branches
+                non_overlap = set(to_list(row[1][0])) ^ set(to_list(row[1][1]))
+                if len(list(non_overlap)) == 0:
+                    continue
+
+                for item in list(non_overlap):
+                    if item in list(row[1][0]):
+                        self.gains.append(item)
+                        row_to_add = [row[0], item, "", main.iat[row[0], 0]]
+                    else:
+                        self.losses.append(item)
+                        row_to_add = [row[0], "", item, branch.iat[row[0], 0]]
+                    writer.writerow(row_to_add)
+
+    def write_report(self):
+        """Begin building Report.MD file
+
+        :return: None
+        """
+        with open("../outputs/report.md", "w") as f:
+            f.write("# The Eyecite Report :eye:\n\n")
+            f.write("\n\nGains and Losses\n")
+            f.write("---------\n")
+            f.write(
+                f"There were {len(self.gains)} gains and "
+                f"{len(self.losses)} losses.\n"
+            )
+            f.write("\n<details>\n")
+            f.write("<summary>Click here to see details.</summary>\n\n")
+
+        # Add markdown report file outputs
+        df = pd.read_csv("../outputs/output.csv")
+
+        with open("../outputs/report.md", "a") as md:
+            if df.__len__() > MAX_ROWS_IN_MD:
+                with open("outputs/report.md", "a+") as f:
+                    f.write(
+                        f"There were {df.__len__()} changes so we are only "
+                        f"displaying the first 50. You can review the \n"
+                        f"entire list by downloading the output.csv "
+                        f"file linked above.\n\n"
+                    )
+
+                df[:MAX_ROWS_IN_MD].to_markdown(buf=md)
+            else:
+                df.to_markdown(buf=md)
+
+        # Remove NAN from file to make it look cleaner
+        with open("../outputs/report.md", "r+") as f:
+            file = f.read()
+            file = re.sub("nan", "   ", file)
+            f.seek(0)
+            f.write(file)
+            f.truncate()
+
+        with open("../outputs/report.md", "a+") as f:
+            f.write("\n\n</details>\n")
+
+        # Add header for time chart for PR comment
+        with open("../outputs/report.md", "a") as f:
+            f.write("\n\nTime Chart\n")
+            f.write("---------\n")
+
+    def generate_time_chart(self) -> None:
+        """Generate time chart showing speed across branches
+
+        return: None
+        """
+
+        main = pd.read_csv(fp_main)
+        branch = pd.read_csv(fp_branch)
+
+        main.columns = main.columns.str.replace("Total", "Total Main")
+        branch.columns = branch.columns.str.replace("Total", "Total Branch")
+
+        df = pd.merge_asof(main, branch, on="Time")
+        df.plot(kind="line", x="Time", y=["Total Main", "Total Branch"])
+
+        plt.ylabel("# Cites Found ", rotation="vertical")
+        plt.savefig("../outputs/time-comparison.png")
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='A test program.')
-    parser.add_argument('--main', action='store_true')
-    parser.add_argument('--branch')
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--branch", action="store_true")
+    parser.add_argument("--chart", action="store_true")
     args = parser.parse_args()
 
     benchmark = Benchmark()
-    benchmark.branch = args.branch
-    benchmark.unzip()
+    if args.chart:
+        # Process the report
+        benchmark.compare_dataframes()
 
+        # Write Report.MD file
+        benchmark.write_report()
+
+        # Generate time chart
+        benchmark.generate_time_chart()
+    else:
+        # Generate data comparison
+        benchmark.generate_branch_report(branch=args.branch)
