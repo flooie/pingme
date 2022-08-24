@@ -6,15 +6,22 @@ jobs:
   benchmark:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Main
+
+      - name: Checkout tools repo
         uses: actions/checkout@v3
         with:
-          path: main
+          repository: my-org/my-tools
+          path: my-tools
+
+      - name: Run stuff for PR
         run: |
           python benchmark/stuff.py
 
-      - name: Checkout PR
+      - name: Checkout
         uses: actions/checkout@v3
+        with:
+          path: main
+
+      - name: Run Stuff for Main
         run: |
           python benchmark/stuff.py
-          
