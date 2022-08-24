@@ -17,7 +17,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          path: main
+          path: checkme
 
       - name: Run Stuff for Main
         run: |
