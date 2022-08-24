@@ -10,7 +10,7 @@ jobs:
       - name: Checkout tools repo
         uses: actions/checkout@v3
 
-      - name: Run stuff for PR
+      - name: Run stuff for Main
         run: |
           python benchmark/stuff.py
 
@@ -19,6 +19,6 @@ jobs:
         with:
           ref: checkme
 
-      - name: Run Stuff for Main
+      - name: Run Stuff for Check Me
         run: |
           python benchmark/stuff.py
