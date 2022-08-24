@@ -29,7 +29,14 @@ jobs:
           echo ${{ github.ref }}
           echo ${{ github.event.pull_request.head.sha }}
 
-          /usr/bin/git log -1 --format='%H'
+          GITHUB_SHA_SHORT=/usr/bin/git log -1 --format='%H' >> $GITHUB_ENV
+
+      - name: Show GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: |
+          echo "$GITHUB_CONTEXT"
+          echo ${{ env.GITHUB_SHA_SHORT }}
 
       - name: Set env
         run: echo "GITHUB_SHA_SHORT=$(echo /usr/bin/git log -1 --format='%H')" >> $GITHUB_ENV
@@ -52,9 +59,3 @@ jobs:
       - name: Use the valuex
         run: |
           echo "${{ env.action_state }}"
-
-      - name: echo it
-        run: |
-          echo 'JSON_RESPONSE<<EOF' >> $GITHUB_ENV
-          echo /usr/bin/git log -1 --format='%H' >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
