@@ -28,5 +28,10 @@ jobs:
           echo ${{ github.sha }}
           echo ${{ github.ref }}
           echo ${{ github.event.pull_request.head.sha }}
-#          a=/usr/bin/git log -1 --format='%H'
-#          echo $a
+
+          /usr/bin/git log -1 --format='%H'
+
+      - name: Set env
+        run: echo "GITHUB_SHA_SHORT=$(echo /usr/bin/git log -1 --format='%H')" >> $GITHUB_ENV
+      - name: Test
+        run: echo $GITHUB_SHA_SHORT
