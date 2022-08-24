@@ -11,3 +11,5 @@ jobs:
       - name: Lets Run Test
         run: |
           python benchmark/stuff.py
+          pwd
+          ls
