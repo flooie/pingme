@@ -39,7 +39,7 @@ jobs:
           echo ${{ env.GITHUB_SHA_SHORT }} 
           echo $GITHUB_SHA_SHORT
       - name: Tes
-        if {{ "asdfasdf" ==  env.GITHUB_SHA_SHORT }}
+        if: ${{ env.GITHUB_SHA_SHORT == 'WORKFLOW' }}
         run: |
           echo "it worked"
 
