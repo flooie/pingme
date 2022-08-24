@@ -28,7 +28,7 @@ jobs:
           echo ${{ github.sha }}
           echo ${{ github.ref }}
           echo ${{ github.event.pull_request.head.sha }}
-
+          /usr/bin/git log -1 --format='%H'
           echo "GITHUB_SHA_SHORT=$(/usr/bin/git log -1 --format='%H')" >> GITHUB_ENV
 
       - name: Show GitHub context
