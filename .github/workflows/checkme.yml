@@ -31,4 +31,3 @@ jobs:
           /usr/bin/git log -1 --format='%H'
           bname=$(echo /usr/bin/git log -1 --format='%H')
           echo ${{ bname }}
-          echo bname
