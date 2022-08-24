@@ -1,6 +1,6 @@
 name: Check Me
 on:
-  push:
+  pull_request:
 
 jobs:
   benchmark:
