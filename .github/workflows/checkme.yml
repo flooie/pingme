@@ -34,7 +34,10 @@ jobs:
       - name: Set env
         run: echo "GITHUB_SHA_SHORT=$(echo /usr/bin/git log -1 --format='%H')" >> $GITHUB_ENV
       - name: Test
-        run: echo $GITHUB_SHA_SHORT
+        run: |
+          echo ${{ env }}
+          echo ${{ env.GITHUB_SHA_SHORT }} 
+          echo $GITHUB_SHA_SHORT
 
       - name: Test
         run: echo ${{ env.GITHUB_SHA_SHORT }}
@@ -45,6 +48,7 @@ jobs:
       - name: Use the valuex
         run: |
           echo "${{ env.action_state }}"
+
       - name: echo it
         run: |
           echo 'JSON_RESPONSE<<EOF' >> $GITHUB_ENV
