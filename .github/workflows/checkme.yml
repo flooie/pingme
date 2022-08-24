@@ -20,6 +20,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: main
+          fetch-depth: 0
 
       - name: Run Stuff for Main
         run: |
@@ -28,6 +29,5 @@ jobs:
           echo ${{ github.ref }}
           echo ${{ github.event.head_commit }}
           echo ${{ github.event.head_commit.message }}
-          /usr/bin/git log -1 --format='%H'
-          bname=$(echo /usr/bin/git log -1 --format='%H')
-          echo ${{ bname }}
+          a=/usr/bin/git log -1 --format='%H'
+          echo $a
