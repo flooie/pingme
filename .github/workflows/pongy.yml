@@ -17,16 +17,15 @@ jobs:
       - name: Run Benchmarking Script
         run: |
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
-
-          git clone https://github.com/freelawproject/eyecite.git benchmark/eyecite
-          cp benchmark/benchmark.py benchmark/eyecite/ && cd benchmark/eyecite/
-          poetry install --no-dev
-          poetry run pip install matplotlib pandas tabulate
-
+#          git clone https://github.com/freelawproject/eyecite.git benchmark/eyecite
+#          cp benchmark/benchmark.py benchmark/eyecite/ && cd benchmark/eyecite/
+#          poetry install --no-dev
+#          poetry run pip install matplotlib pandas tabulate
+          poetry run python benchmark.py 
+               
+#               checkout branch
           poetry run python benchmark.py
-          git checkout ${{ github.head_ref }}
-          poetry install --no-dev
-          poetry run python benchmark.py --branch
+               
           poetry run python benchmark.py --chart
 
       - name: Embed Timing Chart into Markdown Post
@@ -49,11 +48,11 @@ jobs:
             benchmark/outputs/main.csv
             benchmark/outputs/branch.csv
 
-#      - name: Add or Update PR Comment from Generated Report
-#        uses: marocchino/sticky-pull-request-comment@v2
-#        with:
-#          GITHUB_TOKEN: ${{ secrets.TOKEN }}
-#          recreate: true
-#          repo: crosspingme
-#          message: "Hello world.... and hello more world '${{ github.event.client_payload.sha }}'"
-#          number: 1
+      - name: Add or Update PR Comment from Generated Report
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          recreate: true
+          repo: crosspingme
+          message: "Hello world.... and hello more world '${{ github.event.client_payload.sha }}'"
+          number: 1
