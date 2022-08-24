@@ -9,9 +9,6 @@ jobs:
 
       - name: Checkout tools repo
         uses: actions/checkout@v3
-        with:
-          repository: my-org/my-tools
-          path: my-tools
 
       - name: Run stuff for PR
         run: |
