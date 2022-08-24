@@ -15,19 +15,18 @@ jobs:
           python benchmark/stuff.py
           echo ${{ github.sha }}
           echo ${{ github.ref }}
+          echo ${{ github.event.pull_request.head.sha }}
 
       - name: Checkout
         uses: actions/checkout@v3
         with:
           ref: main
-          fetch-depth: 0
 
       - name: Run Stuff for Main
         run: |
           python benchmark/stuff.py
           echo ${{ github.sha }}
           echo ${{ github.ref }}
-          echo ${{ github.event.head_commit }}
-          echo ${{ github.event.head_commit.message }}
-          a=/usr/bin/git log -1 --format='%H'
-          echo $a
+          echo ${{ github.event.pull_request.head.sha }}
+#          a=/usr/bin/git log -1 --format='%H'
+#          echo $a
