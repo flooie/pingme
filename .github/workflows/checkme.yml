@@ -18,7 +18,7 @@ jobs:
           echo ${{ github.event.pull_request.head.sha }}
           echo "GITHUB_SHA_SHORT=$(/usr/bin/git log -1 --format='%H')" >> GITHUB_ENV
           python benchmark/stuff.py --something 1234
-          python benchmark/stuff.py --something $GITHUB_SHA_SHORT
+          python benchmark/stuff.py --something "$(/usr/bin/git log -1 --format='%H')"
 
       - name: Checkout
         uses: actions/checkout@v3
