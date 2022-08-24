@@ -15,7 +15,6 @@ jobs:
           python benchmark/stuff.py
           echo ${{ github.sha }}
           echo ${{ github.ref }}
-          echo ${{ github.event.head_commit.message }}
 
       - name: Checkout
         uses: actions/checkout@v3
@@ -30,3 +29,5 @@ jobs:
           echo ${{ github.event.head_commit }}
           echo ${{ github.event.head_commit.message }}
           /usr/bin/git log -1 --format='%H'
+          bname=$(echo /usr/bin/git log -1 --format='%H')
+          echo $ {{ bname }}
