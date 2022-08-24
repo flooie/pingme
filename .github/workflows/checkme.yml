@@ -30,4 +30,5 @@ jobs:
           echo ${{ github.event.head_commit.message }}
           /usr/bin/git log -1 --format='%H'
           bname=$(echo /usr/bin/git log -1 --format='%H')
-          echo $ {{ bname }}
+          echo ${{ bname }}
+          echo bname
