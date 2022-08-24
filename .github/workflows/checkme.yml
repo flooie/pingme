@@ -14,6 +14,7 @@ jobs:
         run: |
           python benchmark/stuff.py
           echo ${{ github.sha }}
+          echo ${{ github.ref }}
 
       - name: Checkout
         uses: actions/checkout@v3
@@ -24,3 +25,4 @@ jobs:
         run: |
           python benchmark/stuff.py
           echo ${{ github.sha }}
+          echo ${{ github.ref }}
