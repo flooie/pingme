@@ -16,6 +16,7 @@ jobs:
           echo ${{ github.sha }}
           echo ${{ github.ref }}
           echo ${{ github.event.pull_request.head.sha }}
+          echo "GITHUB_SHA_SHORT=$(/usr/bin/git log -1 --format='%H')" >> GITHUB_ENV
 
       - name: Checkout
         uses: actions/checkout@v3
@@ -24,38 +25,40 @@ jobs:
 
       - name: Run Stuff for Main
         run: |
-          python benchmark/stuff.py
-          echo ${{ github.sha }}
-          echo ${{ github.ref }}
-          echo ${{ github.event.pull_request.head.sha }}
-          /usr/bin/git log -2 --format='%H'
-          echo "GITHUB_SHA_SHORT=$(/usr/bin/git log -2 --format='%H')" >> GITHUB_ENV
+          python benchmark/stuff.py --something 1234
+          python benchmark/stuff.py --something $GITHUB_SHA_SHORT
 
-      - name: Show GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: |
-          echo "$GITHUB_CONTEXT"
-          echo ${{ env.GITHUB_SHA_SHORT }}
-
-      - name: Set env
-        run: echo "GITHUB_SHA_SHORT=$(echo /usr/bin/git log -2 --format='%H')" >> $GITHUB_ENV
-      - name: Test
-        run: |
-          echo ${{ env }}
-          echo ${{ env.GITHUB_SHA_SHORT }} 
-          echo $GITHUB_SHA_SHORT
-      - name: Tes
-        if: ${{ env.GITHUB_SHA_SHORT == '2b8bf106af86963f4086bad0492bc47cb97c1d3d' }}
-        run: |
-          echo "it worked"
-
-      - name: Test
-        run: echo ${{ env.GITHUB_SHA_SHORT }}
-      - name: Test2
-        run: |
-          echo "action_state=yellow" >> $GITHUB_ENV
-
-      - name: Use the valuex
-        run: |
-          echo "${{ env.action_state }}"
+#          echo ${{ github.sha }}
+#          echo ${{ github.ref }}
+#          echo ${{ github.event.pull_request.head.sha }}
+#          /usr/bin/git log -2 --format='%H'
+#          echo "GITHUB_SHA_SHORT=$(/usr/bin/git log -2 --format='%H')" >> GITHUB_ENV
+#
+#      - name: Show GitHub context
+#        env:
+#          GITHUB_CONTEXT: ${{ toJson(github) }}
+#        run: |
+#          echo "$GITHUB_CONTEXT"
+#          echo ${{ env.GITHUB_SHA_SHORT }}
+#
+#      - name: Set env
+#        run: echo "GITHUB_SHA_SHORT=$(echo /usr/bin/git log -2 --format='%H')" >> $GITHUB_ENV
+#      - name: Test
+#        run: |
+#          echo ${{ env }}
+#          echo ${{ env.GITHUB_SHA_SHORT }}
+#          echo $GITHUB_SHA_SHORT
+#      - name: Tes
+#        if: ${{ env.GITHUB_SHA_SHORT == '2b8bf106af86963f4086bad0492bc47cb97c1d3d' }}
+#        run: |
+#          echo "it worked"
+#
+#      - name: Test
+#        run: echo ${{ env.GITHUB_SHA_SHORT }}
+#      - name: Test2
+#        run: |
+#          echo "action_state=yellow" >> $GITHUB_ENV
+#
+#      - name: Use the valuex
+#        run: |
+#          echo "${{ env.action_state }}"
