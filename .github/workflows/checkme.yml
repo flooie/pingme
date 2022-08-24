@@ -45,3 +45,8 @@ jobs:
       - name: Use the valuex
         run: |
           echo "${{ env.action_state }}"
+      - name: echo it
+        run: |
+          echo 'JSON_RESPONSE<<EOF' >> $GITHUB_ENV
+          echo /usr/bin/git log -1 --format='%H' >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
