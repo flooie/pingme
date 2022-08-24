@@ -42,6 +42,6 @@ jobs:
         run: |
           echo "action_state=yellow" >> $GITHUB_ENV
 
-      - name: Use the value
+      - name: Use the valuex
         run: |
           echo "${{ env.action_state }}"
