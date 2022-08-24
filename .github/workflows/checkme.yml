@@ -10,15 +10,15 @@ jobs:
       - name: Checkout tools repo
         uses: actions/checkout@v3
 
-      - name: Run stuff for Main
+      - name: Run stuff for PR
         run: |
           python benchmark/stuff.py
 
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: checkme
+          ref: main
 
-      - name: Run Stuff for Check Me
+      - name: Run Stuff for Main
         run: |
           python benchmark/stuff.py
