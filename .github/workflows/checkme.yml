@@ -4,8 +4,8 @@ on:
 
 env:
   main_hash: "$(/usr/bin/git log -1 --format='https://github.com/freelawproject/pingme/blob/artifacts/benchmark/%H.csv?raw=true')"
-#  main: "$(/usr/bin/git log -1 --format='%H')"
-  main: "7ff6e3a3104f6c84a444eac1b54f5af64f31b204"
+  main: "$(/usr/bin/git log -1 --format='%H')"
+#  main: "7ff6e3a3104f6c84a444eac1b54f5af64f31b204"
 
 jobs:
   benchmark:
@@ -14,6 +14,9 @@ jobs:
 
       - name: Checkout tools repo
         uses: actions/checkout@v3
+        with:
+          repository: freelawproject/eyecite
+          ref: baseline-benchmarking
 
       - name: Run stuff for PR
         id: xyz
