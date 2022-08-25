@@ -1,24 +1,27 @@
+# flake8: noqa: E402
 import argparse
 import bz2
 import csv
 import datetime
+import os
 import re
 import sys
 from ast import literal_eval as to_list
 from io import StringIO
 from pathlib import Path
 
-import pandas as pd  # type: ignore
-from matplotlib import pyplot as plt  # type: ignore
+import pandas as pd
+from matplotlib import pyplot as plt
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 from eyecite import get_citations
 
 csv.field_size_limit(sys.maxsize)
 
-root = Path(__file__).parent.parent.absolute()
-fp_main = Path.joinpath(root, "outputs", "main.csv")
-fp_branch = Path.joinpath(root, "outputs", "branch.csv")
-fp_bulk_file = Path.joinpath(root, "bulk-file.csv.bz2")
+root = Path(__file__).parent.absolute()
+
 MAX_ROWS_IN_MD = 51
 
 
@@ -35,6 +38,9 @@ class Benchmark(object):
         self.fields = []
         self.gains = []
         self.losses = []
+
+    def get_filepath(self, filename):
+        return Path.joinpath(root, filename)
 
     def fetch_citations(self, row) -> None:
         """Fetch citations from rows opinion data
@@ -63,13 +69,13 @@ class Benchmark(object):
         self.totals.append(self.count)
         self.times.append((datetime.datetime.now() - self.now).total_seconds())
 
-    def generate_branch_report(self, branch: bool) -> None:
+    def generate_branch_report(self, branch: str) -> None:
         """Generate Report
 
         :param branch: Is a branch from main or not
         :return: None
         """
-        zipfile = bz2.BZ2File(fp_bulk_file)
+        zipfile = bz2.BZ2File(self.get_filepath("bulk-file.csv.bz2"))
         csv_data = csv.reader(StringIO(zipfile.read().decode()), delimiter=",")
         self.fields = next(csv_data)
         for row in csv_data:
@@ -83,22 +89,27 @@ class Benchmark(object):
                 "Opinions": self.opinions,
             }
         )
-        fp = fp_branch if branch else fp_main
-        df.to_csv(index=False, path_or_buf=fp)
+        df.to_csv(index=False, path_or_buf=self.get_filepath(f"{branch}.csv"))
 
-    def compare_dataframes(self) -> None:
+    def compare_dataframes(self, main_hash: str, branch_hash: str) -> None:
         """Compare generated data frames between branches
 
         Generates (mostly) the markdown report for the PR comment
 
         Returns: None
         """
-        main = pd.read_csv(fp_main, usecols=["OpinionID", "Opinions"])
-        branch = pd.read_csv(fp_branch, usecols=["OpinionID", "Opinions"])
+        main = pd.read_csv(
+            self.get_filepath(f"{main_hash}.csv"),
+            usecols=["OpinionID", "Opinions"],
+        )
+        branch = pd.read_csv(
+            self.get_filepath(f"{branch_hash}.csv"),
+            usecols=["OpinionID", "Opinions"],
+        )
 
         comparison = main.compare(branch)
 
-        with open("../outputs/output.csv", "w") as f:
+        with open(self.get_filepath("output.csv"), "w") as f:
             writer = csv.writer(f)
             writer.writerow(["ID", "GAIN", "LOSS", "OPINION_ID", "--"])
 
@@ -125,7 +136,7 @@ class Benchmark(object):
 
         :return: None
         """
-        with open("../outputs/report.md", "w") as f:
+        with open(self.get_filepath("report.md"), "w") as f:
             f.write("# The Eyecite Report :eye:\n\n")
             f.write("\n\nGains and Losses\n")
             f.write("---------\n")
@@ -137,9 +148,9 @@ class Benchmark(object):
             f.write("<summary>Click here to see details.</summary>\n\n")
 
         # Add markdown report file outputs
-        df = pd.read_csv("../outputs/output.csv")
+        df = pd.read_csv(self.get_filepath("output.csv"))
 
-        with open("../outputs/report.md", "a") as md:
+        with open(self.get_filepath("report.md"), "a") as md:
             if df.__len__() > MAX_ROWS_IN_MD:
                 with open("outputs/report.md", "a+") as f:
                     f.write(
@@ -154,29 +165,28 @@ class Benchmark(object):
                 df.to_markdown(buf=md)
 
         # Remove NAN from file to make it look cleaner
-        with open("../outputs/report.md", "r+") as f:
+        with open(self.get_filepath("report.md"), "r+") as f:
             file = f.read()
             file = re.sub("nan", "   ", file)
             f.seek(0)
             f.write(file)
             f.truncate()
 
-        with open("../outputs/report.md", "a+") as f:
+        with open(self.get_filepath("report.md"), "a+") as f:
             f.write("\n\n</details>\n")
 
         # Add header for time chart for PR comment
-        with open("../outputs/report.md", "a") as f:
+        with open(self.get_filepath("report.md"), "a") as f:
             f.write("\n\nTime Chart\n")
             f.write("---------\n")
 
-    def generate_time_chart(self) -> None:
+    def generate_time_chart(self, main, branch) -> None:
         """Generate time chart showing speed across branches
 
         return: None
         """
-
-        main = pd.read_csv(fp_main)
-        branch = pd.read_csv(fp_branch)
+        main = pd.read_csv(self.get_filepath(f"{main}.csv"))
+        branch = pd.read_csv(self.get_filepath(f"{branch}.csv"))
 
         main.columns = main.columns.str.replace("Total", "Total Main")
         branch.columns = branch.columns.str.replace("Total", "Total Branch")
@@ -185,25 +195,30 @@ class Benchmark(object):
         df.plot(kind="line", x="Time", y=["Total Main", "Total Branch"])
 
         plt.ylabel("# Cites Found ", rotation="vertical")
-        plt.savefig("../outputs/time-comparison.png")
+        plt.savefig(self.get_filepath("chart.png"))
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--branch", action="store_true")
     parser.add_argument("--chart", action="store_true")
+    parser.add_argument("--main")
+    parser.add_argument("--branch")
+
     args = parser.parse_args()
+    branch = args.branch
+    main = args.main
 
     benchmark = Benchmark()
     if args.chart:
         # Process the report
-        benchmark.compare_dataframes()
+        benchmark.compare_dataframes(main, branch)
 
         # Write Report.MD file
         benchmark.write_report()
 
         # Generate time chart
-        benchmark.generate_time_chart()
+        benchmark.generate_time_chart(main, branch)
     else:
         # Generate data comparison
-        benchmark.generate_branch_report(branch=args.branch)
+        version = main if main else branch
+        benchmark.generate_branch_report(branch=version)
