@@ -15,18 +15,18 @@ jobs:
         env:
           main_hash: "$(/usr/bin/git log -1 --format='%H')"
         run: |
-          run: echo "::set-output name=ip-address::$(curl -s ifconfig.me)"
-          run: echo "::set-output name=p-address::"https://github.com/freelawproject/pingme/blob/artifacts/benchmark${{ env.main_hash }}.csv?raw=true"
-          echo "${{ env.main_hash }} and this and this"
-          echo "https://github.com/freelawproject/pingme/blob/artifacts/benchmark${{ env.main_hash }}.csv?raw=true"
-          echo "https://github.com/freelawproject/pingme/blob/artifacts/benchmark/$main_hash.csv?raw=true"
-          foo="${env.main_hash} World"
-          echo ${foo}
+          run: echo "::set-output name=ip-address::${{ env.main_hash }}"
+#          run: echo "::set-output name=p-address::"https://github.com/freelawproject/pingme/blob/artifacts/benchmark/${{ env.main_hash }}.csv?raw=true"
+#          echo "${{ env.main_hash }} and this and this"
+#          echo "https://github.com/freelawproject/pingme/blob/artifacts/benchmark/${{ env.main_hash }}.csv?raw=true"
+#          echo "https://github.com/freelawproject/pingme/blob/artifacts/benchmark/$main_hash.csv?raw=true"
+#          foo="${env.main_hash} World"
+#          echo ${foo}
 
       - name: step-2
         run: |
           echo "${{ steps.xyz.outputs.ip-address }}"
-          echo "${{ steps.xyz.outputs.p-address }}"
+#          echo "${{ steps.xyz.outputs.p-address }}"
 
       - name: More stuff
         run: |
