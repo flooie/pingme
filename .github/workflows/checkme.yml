@@ -20,6 +20,7 @@ jobs:
           curl "https://github.com/freelawproject/pingme/blob/artifacts/benchmark/${{ env.main }}.csv?raw=true" --output "benchmark/${{ env.main }}.csv"
           cd benchmark
           ls
+          cat ${{ env.main }}.csv
 
 #          run: echo "::set-output name=p-address::"https://github.com/freelawproject/pingme/blob/artifacts/benchmark/${{ env.main_hash }}.csv?raw=true"
 #          echo "${{ env.main_hash }} and this and this"
