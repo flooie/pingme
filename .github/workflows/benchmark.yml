@@ -48,18 +48,21 @@ jobs:
         with:
           repository: freelawproject/eyecite
           ref: baseline-benchmarking
-            curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
-            poetry install --with benchmark --without dev
-            poetry run python benchmark/benchmark.py --branch prooftest
-            curl https://github.com/freelawproject/eyecite/blob/artifacts/benchmark/${{ env.main_hash }}.csv?raw=true --fail --silent --output benchmark/${{ env.main_hash }}.csv
-            poetry run python benchmark/benchmark.py --main ${{ env.main_hash }} --branch prooftest --chart
-            cat benchmark/report.md
 
-        - name: Add or Update PR Comment from Generated Report
-          uses: marocchino/sticky-pull-request-comment@v2
-          with:
-            recreate: true
-            path: benchmark/report.md
+      - name: Update Main CSV File
+        run: |          
+          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
+          poetry install --with benchmark --without dev
+          poetry run python benchmark/benchmark.py --branch prooftest
+          curl https://github.com/freelawproject/eyecite/blob/artifacts/benchmark/${{ env.main_hash }}.csv?raw=true --fail --silent --output benchmark/${{ env.main_hash }}.csv
+          poetry run python benchmark/benchmark.py --main ${{ env.main_hash }} --branch prooftest --chart
+          cat benchmark/report.md
+
+      - name: Add or Update PR Comment from Generated Report
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          recreate: true
+          path: benchmark/report.md
 
 
               #      - name: Upload and Post Files to PR
