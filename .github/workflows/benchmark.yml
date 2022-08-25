@@ -23,12 +23,12 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
 
+
       - name: Run stuff for PR
         run: |
           echo "${{ env.main_hash }}"
           echo "${{ env.main_hash }}"
           echo "${{ env.path_hash }}"
-#          curl https://github.com/freelawproject/eyecite/blob/artifacts/benchmark/pr${{github.event.number}}-abc.csv?raw=true --output benchmark/abc.csv
           curl https://github.com/freelawproject/eyecite/blob/artifacts/benchmark/pr${{github.event.number}}-${{ env.main_hash }}.csv?raw=true --fail --output benchmark/${{ env.main_hash }}.csv
 
 
