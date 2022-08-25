@@ -49,11 +49,17 @@ jobs:
           repository: freelawproject/eyecite
           ref: baseline-benchmarking
 
-      - name: Update Main CSV File
+      - name: Curl File again
         run: |          
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
+
+      - name: Benchmark Prooftest
+        run: |
           poetry install --with benchmark --without dev
           poetry run python benchmark/benchmark.py --branch prooftest
+
+      - name: Curl and Compare old hash csv
+        run: |
           curl https://github.com/freelawproject/pingme/blob/artifacts/benchmark/${{ env.main_hash }}.csv?raw=true --fail --silent --output benchmark/${{ env.main_hash }}.csv
           poetry run python benchmark/benchmark.py --main ${{ env.main_hash }} --branch prooftest --chart
           cat benchmark/report.md
