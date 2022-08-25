@@ -44,8 +44,7 @@ jobs:
             github-token: ${{ secrets.TOKEN }}
             branch: artifacts
 
-      - name: Checkout and Run PR
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
           repository: freelawproject/eyecite
           ref: baseline-benchmarking
@@ -86,7 +85,7 @@ jobs:
 #          cd benchmark
 #          pwd
 #          ls
-          
+
 
 #      - name: Run Benchmarking Script
 #        run: |
