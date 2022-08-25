@@ -21,20 +21,33 @@ jobs:
       - name: Run Benchmark Script
         run: |
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
+          poetry install --with benchmark --without dev
+          poetry run python benchmark/benchmark.py --branch abc
 
-
-      - uses: actions/checkout@v3
+      - name: Upload and Post Files to PR
+        uses: gavv/pull-request-artifacts@v1.0.0
         with:
-          repository: freelawproject/eyecite
-          ref: baseline-benchmarking
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          commit: ${{ github.event.pull_request.head.sha }}
+          repo-token: ${{ secrets.TOKEN }}
+          artifacts-branch: artifacts
+          artifacts-dir: benchmark
+          artifacts: |
+            benchmark/outputs/abc.csv
 
-      - name: Run Benchmark Script
-        run: |
-          echo "Checking out same branch again to see if any of my files are still there...."
-          pwd
-          cd benchmark
-          pwd
-          ls
+
+#      - uses: actions/checkout@v3
+#        with:
+#          repository: freelawproject/eyecite
+#          ref: baseline-benchmarking
+#
+#      - name: Run Benchmark Script
+#        run: |
+#          echo "Checking out same branch again to see if any of my files are still there...."
+#          pwd
+#          cd benchmark
+#          pwd
+#          ls
           
 
 #      - name: Run Benchmarking Script
