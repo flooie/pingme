@@ -2,15 +2,20 @@ name: Benchmark Pull Request
 on:
   pull_request:
 
+env:
+  main_hash: "$(/usr/bin/git log -1 --format='%H')"
+
+
 jobs:
   benchmark:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
+#          repository: flooie/pingme
+#          ref: artifacts
           repository: freelawproject/eyecite
           ref: baseline-benchmarking
-
       - uses: actions/setup-python@v2
       - uses: snok/install-poetry@v1
         with:
@@ -18,22 +23,38 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
 
+#        - name: Find all JS files and fail if found
+#            uses: DovnarAlexander/github-action-file-detection@master
+#            with:
+#              wildcard: "$(/usr/bin/git log -1 --format='%H')"
+#              exit_code_found: 1
+#              exit_code_not_found: 0
+#              base_path: benchmark
+
+      - name: Run stuff for PR
+        run: |
+          echo "${{ env.main_hash }}"
+          echo "${{ env.main_hash }}"
+          echo "${{ env.main_hash }}"
+
+
       - name: Run Benchmark Script
         run: |
+          echo "${{ env.main_hash }}"
+          echo "benchmark/${{ env.main_hash }}.csv"
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
           poetry install --with benchmark --without dev
-          poetry run python benchmark/benchmark.py --branch abc
+          poetry run python benchmark/benchmark.py --branch "$(/usr/bin/git log -1 --format='%H')"
 
       - name: Upload and Post Files to PR
         uses: gavv/pull-request-artifacts@v1.0.0
         with:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
           commit: ${{ github.event.pull_request.head.sha }}
           repo-token: ${{ secrets.TOKEN }}
           artifacts-branch: artifacts
           artifacts-dir: benchmark
           artifacts: |
-            benchmark/outputs/abc.csv
+            "benchmark/${{ env.main_hash }}.csv"
 
 
 #      - uses: actions/checkout@v3
