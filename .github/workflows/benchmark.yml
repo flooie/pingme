@@ -4,7 +4,7 @@ on:
 
 env:
   main_hash: "$(/usr/bin/git log -1 --format='%H')"
-
+  path_hash: "$(/usr/bin/git log -1 --format='benchmark/%H.csv')"
 
 jobs:
   benchmark:
@@ -35,7 +35,7 @@ jobs:
         run: |
           echo "${{ env.main_hash }}"
           echo "${{ env.main_hash }}"
-          echo "${{ env.main_hash }}"
+          echo "${{ env.path_hash }}"
 
 
       - name: Run Benchmark Script
@@ -54,7 +54,7 @@ jobs:
           artifacts-branch: artifacts
           artifacts-dir: benchmark
           artifacts: |
-            benchmark/${{ env.main_hash }}.csv
+            ${{ env.path_hash }}
 
 
 #      - uses: actions/checkout@v3
