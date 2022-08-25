@@ -35,6 +35,7 @@ jobs:
         run: |
           echo "${{ env.main_hash }}"
           echo "${{ env.main_hash }}"
+          echo "${{ env.main_hash }}"
 
 
       - name: Run Benchmark Script
