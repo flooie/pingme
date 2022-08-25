@@ -2,6 +2,9 @@ name: Check Me
 on:
   push:
 
+env:
+  main_hash: "$(/usr/bin/git log -1 --format='https://github.com/freelawproject/pingme/blob/artifacts/benchmark/%H.csv')"
+
 jobs:
   benchmark:
     runs-on: ubuntu-latest
@@ -15,7 +18,9 @@ jobs:
         env:
           main_hash: "$(/usr/bin/git log -1 --format='%H')"
         run: |
-          run: echo "::set-output name=ip-address::${{ env.main_hash }}"
+          echo ${{ env.main_hash }}
+          echo "${{ env.main_hash }}"
+
 #          run: echo "::set-output name=p-address::"https://github.com/freelawproject/pingme/blob/artifacts/benchmark/${{ env.main_hash }}.csv?raw=true"
 #          echo "${{ env.main_hash }} and this and this"
 #          echo "https://github.com/freelawproject/pingme/blob/artifacts/benchmark/${{ env.main_hash }}.csv?raw=true"
