@@ -41,15 +41,24 @@ jobs:
           poetry install --with benchmark --without dev
           poetry run python benchmark/benchmark.py --branch "$(/usr/bin/git log -1 --format='%H')"
 
-      - name: Upload and Post Files to PR
-        uses: gavv/pull-request-artifacts@v1.0.0
+      - name: Update resources
+        uses: test-room-7/action-update-file@v1
         with:
-          commit: ${{ github.event.pull_request.head.sha }}
-          repo-token: ${{ secrets.TOKEN }}
-          artifacts-branch: artifacts
-          artifacts-dir: benchmark
-          artifacts: |
-            $path_hash
+            file-path: benchmark/*.csv
+            commit-msg: Update File
+            github-token: ${{ secrets.TOKEN }}
+            branch: artifacts
+
+
+#      - name: Upload and Post Files to PR
+#        uses: gavv/pull-request-artifacts@v1.0.0
+#        with:
+#          commit: ${{ github.event.pull_request.head.sha }}
+#          repo-token: ${{ secrets.TOKEN }}
+#          artifacts-branch: artifacts
+#          artifacts-dir: benchmark
+#          artifacts: |
+#            $path_hash
 
 
 #      - uses: actions/checkout@v3
