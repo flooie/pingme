@@ -3,7 +3,7 @@ on:
   pull_request:
 
 env:
-  main_hash: "$(/usr/bin/git log -1 --format='%H')"
+  main: "$(/usr/bin/git log -1 --format='%H')"
 
 jobs:
   benchmark:
@@ -16,122 +16,57 @@ jobs:
           repository: freelawproject/eyecite
           ref: baseline-benchmarking
       - uses: actions/setup-python@v2
-#      - uses: snok/install-poetry@v1
-#        with:
-#          version: 1.2.0rc1
-#          virtualenvs-create: true
-#          virtualenvs-in-project: true
+      - uses: snok/install-poetry@v1
+        with:
+          version: 1.2.0rc1
+          virtualenvs-create: true
+          virtualenvs-in-project: true
 
       - name: Run stuff for PR
         id: curl-csv
         continue-on-error: true
         run: |
-          curl "https://github.com/freelawproject/pingme/blob/artifacts/benchmark/$main_hash.csv?raw=true" --fail --silent --output "benchmark/$main_hash.csv"
+          curl "https://github.com/freelawproject/pingme/blob/artifacts/benchmark/${{ env.main }}.csv?raw=true" --fail --silent --output "benchmark/${{ env.main }}.csv"
 
-#      - name: Run Benchmark Script
-#        if: steps.curl-csv.outcome != 'success'
-#        run: |
-#          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
-#          poetry install --with benchmark --without dev
-#          poetry run python benchmark/benchmark.py --branch ${{ env.main_hash }}
-#
-#      - name: Update Main CSV File
-#        if: steps.curl-csv.outcome != 'success'
-#        uses: test-room-7/action-update-file@v1
-#        with:
-#            file-path: benchmark/*.csv
-#            commit-msg: Update File
-#            github-token: ${{ secrets.TOKEN }}
-#            branch: artifacts
-#
-#      - uses: actions/checkout@v3
-#        with:
-#          repository: freelawproject/eyecite
-#          ref: baseline-benchmarking
-#
-#      - name: Curl File again
-#        run: |
-#          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
-#
-#      - name: Benchmark Prooftest
-#        run: |
-#          poetry install --with benchmark --without dev
-#          poetry run python benchmark/benchmark.py --branch prooftest
-#
-#      - name: Curl and Compare old hash csv
-#        run: |
-#          curl https://github.com/freelawproject/pingme/blob/artifacts/benchmark/${{ env.main_hash }}.csv?raw=true --fail --silent --output benchmark/${{ env.main_hash }}.csv
-#          poetry run python benchmark/benchmark.py --main ${{ env.main_hash }} --branch prooftest --chart
-#          cat benchmark/report.md
-#
-#      - name: Add or Update PR Comment from Generated Report
-#        uses: marocchino/sticky-pull-request-comment@v2
-#        with:
-#          recreate: true
-#          path: benchmark/report.md
+      - name: Run Benchmark Script
+        if: steps.curl-csv.outcome != 'success'
+        run: |
+          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
+          poetry install --with benchmark --without dev
+          poetry run python benchmark/benchmark.py --branch ${{ env.main }}
 
+      - name: Update Main CSV File
+        if: steps.curl-csv.outcome != 'success'
+        uses: test-room-7/action-update-file@v1
+        with:
+            file-path: benchmark/*.csv
+            commit-msg: Update File
+            github-token: ${{ secrets.TOKEN }}
+            branch: artifacts
 
-              #      - name: Upload and Post Files to PR
-#        uses: gavv/pull-request-artifacts@v1.0.0
-#        with:
-#          commit: ${{ github.event.pull_request.head.sha }}
-#          repo-token: ${{ secrets.TOKEN }}
-#          artifacts-branch: artifacts
-#          artifacts-dir: benchmark
-#          artifacts: |
-#            $path_hash
+      - uses: actions/checkout@v3
+        with:
+          repository: freelawproject/eyecite
+          ref: baseline-benchmarking
+#
+      - name: Curl File again
+        run: |
+          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
+#
+      - name: Benchmark Prooftest
+        run: |
+          poetry install --with benchmark --without dev
+          poetry run python benchmark/benchmark.py --branch acbxyz
+#
+      - name: Curl and Compare old hash csv
+        run: |
+          curl https://github.com/freelawproject/pingme/blob/artifacts/benchmark/${{ env.main }}.csv?raw=true --fail --silent --output benchmark/${{ env.main }}.csv
+          poetry run python benchmark/benchmark.py --main ${{ env.main }} --branch abcxyz --chart
+          cat benchmark/report.md
 
+      - name: Add or Update PR Comment from Generated Report
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          recreate: true
+          path: benchmark/report.md
 
-#      - uses: actions/checkout@v3
-#        with:
-#          repository: freelawproject/eyecite
-#          ref: baseline-benchmarking
-#
-#      - name: Run Benchmark Script
-#        run: |
-#          echo "Checking out same branch again to see if any of my files are still there...."
-#          pwd
-#          cd benchmark
-#          pwd
-#          ls
-
-
-#      - name: Run Benchmarking Script
-#        run: |
-#          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/ten-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
-#
-#          git clone https://github.com/freelawproject/eyecite.git benchmark/eyecite
-#          cp benchmark/benchmark.py benchmark/eyecite/ && cd benchmark/eyecite/
-#          poetry install --no-dev
-#          poetry run pip install matplotlib pandas tabulate
-#
-#          poetry run python benchmark.py
-#
-#          poetry install --no-dev
-#          poetry run python benchmark.py --branch
-#          poetry run python benchmark.py --chart
-#
-#      - name: Embed Timing Chart into Markdown Post
-#        run: |
-#          echo "![image](https://github.com/freelawproject/eyecite/blob/artifacts/benchmark/pr${{github.event.number}}-time-comparison.png?raw=true)" >> benchmark/outputs/report.md
-#
-#      - name: Upload and Post Files to PR
-#        uses: gavv/pull-request-artifacts@v1.0.0
-#        with:
-#          commit: ${{ github.event.pull_request.head.sha }}
-#          repo-token: ${{ secrets.GITHUB_TOKEN }}
-#          artifacts-branch: artifacts
-#          artifacts-dir: benchmark
-#          artifacts: |
-#            benchmark/outputs/report.md
-#            benchmark/outputs/time-comparison.png
-#            benchmark/outputs/output.csv
-#            benchmark/outputs/main.csv
-#            benchmark/outputs/branch.csv
-#
-#      - name: Add or Update PR Comment from Generated Report
-#        uses: marocchino/sticky-pull-request-comment@v2
-#        with:
-#          recreate: true
-#          path: benchmark/outputs/report.md
-#
