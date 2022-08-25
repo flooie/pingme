@@ -34,6 +34,7 @@ jobs:
       - name: Run stuff for PR
         run: |
           echo "${{ env.main_hash }}"
+          echo "${{ env.main_hash }}"
 
 
       - name: Run Benchmark Script
