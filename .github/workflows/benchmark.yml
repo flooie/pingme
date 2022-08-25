@@ -21,13 +21,21 @@ jobs:
       - name: Run Benchmark Script
         run: |
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
-          poetry install --with benchmark --without dev
-          poetry run python benchmark/benchmark.py --branch abc
-          poetry run python benchmark/benchmark.py --branch xyz
-          poetry run python benchmark/benchmark.py --main abc --branch xyz --chart
 
-          cat benchmark/report.md
 
+      - uses: actions/checkout@v3
+        with:
+          repository: freelawproject/eyecite
+          ref: baseline-benchmarking
+
+      - name: Run Benchmark Script
+        run: |
+          echo "Checking out same branch again to see if any of my files are still there...."
+          pwd
+          cd benchmark
+          pwd
+          ls
+          
 
 #      - name: Run Benchmarking Script
 #        run: |
