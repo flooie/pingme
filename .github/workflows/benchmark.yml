@@ -21,7 +21,7 @@ jobs:
       - name: Run Benchmark Script
         run: |
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/ten-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
-          poetry install --no-dev --with benchmark 
+          poetry install --with benchmark --without dev
           poetry run python benchmark/benchmark.py
           ls
           pwd
