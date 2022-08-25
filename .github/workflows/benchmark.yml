@@ -26,7 +26,7 @@ jobs:
         id: curl-csv
         continue-on-error: true
         run: |
-          curl "https://github.com/flooie/pingme/blob/artifacts/benchmark/${{ env.main }}.csv?raw=true" --fail --silent --output "benchmark/${{ env.main }}.csv"
+          curl "https://raw.githubusercontent.com/flooie/pingme/artifacts/benchmark/${{ env.main }}.csv?raw=true" --output "benchmark/${{ env.main }}.csv"
           cat benchmark/${{ env.main }}.csv
 
       - name: Run Benchmark Script
@@ -63,7 +63,7 @@ jobs:
 
       - name: Curl and Compare old hash csv
         run: |
-          curl https://github.com/flooie/pingme/blob/artifacts/benchmark/${{ env.main }}.csv?raw=true --fail --silent --output benchmark/${{ env.main }}.csv
+          curl "https://raw.githubusercontent.com/flooie/pingme/artifacts/benchmark/${{ env.main }}.csv?raw=true" --output "benchmark/${{ env.main }}.csv"
           poetry run python benchmark/benchmark.py --main ${{ env.main }} --branch abcxyz --chart
           cat benchmark/report.md
 
