@@ -22,25 +22,21 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
 
-
       - name: Run stuff for PR
+        id: curl-csv
         continue-on-error: true
         run: |
-          echo "${{ env.main_hash }}"
-          echo "${{ env.main_hash }}"
-          echo "${{ env.path_hash }}"
           curl https://github.com/freelawproject/eyecite/blob/artifacts/benchmark/${{ env.main_hash }}.csv?raw=true --fail --silent --output benchmark/${{ env.main_hash }}.csv
 
-
       - name: Run Benchmark Script
+        if: steps.curl-csv.outcome != 'success'
         run: |
-          echo "${{ env.main_hash }}"
-          echo "benchmark/${{ env.main_hash }}.csv"
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
           poetry install --with benchmark --without dev
-          poetry run python benchmark/benchmark.py --branch "$(/usr/bin/git log -1 --format='%H')"
+          poetry run python benchmark/benchmark.py --branch ${{ env.main_hash }}
 
-      - name: Update resources
+      - name: Update Main CSV File
+        if: steps.curl-csv.outcome != 'success'
         uses: test-room-7/action-update-file@v1
         with:
             file-path: benchmark/*.csv
@@ -48,8 +44,26 @@ jobs:
             github-token: ${{ secrets.TOKEN }}
             branch: artifacts
 
+      - name: Checkout and Run PR
+        uses: actions/checkout@v3
+        with:
+          repository: freelawproject/eyecite
+          ref: baseline-benchmarking
+            curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
+            poetry install --with benchmark --without dev
+            poetry run python benchmark/benchmark.py --branch prooftest
+            curl https://github.com/freelawproject/eyecite/blob/artifacts/benchmark/${{ env.main_hash }}.csv?raw=true --fail --silent --output benchmark/${{ env.main_hash }}.csv
+            poetry run python benchmark/benchmark.py --main ${{ env.main_hash }} --branch prooftest --chart
+            cat benchmark/report.md
 
-#      - name: Upload and Post Files to PR
+        - name: Add or Update PR Comment from Generated Report
+          uses: marocchino/sticky-pull-request-comment@v2
+          with:
+            recreate: true
+            path: benchmark/report.md
+
+
+              #      - name: Upload and Post Files to PR
 #        uses: gavv/pull-request-artifacts@v1.0.0
 #        with:
 #          commit: ${{ github.event.pull_request.head.sha }}
@@ -112,4 +126,4 @@ jobs:
 #        with:
 #          recreate: true
 #          path: benchmark/outputs/report.md
-
+#
