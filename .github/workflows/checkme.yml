@@ -17,10 +17,7 @@ jobs:
       - name: Run stuff for PR
         id: xyz
         run: |
-          echo ${{ env.main_hash }}
-          echo "${{ env.main_hash }}"
-          curl ${{ env.main_hash }} --output "benchmark/abc.csv"
-          curl "https://github.com/freelawproject/pingme/blob/artifacts/benchmark/${{ env.main }}.csv?raw=true" --output "benchmark/xyz.csv"
+          curl "https://github.com/freelawproject/pingme/blob/artifacts/benchmark/${{ env.main }}.csv?raw=true" --output "benchmark/${{ env.main }}.csv"
           cd benchmark
           ls
 
