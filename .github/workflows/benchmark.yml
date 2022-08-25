@@ -20,13 +20,13 @@ jobs:
 
       - name: Run Benchmark Script
         run: |
-          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/ten-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
-          mkdir benchmark/outputs/
+          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
           poetry install --with benchmark --without dev
           poetry run python benchmark/benchmark.py --branch abc
           poetry run python benchmark/benchmark.py --branch xyz
           poetry run python benchmark/benchmark.py --main abc --branch xyz --chart
 
+          cat benchmark/report.md
 
 
 #      - name: Run Benchmarking Script
