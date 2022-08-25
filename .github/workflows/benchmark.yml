@@ -8,7 +8,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: main
+          repository: freelawproject/eyecite
+          ref: baseline-benchmarking
 
       - uses: actions/setup-python@v2
       - uses: snok/install-poetry@v1
@@ -17,42 +18,47 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
 
-      - name: Run Benchmarking Script
+      - name: Run Bencmark Script
         run: |
-          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/ten-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
-          
-          git clone https://github.com/freelawproject/eyecite.git benchmark/eyecite
-          cp benchmark/benchmark.py benchmark/eyecite/ && cd benchmark/eyecite/
-          poetry install --no-dev
-          poetry run pip install matplotlib pandas tabulate
-          
-          poetry run python benchmark.py
-
-          poetry install --no-dev
-          poetry run python benchmark.py --branch
-          poetry run python benchmark.py --chart
-
-      - name: Embed Timing Chart into Markdown Post
-        run: |
-          echo "![image](https://github.com/freelawproject/eyecite/blob/artifacts/benchmark/pr${{github.event.number}}-time-comparison.png?raw=true)" >> benchmark/outputs/report.md
-
-      - name: Upload and Post Files to PR
-        uses: gavv/pull-request-artifacts@v1.0.0
-        with:
-          commit: ${{ github.event.pull_request.head.sha }}
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts-branch: artifacts
-          artifacts-dir: benchmark
-          artifacts: |
-            benchmark/outputs/report.md
-            benchmark/outputs/time-comparison.png
-            benchmark/outputs/output.csv
-            benchmark/outputs/main.csv
-            benchmark/outputs/branch.csv
-
-      - name: Add or Update PR Comment from Generated Report
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          recreate: true
-          path: benchmark/outputs/report.md
+          python benchmark/benchmark.py
+          ls
+          pwd
+#      - name: Run Benchmarking Script
+#        run: |
+#          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/ten-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
+#
+#          git clone https://github.com/freelawproject/eyecite.git benchmark/eyecite
+#          cp benchmark/benchmark.py benchmark/eyecite/ && cd benchmark/eyecite/
+#          poetry install --no-dev
+#          poetry run pip install matplotlib pandas tabulate
+#
+#          poetry run python benchmark.py
+#
+#          poetry install --no-dev
+#          poetry run python benchmark.py --branch
+#          poetry run python benchmark.py --chart
+#
+#      - name: Embed Timing Chart into Markdown Post
+#        run: |
+#          echo "![image](https://github.com/freelawproject/eyecite/blob/artifacts/benchmark/pr${{github.event.number}}-time-comparison.png?raw=true)" >> benchmark/outputs/report.md
+#
+#      - name: Upload and Post Files to PR
+#        uses: gavv/pull-request-artifacts@v1.0.0
+#        with:
+#          commit: ${{ github.event.pull_request.head.sha }}
+#          repo-token: ${{ secrets.GITHUB_TOKEN }}
+#          artifacts-branch: artifacts
+#          artifacts-dir: benchmark
+#          artifacts: |
+#            benchmark/outputs/report.md
+#            benchmark/outputs/time-comparison.png
+#            benchmark/outputs/output.csv
+#            benchmark/outputs/main.csv
+#            benchmark/outputs/branch.csv
+#
+#      - name: Add or Update PR Comment from Generated Report
+#        uses: marocchino/sticky-pull-request-comment@v2
+#        with:
+#          recreate: true
+#          path: benchmark/outputs/report.md
 
