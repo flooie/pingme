@@ -29,7 +29,7 @@ jobs:
           echo "${{ env.main_hash }}"
           echo "${{ env.main_hash }}"
           echo "${{ env.path_hash }}"
-          curl https://github.com/freelawproject/eyecite/blob/artifacts/benchmark/pr${{github.event.number}}-${{ env.main_hash }}.csv?raw=true --fail --output benchmark/${{ env.main_hash }}.csv
+          curl https://github.com/freelawproject/eyecite/blob/artifacts/benchmark/pr${{github.event.number}}-${{ env.main_hash }}.csv?raw=true --fail --silent --output benchmark/${{ env.main_hash }}.csv
 
 
       - name: Run Benchmark Script
