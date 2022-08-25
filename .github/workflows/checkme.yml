@@ -17,7 +17,7 @@ jobs:
       - name: Run stuff for PR
         id: xyz
         run: |
-          curl "https://github.com/freelawproject/pingme/blob/artifacts/benchmark/${{ env.main }}.csv?raw=true" --output "benchmark/${{ env.main }}.csv"
+          curl "https://raw.githubusercontent.com/flooie/pingme/artifacts/benchmark/${{ env.main }}.csv?raw=true" --output "benchmark/${{ env.main }}.csv"
           cd benchmark
           ls
           cat ${{ env.main }}.csv
