@@ -23,19 +23,13 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
 
-#        - name: Find all JS files and fail if found
-#            uses: DovnarAlexander/github-action-file-detection@master
-#            with:
-#              wildcard: "$(/usr/bin/git log -1 --format='%H')"
-#              exit_code_found: 1
-#              exit_code_not_found: 0
-#              base_path: benchmark
 
       - name: Run stuff for PR
         run: |
           echo "${{ env.main_hash }}"
           echo "${{ env.main_hash }}"
           echo "${{ env.path_hash }}"
+          curl https://github.com/freelawproject/eyecite/blob/artifacts/benchmark/pr${{github.event.number}}-${{ env.main_hash }}.csv?raw=true --fail --output benchmark/${{ env.main_hash }}.csv
 
 
       - name: Run Benchmark Script
