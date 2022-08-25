@@ -49,7 +49,7 @@ jobs:
           artifacts-branch: artifacts
           artifacts-dir: benchmark
           artifacts: |
-            ${{ env.path_hash }}
+            $path_hash
 
 
 #      - uses: actions/checkout@v3
