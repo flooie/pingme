@@ -4,6 +4,7 @@ on:
 
 env:
   main_hash: "$(/usr/bin/git log -1 --format='https://github.com/freelawproject/pingme/blob/artifacts/benchmark/%H.csv?raw=true')"
+  main: "$(/usr/bin/git log -1 --format='%H')"
 
 jobs:
   benchmark:
@@ -19,6 +20,9 @@ jobs:
           echo ${{ env.main_hash }}
           echo "${{ env.main_hash }}"
           curl ${{ env.main_hash }} --output "benchmark/abc.csv"
+          curl "https://github.com/freelawproject/pingme/blob/artifacts/benchmark/${{ main }}.csv?raw=true" --output "benchmark/xyz.csv"
+          cd benchmark
+          ls
 
 #          run: echo "::set-output name=p-address::"https://github.com/freelawproject/pingme/blob/artifacts/benchmark/${{ env.main_hash }}.csv?raw=true"
 #          echo "${{ env.main_hash }} and this and this"
@@ -26,44 +30,3 @@ jobs:
 #          echo "https://github.com/freelawproject/pingme/blob/artifacts/benchmark/$main_hash.csv?raw=true"
 #          foo="${env.main_hash} World"
 #          echo ${foo}
-
-      - name: step-2
-        run: |
-          echo "${{ steps.xyz.outputs.ip-address }}"
-#          echo "${{ steps.xyz.outputs.p-address }}"
-
-      - name: More stuff
-        run: |
-          echo "GITHUB_SHA_SHORT=$(/usr/bin/git log -1 --format='%H')" >> GITHUB_ENV
-#
-      - name: Checkout
-        run: |
-          echo $GITHUB_SHA_SHORT
-
-      - name: Curl
-        run: |
-          curl "https://github.com/freelawproject/pingme/blob/artifacts/benchmark/$main_hash.csv?raw=true" --fail --silent --output "benchmark/$main_hash.csv"
-
-#        uses: actions/checkout@v3
-#        with:
-#          ref: main
-#
-#      - name: Run Stuff for Main
-#        run: |
-#          python benchmark/stuff.py --something 1234
-#          python benchmark/stuff.py --something $GITHUB_SHA_SHORT
-#
-##      - name: Show env
-##        on:
-##        push:
-##        branches:
-##        - '*'
-##        env:
-##        somevar: 'lastvar'
-##        jobs:
-##        show:
-##        runs-on: ubuntu-latest
-##        steps:
-##        - name: Is variable exported?
-##        run: |
-##        echo "${{ env.somevar }}"
