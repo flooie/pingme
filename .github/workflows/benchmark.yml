@@ -21,7 +21,7 @@ jobs:
       - name: Run Bencmark Script
         run: |
           poetry install --with benchmark 
-          python benchmark/benchmark.py
+          poetry run benchmark/benchmark.py
           ls
           pwd
 #      - name: Run Benchmarking Script
