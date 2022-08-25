@@ -15,6 +15,8 @@ jobs:
           main_hash: "$(/usr/bin/git log -1 --format='%H')"
         run: |
           echo "${{ env.main_hash }} and this and this"
+          echo "https://github.com/freelawproject/pingme/blob/artifacts/benchmark${{ env.main_hash }}.csv?raw=true"
+          echo "https://github.com/freelawproject/pingme/blob/artifacts/benchmark/$main_hash.csv?raw=true"
           foo="${env.main_hash} World"
           echo ${foo}
 
