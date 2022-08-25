@@ -18,10 +18,10 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
 
-      - name: Run Bencmark Script
+      - name: Run Benchmark Script
         run: |
           poetry install --with benchmark 
-          poetry run benchmark/benchmark.py
+          poetry run python benchmark/benchmark.py
           ls
           pwd
 #      - name: Run Benchmarking Script
