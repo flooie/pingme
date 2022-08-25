@@ -26,7 +26,8 @@ jobs:
         id: curl-csv
         continue-on-error: true
         run: |
-          curl "https://github.com/freelawproject/pingme/blob/artifacts/benchmark/${{ env.main }}.csv?raw=true" --fail --silent --output "benchmark/${{ env.main }}.csv"
+          curl "https://github.com/flooie/pingme/blob/artifacts/benchmark/${{ env.main }}.csv?raw=true" --fail --silent --output "benchmark/${{ env.main }}.csv"
+          cat benchmark/${{ env.main }}.csv
 
       - name: Run Benchmark Script
         if: steps.curl-csv.outcome != 'success'
@@ -34,6 +35,7 @@ jobs:
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
           poetry install --with benchmark --without dev
           poetry run python benchmark/benchmark.py --branch ${{ env.main }}
+          cat benchmark/${{ env.main }}.csv
 
       - name: Update Main CSV File
         if: steps.curl-csv.outcome != 'success'
@@ -56,11 +58,12 @@ jobs:
       - name: Benchmark Prooftest
         run: |
           poetry install --with benchmark --without dev
-          poetry run python benchmark/benchmark.py --branch acbxyz
-#
+          poetry run python benchmark/benchmark.py --branch abcxyz
+          cat benchmark/abcxyz.csv
+
       - name: Curl and Compare old hash csv
         run: |
-          curl https://github.com/freelawproject/pingme/blob/artifacts/benchmark/${{ env.main }}.csv?raw=true --fail --silent --output benchmark/${{ env.main }}.csv
+          curl https://github.com/flooie/pingme/blob/artifacts/benchmark/${{ env.main }}.csv?raw=true --fail --silent --output benchmark/${{ env.main }}.csv
           poetry run python benchmark/benchmark.py --main ${{ env.main }} --branch abcxyz --chart
           cat benchmark/report.md
 
