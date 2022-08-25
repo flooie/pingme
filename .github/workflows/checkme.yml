@@ -4,7 +4,8 @@ on:
 
 env:
   main_hash: "$(/usr/bin/git log -1 --format='https://github.com/freelawproject/pingme/blob/artifacts/benchmark/%H.csv?raw=true')"
-  main: "$(/usr/bin/git log -1 --format='%H')"
+#  main: "$(/usr/bin/git log -1 --format='%H')"
+  main: "7ff6e3a3104f6c84a444eac1b54f5af64f31b204"
 
 jobs:
   benchmark:
