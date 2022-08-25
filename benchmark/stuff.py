@@ -3,3 +3,4 @@ if __name__ == '__main__':
     print("OOOOOOKAY")
     print("OKOKO")
     print("OO")
+    print("OO")
