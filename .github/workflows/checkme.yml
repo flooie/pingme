@@ -13,18 +13,12 @@ jobs:
       - name: Run stuff for PR
         env:
           main_hash: "$(/usr/bin/git log -1 --format='%H')"
-
         run: |
           echo "${{ env.main_hash }}"
 
       - name: More stuff
         run: |
-#          python benchmark/stuff.py
-#          echo ${{ github.sha }}
-#          echo ${{ github.ref }}
-#          echo ${{ github.event.pull_request.head.sha }}
           echo "GITHUB_SHA_SHORT=$(/usr/bin/git log -1 --format='%H')" >> GITHUB_ENV
-#          python benchmark/stuff.py --something "$(/usr/bin/git log -1 --format='%H')"
 #
       - name: Checkout
         run: |
