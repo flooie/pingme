@@ -54,7 +54,7 @@ jobs:
           artifacts-branch: artifacts
           artifacts-dir: benchmark
           artifacts: |
-            "benchmark/${{ env.main_hash }}.csv"
+            benchmark/${{ env.main_hash }}.csv
 
 
 #      - uses: actions/checkout@v3
