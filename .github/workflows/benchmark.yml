@@ -26,7 +26,7 @@ jobs:
         id: curl-csv
         continue-on-error: true
         run: |
-          curl https://github.com/freelawproject/pingme/blob/artifacts/benchmark/${{ env.main_hash }}.csv?raw=true --fail --silent --output benchmark/${{ env.main_hash }}.csv
+          curl "https://github.com/freelawproject/pingme/blob/artifacts/benchmark/${{ env.main_hash }}.csv?raw=true" --fail --silent --output "benchmark/${{ env.main_hash }}.csv"
 
       - name: Run Benchmark Script
         if: steps.curl-csv.outcome != 'success'
