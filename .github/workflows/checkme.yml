@@ -14,7 +14,7 @@ jobs:
         env:
           main_hash: "$(/usr/bin/git log -1 --format='%H')"
         run: |
-          echo "${{ env.main_hash }}" & "adfadfasdf"
+          echo "${{ env.main_hash }} and this and this"
           foo="${env.main_hash} World"
           echo ${foo}
 
