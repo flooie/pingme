@@ -33,7 +33,7 @@ jobs:
           artifacts-branch: artifacts
           artifacts-dir: benchmark
           artifacts: |
-            benchmark/outputs/abc.csv
+            benchmark/abc.csv
 
 
 #      - uses: actions/checkout@v3
