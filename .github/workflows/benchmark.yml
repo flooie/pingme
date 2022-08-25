@@ -37,7 +37,8 @@ jobs:
 
       - name: Run Benchmark Script
         run: |
-          echo "GITHUB_SHA_SHORT=$(/usr/bin/git log -1 --format='%H')" >> GITHUB_ENV
+          echo "${{ env.main_hash }}"
+          echo "benchmark/${{ env.main_hash }}.csv"
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
           poetry install --with benchmark --without dev
           poetry run python benchmark/benchmark.py --branch "$(/usr/bin/git log -1 --format='%H')"
