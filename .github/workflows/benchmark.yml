@@ -1,6 +1,6 @@
 name: Benchmark Pull Request
 on:
-  push:
+  pull_request:
 
 jobs:
   benchmark:
