@@ -20,7 +20,7 @@ jobs:
           echo ${{ env.main_hash }}
           echo "${{ env.main_hash }}"
           curl ${{ env.main_hash }} --output "benchmark/abc.csv"
-          curl "https://github.com/freelawproject/pingme/blob/artifacts/benchmark/${{ main }}.csv?raw=true" --output "benchmark/xyz.csv"
+          curl "https://github.com/freelawproject/pingme/blob/artifacts/benchmark/${{ env.main }}.csv?raw=true" --output "benchmark/xyz.csv"
           cd benchmark
           ls
 
