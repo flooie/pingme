@@ -23,6 +23,16 @@ jobs:
           virtualenvs-in-project: true
 
       - name: Run stuff for PR
+        run: |
+          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
+          poetry install --with benchmark --without dev
+          poetry run python benchmark/benchmark.py --branch PR
+          git checkout main
+          git checkout baseline-benchmarking
+          poetry run pip install reporters-db=3.2.10
+          poetry run python benchmark/benchmark.py --branch main
+
+      - name: Run stuff for PR
         id: curl-csv
         continue-on-error: true
         run: |
@@ -34,42 +44,56 @@ jobs:
         run: |
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
           poetry install --with benchmark --without dev
-          poetry run python benchmark/benchmark.py --branch ${{ env.main }}
+          poetry run python benchmark/benchmark.py --branch pr-branch
           cat benchmark/${{ env.main }}.csv
-
-      - name: Update Main CSV File
-        if: steps.curl-csv.outcome != 'success'
-        uses: test-room-7/action-update-file@v1
-        with:
-            file-path: benchmark/*.csv
-            commit-msg: Update File
-            github-token: ${{ secrets.TOKEN }}
-            branch: artifacts
-
-      - uses: actions/checkout@v3
-        with:
-          repository: freelawproject/eyecite
-          ref: baseline-benchmarking
-#
-      - name: Curl File again
-        run: |
-          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
-#
-      - name: Benchmark Prooftest
-        run: |
-          poetry install --with benchmark --without dev
-          poetry run python benchmark/benchmark.py --branch abcxyz
-          cat benchmark/abcxyz.csv
-
-      - name: Curl and Compare old hash csv
-        run: |
-          curl "https://raw.githubusercontent.com/flooie/pingme/artifacts/benchmark/${{ env.main }}.csv?raw=true" --output "benchmark/${{ env.main }}.csv"
-          poetry run python benchmark/benchmark.py --main ${{ env.main }} --branch abcxyz --chart
-          cat benchmark/report.md
+          poetry run python benchmark/benchmark.py --main main
+          poetry run python benchmark/benchmark.py --main main --branch pr-branch --chart
 
       - name: Add or Update PR Comment from Generated Report
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           recreate: true
-          path: benchmark/report.md
+          path: |
+            benchmark/report.md
+            benchmark/time-comparison.png
+            benchmark/branch.csv
+            benchmark/main.csv
+            benchmark/output.csv
+
+#      - name: Update Main CSV File
+#        if: steps.curl-csv.outcome != 'success'
+#        uses: test-room-7/action-update-file@v1
+#        with:
+#            file-path: benchmark/*.csv
+#            commit-msg: Update File
+#            github-token: ${{ secrets.TOKEN }}
+#            branch: artifacts
+
+#      - uses: actions/checkout@v3
+#        with:
+#          repository: freelawproject/eyecite
+#          ref: baseline-benchmarking
+##
+#      - name: Curl File again
+#        run: |
+#          curl "https://raw.githubusercontent.com/flooie/pingme/artifacts/benchmark/${{ env.main }}.csv?raw=true" --output "benchmark/${{ env.main }}.csv"
+#          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
+##
+#      - name: Benchmark Second Branch
+#        run: |
+#          poetry install --with benchmark --without dev
+#          poetry run python benchmark/benchmark.py --branch abcxyz
+#          poetry run python benchmark/benchmark.py --main ${{ env.main }} --branch abcxyz --chart
+
+#      - name: Generate Report
+#        run: |
+#          poetry run python benchmark/benchmark.py --main ${{ env.main }} --branch abcxyz --chart
+
+      - name: Add or Update PR Comment from Generated Report
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          recreate: true
+          path: |
+            benchmark/report.md
+            benchmark/time-comparison.png
 
