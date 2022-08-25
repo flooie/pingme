@@ -25,6 +25,7 @@ jobs:
 
 
       - name: Run stuff for PR
+        continue-on-error: true
         run: |
           echo "${{ env.main_hash }}"
           echo "${{ env.main_hash }}"
@@ -48,7 +49,7 @@ jobs:
           artifacts-branch: artifacts
           artifacts-dir: benchmark
           artifacts: |
-            "${{ env.path_hash }}"
+            ${{ env.path_hash }}
 
 
 #      - uses: actions/checkout@v3
