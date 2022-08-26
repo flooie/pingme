@@ -22,6 +22,7 @@ jobs:
 
       - name: Install Poetry Requirements
         run: |
+          echo ${{ env.main }}
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
           poetry install --with benchmark --without dev
 
@@ -37,6 +38,7 @@ jobs:
 
       - name: Unstash and Test Next Branch
         run: |
+          echo ${{ env.main }}
           poetry install --with benchmark --without dev
           git stash pop
           poetry run python benchmark/benchmark.py --branch main
