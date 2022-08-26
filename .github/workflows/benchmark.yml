@@ -41,8 +41,8 @@ jobs:
           echo ${{ env.main }}
           poetry install --with benchmark --without dev
           git stash pop
-          poetry run python benchmark/benchmark.py --branch main
-          poetry run python benchmark/benchmark.py --main main --branch branch --chart ${{ github.event.number }}
+          poetry run python benchmark/benchmark.py --branch ${{ env.main }}
+          poetry run python benchmark/benchmark.py --main ${{ env.main }} --branch branch --chart ${{ github.event.number }}
           cat benchmark/report.md
           echo ${{github.event.number}}
 
@@ -58,8 +58,8 @@ jobs:
             benchmark/report.md
             benchmark/chart.png
             benchmark/output.csv
-            benchmark/main.csv
             benchmark/branch.csv
+#            benchmark/main.csv
 
       - name: Add or Update PR Comment from Generated Report
         uses: marocchino/sticky-pull-request-comment@v2
