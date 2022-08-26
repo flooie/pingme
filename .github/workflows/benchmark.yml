@@ -64,10 +64,4 @@ jobs:
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           recreate: true
-          message: "Hello ... working... maybe????"
-#          path: |
-#            benchmark/report.md
-#            benchmark/chart.png
-#            benchmark/branch.csv
-#            benchmark/main.csv
-#            benchmark/output.csv
+          path: benchmark/report.md
