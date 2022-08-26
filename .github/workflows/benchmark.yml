@@ -44,6 +44,7 @@ jobs:
           echo "::set-output name=filepath::benchmark/${{ env.main }}.csv"
           poetry install --with benchmark --without dev
           git stash pop
+          pip install reporters-db==3.2.5
           poetry run python benchmark/benchmark.py --branch ${{ env.main }}
           poetry run python benchmark/benchmark.py --main ${{ env.main }} --branch ${{ steps.b1.outputs.hash }} --chart ${{ github.event.number }}
 
