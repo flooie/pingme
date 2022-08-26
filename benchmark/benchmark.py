@@ -16,7 +16,7 @@ from matplotlib import pyplot as plt
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
-from eyecite import get_citations
+from eyecite import get_citations, clean_text
 
 csv.field_size_limit(sys.maxsize)
 
@@ -60,7 +60,7 @@ class Benchmark(object):
         self.list_of_ids.append(row_id)
         found_cites = []
         for op in non_empty_rows:
-            found_citations = get_citations(op)
+            found_citations = get_citations(clean_text(op, ["html", "inline_whitespace"]))
             cites = [cite.token.data for cite in found_citations if cite.token]
             found_cites.extend(cites)
 
@@ -131,7 +131,7 @@ class Benchmark(object):
                         row_to_add = [row[0], "", item, branch.iat[row[0], 0]]
                     writer.writerow(row_to_add)
 
-    def write_report(self):
+    def write_report(self, reporters):
         """Begin building Report.MD file
 
         :return: None
@@ -175,10 +175,11 @@ class Benchmark(object):
         with open(self.get_filepath("report.md"), "a+") as f:
             f.write("\n\n</details>\n")
 
-        # Add header for time chart for PR comment
-        with open(self.get_filepath("report.md"), "a") as f:
-            f.write("\n\nTime Chart\n")
-            f.write("---------\n")
+        if not reporters:
+            # Add header for time chart for PR comment
+            with open(self.get_filepath("report.md"), "a") as f:
+                f.write("\n\nTime Chart\n")
+                f.write("---------\n")
 
     def generate_time_chart(self, main, branch, pr_number) -> None:
         """Generate time chart showing speed across branches
@@ -199,7 +200,6 @@ class Benchmark(object):
 
         # Add header for time chart for PR comment
         with open(self.get_filepath("report.md"), "a") as f:
-            # f.write("![image](https://github.com/freelawproject/eyecite/blob/artifacts/benchmark/pr${{github.event.number}}-time-comparison.png?raw=true)")
             f.write(f"![image](https://raw.githubusercontent.com/flooie/pingme/artifacts/benchmark/pr{pr_number}-chart.png)")
 
 
@@ -208,11 +208,13 @@ if __name__ == "__main__":
     parser.add_argument("--chart")
     parser.add_argument("--main")
     parser.add_argument("--branch")
+    parser.add_argument("--reporters", action="store_true")
 
     args = parser.parse_args()
     branch = args.branch
     main = args.main
     chart = args.chart
+    reporters = args.reporters
 
     benchmark = Benchmark()
     if args.chart:
@@ -220,10 +222,11 @@ if __name__ == "__main__":
         benchmark.compare_dataframes(main, branch)
 
         # Write Report.MD file
-        benchmark.write_report()
+        benchmark.write_report(reporters)
 
-        # Generate time chart
-        benchmark.generate_time_chart(main, branch, chart)
+        if not reporters:
+            # Generate time chart
+            benchmark.generate_time_chart(main, branch, chart)
     else:
         # Generate data comparison
         version = main if main else branch
