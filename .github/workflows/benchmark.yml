@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          repository: flooie/pingme
-          ref: new-pr-ok
+#        with:
+#          repository: flooie/pingme
+#          ref: artifacts
 #          repository: freelawproject/eyecite
 #          ref: baseline-benchmarking
       - uses: actions/setup-python@v2
