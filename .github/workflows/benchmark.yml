@@ -105,10 +105,6 @@ jobs:
           poetry run pip install "git+https://github.com/freelawproject/reporters-db.git@${{ github.event.client_payload.commit }}"
           poetry run python benchmark/benchmark.py --branch update
           poetry run python benchmark/benchmark.py --main original --branch update --chart ${{ github.event.client_payload.pr_number }}
-          cd benchmark
-          ls
-          pwd
-          cd ..
 
       - name: Add or Update PR Comment from Generated Report
         uses: marocchino/sticky-pull-request-comment@v2
@@ -116,4 +112,4 @@ jobs:
           recreate: true
           path: benchmark/report.md
           number: ${{ github.event.client_payload.pr_number }}
-          repo: flooie/crosspingme
+          repo: crosspingme
