@@ -1,6 +1,6 @@
 name: Benchmark Pull Request
 on:
-  push:
+  pull_request:
 
 env:
   main: "$(/usr/bin/git log -1 --format='%H')"
@@ -13,9 +13,6 @@ jobs:
         with:
           repository: flooie/pingme
           ref: new-pr-ok
-#          ref: artifacts
-#          repository: freelawproject/eyecite
-#          ref: baseline-benchmarking
       - uses: actions/setup-python@v2
       - uses: snok/install-poetry@v1
         with:
@@ -30,7 +27,7 @@ jobs:
 
       - name: Test Branch
         run: |
-          poetry run python benchmark/benchmark.py --branch PR
+          poetry run python benchmark/benchmark.py --branch branch
           git stash --include-untracked
 
       - uses: actions/checkout@v3
@@ -43,10 +40,8 @@ jobs:
           poetry install --with benchmark --without dev
           git stash pop
           poetry run python benchmark/benchmark.py --branch main
-          poetry run python benchmark/benchmark.py --main main --branch PR --chart
-          cd benchmark/
-          ls 
-          cd ..
+          poetry run python benchmark/benchmark.py --main main --branch branch --chart
+          cat benchmark/report.md
 
       - name: Add or Update PR Comment from Generated Report
         uses: marocchino/sticky-pull-request-comment@v2
@@ -54,7 +49,7 @@ jobs:
           recreate: true
           path: |
             benchmark/report.md
-            benchmark/time-comparison.png
+            benchmark/chart.png
             benchmark/branch.csv
             benchmark/main.csv
             benchmark/output.csv
