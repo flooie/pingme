@@ -23,12 +23,12 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
 
-      - name: Run stuff for PR
+      - name: Install Poetry Requirements
         run: |
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
           poetry install --with benchmark --without dev
 
-      - name: Run stuff for PR Generate REPORT
+      - name: Test Branch
         run: |
           poetry run python benchmark/benchmark.py --branch PR
           git stash --include-untracked
@@ -38,7 +38,7 @@ jobs:
           repository: flooie/pingme
           ref: main
 
-      - name: Run stuff for PR
+      - name: Unstash and Test Next Branch
         run: |
           git stash pop
           cd benchmark/
