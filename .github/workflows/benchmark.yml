@@ -11,7 +11,7 @@ env:
 jobs:
   benchmark:
     name: PR comment
-    if: github.event_name == 'pull_request'
+    if: ${{ github.event.issue.pull_request }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -53,7 +53,6 @@ jobs:
         run: |
           poetry install --with benchmark --without dev
           git stash pop
-          poetry run pip install reporters-db==3.2.5
           poetry run python benchmark/benchmark.py --branch ${{ steps.b2.outputs.hash }}
           poetry run python benchmark/benchmark.py --main ${{ steps.b2.outputs.hash }} --branch ${{ steps.b1.outputs.hash }} --chart ${{ github.event.number }}
 
