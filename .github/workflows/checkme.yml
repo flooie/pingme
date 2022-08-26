@@ -19,6 +19,7 @@ jobs:
         id: xyz
         run: |
           echo ${{ env.main }}
+          echo "::set-output name=test::${{ env.main }}"
 
       - uses: actions/checkout@v3
         with:
@@ -30,6 +31,7 @@ jobs:
         run: |
           echo ${{ env.main }}
           echo "$(/usr/bin/git log -1 --format='%H')"
+          echo ${{ steps.xyz.outputs.test }}
 
 #          curl "https://raw.githubusercontent.com/flooie/pingme/artifacts/benchmark/${{ env.main }}.csv?raw=true" --output "benchmark/${{ env.main }}.csv"
 #          cd benchmark
