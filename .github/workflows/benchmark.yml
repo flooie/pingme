@@ -106,12 +106,12 @@ jobs:
 #          poetry run python benchmark/benchmark.py --branch update
 #          poetry run python benchmark/benchmark.py --main original --branch update --chart ${{ github.event.client_payload.pr_number }}
 #
-#      - name: Add or Update PR Comment from Generated Report
-#        uses: marocchino/sticky-pull-request-comment@v2
-#        with:
-#          recreate: true
-#          GITHUB_TOKEN: ${{ secrets.TOKEN }}
-##          path: benchmark/report.md
-#          message: "THIS IS A MESSAGE"
+      - name: Add or Update PR Comment from Generated Report
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          recreate: true
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+#          path: benchmark/report.md
+          message: "THIS IS A MESSAGE"
           number: ${{ github.event.client_payload.pr_number }}
           repo: flooie/crosspingme
