@@ -152,7 +152,7 @@ class Benchmark(object):
 
         with open(self.get_filepath("report.md"), "a") as md:
             if df.__len__() > MAX_ROWS_IN_MD:
-                with open("outputs/report.md", "a+") as f:
+                with open("report.md", "a+") as f:
                     f.write(
                         f"There were {df.__len__()} changes so we are only "
                         f"displaying the first 50. You can review the \n"
