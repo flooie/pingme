@@ -1,12 +1,17 @@
 name: Benchmark Pull Request
 on:
   pull_request:
+  repository_dispatch:
+    types: [ reporters-db-pr ]
+
 
 env:
   main: "$(/usr/bin/git log -1 --format='%H')"
 
 jobs:
   benchmark:
+    name: PR comment
+    if: ${{ github.event.issue.pull_request }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -72,3 +77,24 @@ jobs:
         with:
           recreate: true
           path: benchmark/report.md
+
+  dispatch:
+    name: Reporters-DB-Dipatch
+    if: ${{ github.event.issue.repository_dispatch }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v2
+      - uses: snok/install-poetry@v1
+        with:
+          version: 1.2.0rc1
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Setup variables I
+        id: b1
+        run: |
+          echo "HELLO REPO DISPATCH"
+          echo ${{ github.event.client_payload.message }}
+          echo ${{ github.event.client_payload.gsha }}
+          
