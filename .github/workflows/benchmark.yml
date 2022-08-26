@@ -1,6 +1,6 @@
 name: Benchmark Pull Request
 on:
-  push:
+  pull_request:
 
 env:
   main: "$(/usr/bin/git log -1 --format='%H')"
@@ -27,8 +27,9 @@ jobs:
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
           poetry install --with benchmark --without dev
           poetry run python benchmark/benchmark.py --branch PR
-#          git checkout baseline-benchmarking
-#          poetry run pip install reporters-db=3.2.10
+          git checkout main
+          git checkout baseline-benchmarking
+          poetry run pip install reporters-db=3.2.10
           poetry run python benchmark/benchmark.py --branch main
           poetry run python benchmark/benchmark.py --main main --branch PR --chart
 
@@ -42,3 +43,41 @@ jobs:
             benchmark/branch.csv
             benchmark/main.csv
             benchmark/output.csv
+
+#      - name: Update Main CSV File
+#        if: steps.curl-csv.outcome != 'success'
+#        uses: test-room-7/action-update-file@v1
+#        with:
+#            file-path: benchmark/*.csv
+#            commit-msg: Update File
+#            github-token: ${{ secrets.TOKEN }}
+#            branch: artifacts
+
+#      - uses: actions/checkout@v3
+#        with:
+#          repository: freelawproject/eyecite
+#          ref: baseline-benchmarking
+##
+#      - name: Curl File again
+#        run: |
+#          curl "https://raw.githubusercontent.com/flooie/pingme/artifacts/benchmark/${{ env.main }}.csv?raw=true" --output "benchmark/${{ env.main }}.csv"
+#          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
+##
+#      - name: Benchmark Second Branch
+#        run: |
+#          poetry install --with benchmark --without dev
+#          poetry run python benchmark/benchmark.py --branch abcxyz
+#          poetry run python benchmark/benchmark.py --main ${{ env.main }} --branch abcxyz --chart
+
+#      - name: Generate Report
+#        run: |
+#          poetry run python benchmark/benchmark.py --main ${{ env.main }} --branch abcxyz --chart
+
+#      - name: Add or Update PR Comment from Generated Report
+#        uses: marocchino/sticky-pull-request-comment@v2
+#        with:
+#          recreate: true
+#          path: |
+#            benchmark/report.md
+#            benchmark/time-comparison.png
+
