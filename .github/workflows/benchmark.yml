@@ -43,6 +43,21 @@ jobs:
           poetry run python benchmark/benchmark.py --main main --branch branch --chart
           cat benchmark/report.md
 
+      - name: Upload and Post Files to PR
+        uses: gavv/pull-request-artifacts@v1.0.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          commit: ${{ github.event.pull_request.head.sha }}
+          repo: pingme
+          artifacts-branch: artifacts
+          artifacts-dir: benchmark
+          artifacts: |
+            benchmark/report.md
+            benchmark/time-comparison.png
+            benchmark/output.csv
+            benchmark/main.csv
+            benchmark/branch.csv
+
       - name: Add or Update PR Comment from Generated Report
         uses: marocchino/sticky-pull-request-comment@v2
         with:
