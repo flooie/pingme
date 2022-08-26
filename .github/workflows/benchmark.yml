@@ -42,7 +42,7 @@ jobs:
           poetry install --with benchmark --without dev
           git stash pop
           poetry run python benchmark/benchmark.py --branch main
-          poetry run python benchmark/benchmark.py --main main --branch branch --chart
+          poetry run python benchmark/benchmark.py --main main --branch branch --chart ${{ github.event.number }}
           cat benchmark/report.md
           echo ${{github.event.number}}
 
