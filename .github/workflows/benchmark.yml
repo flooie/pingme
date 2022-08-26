@@ -94,8 +94,7 @@ jobs:
         id: b1
         run: |
           echo  ${{ github.event.issue }}
-          echo  ${{ github.event }}
-          echo  ${{ github }}
+          echo  ${{ github.event_name }}
           echo "HELLO REPO DISPATCH"
           echo ${{ github.event.client_payload.message }}
           echo ${{ github.event.client_payload.gsha }}
