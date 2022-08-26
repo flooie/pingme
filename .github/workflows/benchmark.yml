@@ -27,7 +27,13 @@ jobs:
         run: |
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
           poetry install --with benchmark --without dev
+
+      - name: Run stuff for PR Generate REPORT
+        run: |
           poetry run python benchmark/benchmark.py --branch PR
+          cd benchmark/
+          ls
+          cd ..
           git stash
 
       - uses: actions/checkout@v3
