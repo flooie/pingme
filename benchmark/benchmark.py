@@ -60,9 +60,13 @@ class Benchmark(object):
         self.list_of_ids.append(row_id)
         found_cites = []
         for op in non_empty_rows:
-            found_citations = get_citations(clean_text(op, ["html", "inline_whitespace"]))
-            cites = [cite.token.data for cite in found_citations if cite.token]
-            found_cites.extend(cites)
+            print(len(op))
+            try:
+                found_citations = get_citations(clean_text(op, ["html", "inline_whitespace"]))
+                cites = [cite.token.data for cite in found_citations if cite.token]
+                found_cites.extend(cites)
+            except:
+                print("ERROR")
 
         self.opinions.append(found_cites)
         self.count += len(found_cites)
