@@ -16,7 +16,7 @@ from matplotlib import pyplot as plt
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
-from eyecite import get_citations
+from eyecite import get_citations, clean_text
 
 csv.field_size_limit(sys.maxsize)
 
@@ -60,7 +60,7 @@ class Benchmark(object):
         self.list_of_ids.append(row_id)
         found_cites = []
         for op in non_empty_rows:
-            found_citations = get_citations(op)
+            found_citations = get_citations(clean_text(op, ["html", "inline_whitespace"]))
             cites = [cite.token.data for cite in found_citations if cite.token]
             found_cites.extend(cites)
 
