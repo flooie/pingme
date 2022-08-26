@@ -17,17 +17,19 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
 
-      - name: Setup
+      - name: Setup variables I
         id: b1
         run: |
           echo "::set-output name=filepath::benchmark/${{ env.main }}.csv"
           echo "::set-output name=hash::${{ env.main }}"
+
+      - name: Curl and Install 
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
           poetry install --with benchmark --without dev
 
       - name: Run first benchmark
         run: |
-          poetry run python benchmark/benchmark.py --branch ${{ env.main }}
+          poetry run python benchmark/benchmark.py --branch ${{ steps.b1.outputs.hash }}
           git stash --include-untracked
 
       - uses: actions/checkout@v3
@@ -35,20 +37,19 @@ jobs:
           repository: flooie/pingme
           ref: main
 
-      - name: Run second benchmark
+      - name: Setup variables II
         id: b2
         run: |
           echo "::set-output name=filepath::benchmark/${{ env.main }}.csv"
+          echo "::set-output name=hash::${{ env.main }}"
+
+      - name: Run second benchmark
+        run: |
           poetry install --with benchmark --without dev
           git stash pop
           poetry run pip install reporters-db==3.2.5
-          poetry run python benchmark/benchmark.py --branch ${{ env.main }}
-          poetry run python benchmark/benchmark.py --main ${{ env.main }} --branch ${{ steps.b1.outputs.hash }} --chart ${{ github.event.number }}
-
-      - name: Inbetween
-        run: |
-          echo ${{ steps.b1.outputs.filepath }}
-          echo ${{ steps.b2.outputs.filepath }}
+          poetry run python benchmark/benchmark.py --branch ${{ steps.b2.outputs.hash }}
+          poetry run python benchmark/benchmark.py --main ${{ steps.b2.outputs.hash }} --branch ${{ steps.b1.outputs.hash }} --chart ${{ github.event.number }}
 
       - name: Upload and Post Files to PR
         uses: gavv/pull-request-artifacts@v1.0.0
