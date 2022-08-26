@@ -17,3 +17,4 @@ There were 0 gains and 0 losses.
 
 Time Chart
 ---------
+![image](https://raw.githubusercontent.com/flooie/pingme/artifacts/benchmark/pr13-chart.png)
