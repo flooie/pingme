@@ -100,7 +100,7 @@ jobs:
           poetry run python benchmark/benchmark.py --branch original
           poetry run pip install "git+https://github.com/freelawproject/reporters-db.git@${{ github.event.client_payload.commit }}"
           poetry run python benchmark/benchmark.py --branch update
-          poetry run python benchmark/benchmark.py --main original --branch update --chart ${{ github.event.client_payload.pr_number }} --reporters
+          poetry run python benchmark/benchmark.py --main original --branch update --chart 1 --reporters
 
       - name: Upload and Post Files to PR
         uses: gavv/pull-request-artifacts@v1.0.0
