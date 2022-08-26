@@ -23,7 +23,8 @@ jobs:
           echo "::set-output name=filepath::benchmark/${{ env.main }}.csv"
           echo "::set-output name=hash::${{ env.main }}"
 
-      - name: Curl and Install 
+      - name: Curl and Install
+        run: |
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
           poetry install --with benchmark --without dev
 
