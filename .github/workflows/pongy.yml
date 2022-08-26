@@ -1,6 +1,6 @@
 name: Repository Dispatch
 on:
-  repository_dispatch:
+  pull_request_review_comment:
     types: [reporters-db-pr] # this is tagged event type to do the soemthing or other
 jobs:
   benchmark:
