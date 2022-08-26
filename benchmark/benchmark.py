@@ -131,7 +131,7 @@ class Benchmark(object):
                         row_to_add = [row[0], "", item, branch.iat[row[0], 0]]
                     writer.writerow(row_to_add)
 
-    def write_report(self):
+    def write_report(self, reporters):
         """Begin building Report.MD file
 
         :return: None
@@ -175,12 +175,13 @@ class Benchmark(object):
         with open(self.get_filepath("report.md"), "a+") as f:
             f.write("\n\n</details>\n")
 
-        # Add header for time chart for PR comment
-        with open(self.get_filepath("report.md"), "a") as f:
-            f.write("\n\nTime Chart\n")
-            f.write("---------\n")
+        if not reporters:
+            # Add header for time chart for PR comment
+            with open(self.get_filepath("report.md"), "a") as f:
+                f.write("\n\nTime Chart\n")
+                f.write("---------\n")
 
-    def generate_time_chart(self, main, branch, pr_number, reporters) -> None:
+    def generate_time_chart(self, main, branch, pr_number) -> None:
         """Generate time chart showing speed across branches
 
         return: None
@@ -199,10 +200,7 @@ class Benchmark(object):
 
         # Add header for time chart for PR comment
         with open(self.get_filepath("report.md"), "a") as f:
-            if not reporters:
-                f.write(f"![image](https://raw.githubusercontent.com/flooie/pingme/artifacts/benchmark/pr{pr_number}-chart.png)")
-            else:
-                f.write(f"![image](https://raw.githubusercontent.com/flooie/crosspingme/artifacts/benchmark/pr{pr_number}-chart.png)")
+            f.write(f"![image](https://raw.githubusercontent.com/flooie/pingme/artifacts/benchmark/pr{pr_number}-chart.png)")
 
 
 if __name__ == "__main__":
@@ -226,10 +224,11 @@ if __name__ == "__main__":
         benchmark.compare_dataframes(main, branch)
 
         # Write Report.MD file
-        benchmark.write_report()
+        benchmark.write_report(reporters)
 
-        # Generate time chart
-        benchmark.generate_time_chart(main, branch, chart, reporters)
+        if not reporters:
+            # Generate time chart
+            benchmark.generate_time_chart(main, branch, chart)
     else:
         # Generate data comparison
         version = main if main else branch
