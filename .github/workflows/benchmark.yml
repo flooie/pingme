@@ -4,8 +4,6 @@ on:
 
 env:
   main: "$(/usr/bin/git log -1 --format='%H')"
-  somethingsomething: "$(/usr/bin/git log -1 --format='benchmark/%H.csv')"
-  something: benchmark/branch.csv
 
 jobs:
   benchmark:
@@ -24,39 +22,35 @@ jobs:
 
       - name: Install Poetry Requirements
         run: |
-          echo ${{ env.main }}
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
           poetry install --with benchmark --without dev
 
-      - name: Test Branch
+      - name: Run first benchmark
         id: b1
         run: |
           poetry run python benchmark/benchmark.py --branch ${{ env.main }}
           git stash --include-untracked
-          echo "::set-output name=test::benchmark/${{ env.main }}.csv"
-          echo "::set-output name=key::${{ env.main }}"
+          echo "::set-output name=filepath::benchmark/${{ env.main }}.csv"
+          echo "::set-output name=hash::${{ env.main }}"
 
       - uses: actions/checkout@v3
         with:
           repository: flooie/pingme
           ref: main
 
-      - name: Unstash and Test Next Branch
+      - name: Run second benchmark
         id: b2
         run: |
-          echo ${{ env.main }}
+          echo "::set-output name=filepath::benchmark/${{ env.main }}.csv"
           poetry install --with benchmark --without dev
           git stash pop
           poetry run python benchmark/benchmark.py --branch ${{ env.main }}
-          poetry run python benchmark/benchmark.py --main ${{ env.main }} --branch ${{ steps.b1.outputs.key }} --chart ${{ github.event.number }}
-          cat benchmark/report.md
-          echo ${{github.event.number}}
-          echo "::set-output name=test::benchmark/${{ env.main }}.csv"
+          poetry run python benchmark/benchmark.py --main ${{ env.main }} --branch ${{ steps.b1.outputs.hash }} --chart ${{ github.event.number }}
 
       - name: Inbetween
         run: |
-          echo ${{ steps.b2.outputs.test }}
-          echo ${{ env.somethingsomething }}
+          echo ${{ steps.b1.outputs.filepath }}
+          echo ${{ steps.b2.outputs.filepath }}
 
       - name: Upload and Post Files to PR
         uses: gavv/pull-request-artifacts@v1.0.0
@@ -70,8 +64,8 @@ jobs:
             benchmark/report.md
             benchmark/chart.png
             benchmark/output.csv
-            ${{ steps.b2.outputs.test }}
-            ${{ steps.b1.outputs.test }}
+            ${{ steps.b1.outputs.filepath }}
+            ${{ steps.b2.outputs.filepath }}
 
       - name: Add or Update PR Comment from Generated Report
         uses: marocchino/sticky-pull-request-comment@v2
