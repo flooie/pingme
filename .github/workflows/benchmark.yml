@@ -10,11 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-#        with:
-#          repository: flooie/pingme
-#          ref: artifacts
-#          repository: freelawproject/eyecite
-#          ref: baseline-benchmarking
+        with:
+          repository: flooie/pingme
+          ref: new-pr-ok
       - uses: actions/setup-python@v2
       - uses: snok/install-poetry@v1
         with:
@@ -22,15 +20,28 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
 
-      - name: Run stuff for PR
+      - name: Install Poetry Requirements
         run: |
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
           poetry install --with benchmark --without dev
-          poetry run python benchmark/benchmark.py --branch PR
-#          git checkout baseline-benchmarking
-          poetry run pip install reporters-db==3.2.10
+
+      - name: Test Branch
+        run: |
+          poetry run python benchmark/benchmark.py --branch branch
+          git stash --include-untracked
+
+      - uses: actions/checkout@v3
+        with:
+          repository: flooie/pingme
+          ref: main
+
+      - name: Unstash and Test Next Branch
+        run: |
+          poetry install --with benchmark --without dev
+          git stash pop
           poetry run python benchmark/benchmark.py --branch main
-          poetry run python benchmark/benchmark.py --main main --branch PR --chart
+          poetry run python benchmark/benchmark.py --main main --branch branch --chart
+          cat benchmark/report.md
 
       - name: Add or Update PR Comment from Generated Report
         uses: marocchino/sticky-pull-request-comment@v2
@@ -38,7 +49,7 @@ jobs:
           recreate: true
           path: |
             benchmark/report.md
-            benchmark/time-comparison.png
+            benchmark/chart.png
             benchmark/branch.csv
             benchmark/main.csv
             benchmark/output.csv
