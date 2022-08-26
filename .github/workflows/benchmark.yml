@@ -28,9 +28,16 @@ jobs:
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
           poetry install --with benchmark --without dev
           poetry run python benchmark/benchmark.py --branch PR
-          git checkout main
-          git checkout baseline-benchmarking
-          poetry run pip install reporters-db=3.2.10
+          git stash
+
+      - uses: actions/checkout@v3
+        with:
+          repository: flooie/pingme
+          ref: main
+
+      - name: Run stuff for PR
+        run: |
+          git stash apply
           poetry run python benchmark/benchmark.py --branch main
           poetry run python benchmark/benchmark.py --main main --branch PR --chart
 
