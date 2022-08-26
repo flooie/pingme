@@ -31,10 +31,7 @@ jobs:
       - name: Run stuff for PR Generate REPORT
         run: |
           poetry run python benchmark/benchmark.py --branch PR
-          cd benchmark/
-          ls
-          cd ..
-          git stash
+          git stash --include-untracked
 
       - uses: actions/checkout@v3
         with:
