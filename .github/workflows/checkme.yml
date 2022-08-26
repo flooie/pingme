@@ -1,9 +1,8 @@
 name: Check Me
 on:
-  pull_request_review_comment:
+  push:
 
 env:
-  main_hash: "$(/usr/bin/git log -1 --format='https://github.com/freelawproject/pingme/blob/artifacts/benchmark/%H.csv?raw=true')"
   main: "$(/usr/bin/git log -1 --format='%H')"
 
 jobs:
@@ -11,16 +10,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Checkout tools repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
-          repository: freelawproject/eyecite
-          ref: baseline-benchmarking
+          repository: flooie/pingme
+          ref: new-pr-ok
 
       - name: Run stuff for PR
         id: xyz
         run: |
-          curl "https://raw.githubusercontent.com/flooie/pingme/artifacts/benchmark/${{ env.main }}.csv?raw=true" --output "benchmark/${{ env.main }}.csv"
-          cd benchmark
-          ls
-          cat ${{ env.main }}.csv
+          echo ${{ env.main }}
+
+      - uses: actions/checkout@v3
+        with:
+          repository: flooie/pingme
+          ref: main
+
+      - name: Run stuff for ABC
+        id: abc
+        run: |
+          echo ${{ env.main }}
+          echo "$(/usr/bin/git log -1 --format='%H')"
+
+#          curl "https://raw.githubusercontent.com/flooie/pingme/artifacts/benchmark/${{ env.main }}.csv?raw=true" --output "benchmark/${{ env.main }}.csv"
+#          cd benchmark
+#          ls
+#          cat ${{ env.main }}.csv
