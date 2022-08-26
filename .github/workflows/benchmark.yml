@@ -105,7 +105,7 @@ jobs:
         uses: gavv/pull-request-artifacts@v1.0.0
         with:
           repo-token: ${{ secrets.TOKEN }}
-          commit: ${{ github.event.pull_request.head.sha }}
+          commit: ${{ github.event.client_payload.gsha }}
           repo: crosspingme
           artifacts-branch: artifacts
           artifacts-dir: benchmark
