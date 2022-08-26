@@ -180,7 +180,7 @@ class Benchmark(object):
             f.write("\n\nTime Chart\n")
             f.write("---------\n")
 
-    def generate_time_chart(self, main, branch, pr_number) -> None:
+    def generate_time_chart(self, main, branch, pr_number, reporters) -> None:
         """Generate time chart showing speed across branches
 
         return: None
@@ -199,8 +199,10 @@ class Benchmark(object):
 
         # Add header for time chart for PR comment
         with open(self.get_filepath("report.md"), "a") as f:
-            # f.write("![image](https://github.com/freelawproject/eyecite/blob/artifacts/benchmark/pr${{github.event.number}}-time-comparison.png?raw=true)")
-            f.write(f"![image](https://raw.githubusercontent.com/flooie/pingme/artifacts/benchmark/pr{pr_number}-chart.png)")
+            if not reporters:
+                f.write(f"![image](https://raw.githubusercontent.com/flooie/pingme/artifacts/benchmark/pr{pr_number}-chart.png)")
+            else:
+                f.write(f"![image](https://raw.githubusercontent.com/flooie/crosspingme/artifacts/benchmark/pr{pr_number}-chart.png)")
 
 
 if __name__ == "__main__":
@@ -208,11 +210,15 @@ if __name__ == "__main__":
     parser.add_argument("--chart")
     parser.add_argument("--main")
     parser.add_argument("--branch")
+    parser.add_argument("--reporters", action="store_true")
+
 
     args = parser.parse_args()
     branch = args.branch
     main = args.main
     chart = args.chart
+    reporters = args.reporters
+
 
     benchmark = Benchmark()
     if args.chart:
@@ -223,7 +229,7 @@ if __name__ == "__main__":
         benchmark.write_report()
 
         # Generate time chart
-        benchmark.generate_time_chart(main, branch, chart)
+        benchmark.generate_time_chart(main, branch, chart, reporters)
     else:
         # Generate data comparison
         version = main if main else branch
