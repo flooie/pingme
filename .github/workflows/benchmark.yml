@@ -114,4 +114,4 @@ jobs:
 #          path: benchmark/report.md
           message: "THIS IS A MESSAGE"
           number: ${{ github.event.client_payload.pr_number }}
-          repo: flooie/crosspingme
+          repo: crosspingme
