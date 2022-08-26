@@ -55,7 +55,7 @@ jobs:
           artifacts-dir: benchmark
           artifacts: |
             benchmark/report.md
-            benchmark/time-comparison.png
+            benchmark/chart.png
             benchmark/output.csv
             benchmark/main.csv
             benchmark/branch.csv
