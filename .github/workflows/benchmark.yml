@@ -23,50 +23,51 @@ jobs:
       - name: Install Poetry Requirements
         run: |
           echo ${{ env.main }}
-          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
-          poetry install --with benchmark --without dev
+#          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
+#          poetry install --with benchmark --without dev
+#
+#      - name: Test Branch
+#        run: |
+#          poetry run python benchmark/benchmark.py --branch branch
+#          git stash --include-untracked
+#
+#      - uses: actions/checkout@v3
+#        with:
+#          repository: flooie/pingme
+#          ref: main
+#
+#      - name: Unstash and Test Next Branch
+#        run: |
+#          echo ${{ env.main }}
+#          poetry install --with benchmark --without dev
+#          git stash pop
+#          poetry run python benchmark/benchmark.py --branch main
+#          poetry run python benchmark/benchmark.py --main main --branch branch --chart
+#          cat benchmark/report.md
 
-      - name: Test Branch
-        run: |
-          poetry run python benchmark/benchmark.py --branch branch
-          git stash --include-untracked
-
-      - uses: actions/checkout@v3
-        with:
-          repository: flooie/pingme
-          ref: main
-
-      - name: Unstash and Test Next Branch
-        run: |
-          echo ${{ env.main }}
-          poetry install --with benchmark --without dev
-          git stash pop
-          poetry run python benchmark/benchmark.py --branch main
-          poetry run python benchmark/benchmark.py --main main --branch branch --chart
-          cat benchmark/report.md
-
-      - name: Upload and Post Files to PR
-        uses: gavv/pull-request-artifacts@v1.0.0
-        with:
-          repo-token: ${{ secrets.TOKEN }}
-          commit: ${{ github.event.pull_request.head.sha }}
-          repo: pingme
-          artifacts-branch: artifacts
-          artifacts-dir: benchmark
-          artifacts: |
-            benchmark/report.md
-            benchmark/chart.png
-            benchmark/output.csv
-            benchmark/main.csv
-            benchmark/branch.csv
+#      - name: Upload and Post Files to PR
+#        uses: gavv/pull-request-artifacts@v1.0.0
+#        with:
+#          repo-token: ${{ secrets.TOKEN }}
+#          commit: ${{ github.event.pull_request.head.sha }}
+#          repo: pingme
+#          artifacts-branch: artifacts
+#          artifacts-dir: benchmark
+#          artifacts: |
+#            benchmark/report.md
+#            benchmark/chart.png
+#            benchmark/output.csv
+#            benchmark/main.csv
+#            benchmark/branch.csv
 
       - name: Add or Update PR Comment from Generated Report
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           recreate: true
-          path: |
-            benchmark/report.md
-            benchmark/chart.png
-            benchmark/branch.csv
-            benchmark/main.csv
-            benchmark/output.csv
+          message: "hello world...."
+#          path: |
+#            benchmark/report.md
+#            benchmark/chart.png
+#            benchmark/branch.csv
+#            benchmark/main.csv
+#            benchmark/output.csv
