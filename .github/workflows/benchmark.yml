@@ -41,6 +41,9 @@ jobs:
       - name: Run stuff for PR
         run: |
           git stash pop
+          cd benchmark/
+          ls
+          cd ..
           poetry run python benchmark/benchmark.py --branch main
           poetry run python benchmark/benchmark.py --main main --branch PR --chart
 
