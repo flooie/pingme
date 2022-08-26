@@ -94,7 +94,16 @@ jobs:
       - name: Setup variables I
         id: b1
         run: |
-          echo  ${{ github.event_name }}
+          echo ${{ github.event_name }}
           echo ${{ github.event.client_payload.message }}
           echo ${{ github.event.client_payload.gsha }}
+          poetry run python benchmark/benchmark.py --branch original
+          poetry install --with benchmark --without dev
+          poetry run pip install $ pip install git+https://github.com/freelawproject/reporters-db.git@${{ github.event.client_payload.commit }}
+          poetry run python benchmark/benchmark.py --branch ${{ steps.b1.outputs.hash }}
+          poetry run python benchmark/benchmark.py --branch update
+          cd benchmark
+          ls
+          pwd
+          cd ..
           
