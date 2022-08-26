@@ -22,7 +22,7 @@ jobs:
 
       - name: Install Poetry Requirements
         run: |
-          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/ten-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
+          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
           poetry install --with benchmark --without dev
 
       - name: Run first benchmark
@@ -44,7 +44,7 @@ jobs:
           echo "::set-output name=filepath::benchmark/${{ env.main }}.csv"
           poetry install --with benchmark --without dev
           git stash pop
-          pip install reporters-db==3.2.5
+          poetry run pip install reporters-db==3.2.5
           poetry run python benchmark/benchmark.py --branch ${{ env.main }}
           poetry run python benchmark/benchmark.py --main ${{ env.main }} --branch ${{ steps.b1.outputs.hash }} --chart ${{ github.event.number }}
 
