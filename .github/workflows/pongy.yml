@@ -1,58 +1,70 @@
-name: Repository Dispatch
+name: Benchmark Pull Request
 on:
-  pull_request_review_comment:
-    types: [reporters-db-pr] # this is tagged event type to do the soemthing or other
+  pull_request:
+
+env:
+  main: "$(/usr/bin/git log -1 --format='%H')"
+
 jobs:
   benchmark:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          repository: flooie/pingme
+          ref: new-pr-ok
       - uses: actions/setup-python@v2
       - uses: snok/install-poetry@v1
         with:
-          version: 1.1.13
+          version: 1.2.0rc1
           virtualenvs-create: true
           virtualenvs-in-project: true
 
-      - name: Run Benchmarking Script
+      - name: Install Poetry Requirements
         run: |
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
-#          git clone https://github.com/freelawproject/eyecite.git benchmark/eyecite
-#          cp benchmark/benchmark.py benchmark/eyecite/ && cd benchmark/eyecite/
-#          poetry install --no-dev
-#          poetry run pip install matplotlib pandas tabulate
-          poetry run python benchmark.py 
-               
-#               checkout branch
-          poetry run python benchmark.py
-               
-          poetry run python benchmark.py --chart
+          poetry install --with benchmark --without dev
 
-      - name: Embed Timing Chart into Markdown Post
+      - name: Test Branch
         run: |
-          echo "![image](https://github.com/flooie/pingme/blob/artifacts/benchmark/pr${{github.event.number}}-time-comparison.png?raw=true)" >> benchmark/outputs/report.md
+          poetry run python benchmark/benchmark.py --branch branch
+          git stash --include-untracked
+
+      - uses: actions/checkout@v3
+        with:
+          repository: flooie/pingme
+          ref: main
+
+      - name: Unstash and Test Next Branch
+        run: |
+          poetry install --with benchmark --without dev
+          git stash pop
+          poetry run python benchmark/benchmark.py --branch main
+          poetry run python benchmark/benchmark.py --main main --branch branch --chart
+          cat benchmark/report.md
 
       - name: Upload and Post Files to PR
         uses: gavv/pull-request-artifacts@v1.0.0
         with:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           commit: ${{ github.event.pull_request.head.sha }}
-#          repo-token: ${{ secrets.TOKEN }}
-          repo: crosspingme
+          repo: pingme
           artifacts-branch: artifacts
           artifacts-dir: benchmark
           artifacts: |
-            benchmark/outputs/report.md
-            benchmark/outputs/time-comparison.png
-            benchmark/outputs/output.csv
-            benchmark/outputs/main.csv
-            benchmark/outputs/branch.csv
+            benchmark/report.md
+            benchmark/time-comparison.png
+            benchmark/output.csv
+            benchmark/main.csv
+            benchmark/branch.csv
 
       - name: Add or Update PR Comment from Generated Report
         uses: marocchino/sticky-pull-request-comment@v2
         with:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
           recreate: true
-          repo: crosspingme
-          message: "Hello world.... and hello more world '${{ github.event.client_payload.sha }}'"
-          number: 1
+          path: |
+            benchmark/report.md
+            benchmark/chart.png
+            benchmark/branch.csv
+            benchmark/main.csv
+            benchmark/output.csv
