@@ -40,7 +40,7 @@ jobs:
 
       - name: Run stuff for PR
         run: |
-          git stash apply
+          git stash pop
           poetry run python benchmark/benchmark.py --branch main
           poetry run python benchmark/benchmark.py --main main --branch PR --chart
 
