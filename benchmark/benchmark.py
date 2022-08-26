@@ -210,13 +210,11 @@ if __name__ == "__main__":
     parser.add_argument("--branch")
     parser.add_argument("--reporters", action="store_true")
 
-
     args = parser.parse_args()
     branch = args.branch
     main = args.main
     chart = args.chart
     reporters = args.reporters
-
 
     benchmark = Benchmark()
     if args.chart:
