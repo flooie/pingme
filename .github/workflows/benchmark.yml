@@ -4,6 +4,7 @@ on:
 
 env:
   main: "$(/usr/bin/git log -1 --format='%H')"
+  somethingsomething: "$(/usr/bin/git log -1 --format='benchmark/%H.csv')"
   something: benchmark/branch.csv
 
 jobs:
@@ -38,6 +39,7 @@ jobs:
           ref: main
 
       - name: Unstash and Test Next Branch
+        id: b2
         run: |
           echo ${{ env.main }}
           poetry install --with benchmark --without dev
@@ -46,6 +48,12 @@ jobs:
           poetry run python benchmark/benchmark.py --main ${{ env.main }} --branch branch --chart ${{ github.event.number }}
           cat benchmark/report.md
           echo ${{github.event.number}}
+          echo "::set-output name=test::benchmark/${{ env.main }}.csv"
+
+      - name: Inbetween
+        run: |
+          echo ${{ steps.b2.outputs.test }}
+          echo ${{ env.somethingsomething }}
 
       - name: Upload and Post Files to PR
         uses: gavv/pull-request-artifacts@v1.0.0
@@ -59,7 +67,7 @@ jobs:
             benchmark/report.md
             benchmark/chart.png
             benchmark/output.csv
-            ${{ env.something }}
+            ${{ env.somethingsomething }}
 
       - name: Add or Update PR Comment from Generated Report
         uses: marocchino/sticky-pull-request-comment@v2
