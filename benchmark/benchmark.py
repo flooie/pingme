@@ -52,7 +52,7 @@ class Benchmark(object):
         # Find opinions to test against from the zip file and return
         # citations found
         non_empty_rows = [
-            row[field] for field in self.fields if type(row[field]) == str and len(row['field'] > 0)
+            row[field] for field in self.fields if type(row[field]) == str and len(row['field']) > 0
         ]
         if len(non_empty_rows) == 0:
             return None
