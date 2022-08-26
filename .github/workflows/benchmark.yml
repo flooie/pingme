@@ -59,7 +59,7 @@ jobs:
             benchmark/chart.png
             benchmark/output.csv
             benchmark/branch.csv
-#            benchmark/main.csv
+            "benchmark/${{ env.main }}.csv"
 
       - name: Add or Update PR Comment from Generated Report
         uses: marocchino/sticky-pull-request-comment@v2
