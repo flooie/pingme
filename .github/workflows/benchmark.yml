@@ -11,10 +11,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-#          repository: flooie/pingme
+          repository: flooie/pingme
+          ref: new-pr-ok
 #          ref: artifacts
-          repository: freelawproject/eyecite
-          ref: baseline-benchmarking
+#          repository: freelawproject/eyecite
+#          ref: baseline-benchmarking
       - uses: actions/setup-python@v2
       - uses: snok/install-poetry@v1
         with:
