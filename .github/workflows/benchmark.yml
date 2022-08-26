@@ -4,6 +4,7 @@ on:
 
 env:
   main: "$(/usr/bin/git log -1 --format='%H')"
+  something: benchmark/branch.csv
 
 jobs:
   benchmark:
@@ -58,8 +59,7 @@ jobs:
             benchmark/report.md
             benchmark/chart.png
             benchmark/output.csv
-            benchmark/branch.csv
-            "benchmark/${{ env.main }}.csv"
+            ${{ env.something }}
 
       - name: Add or Update PR Comment from Generated Report
         uses: marocchino/sticky-pull-request-comment@v2
