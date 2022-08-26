@@ -91,27 +91,26 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
 
-#      - name: Setup variables I
-#        id: b1
-#        run: |
-#          echo ${{ github.event_name }}
-#          echo ${{ github.event.client_payload.pr_number }}
-#          echo ${{ github.event.client_payload.gsha }}
-#          echo ${{ github.event.client_payload.commit }}
-#          echo "git+https://github.com/freelawproject/reporters-db.git@${{ github.event.client_payload.commit }}"
-#          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
-#          poetry install --with benchmark --without dev
-#          poetry run python benchmark/benchmark.py --branch original
-#          poetry run pip install "git+https://github.com/freelawproject/reporters-db.git@${{ github.event.client_payload.commit }}"
-#          poetry run python benchmark/benchmark.py --branch update
-#          poetry run python benchmark/benchmark.py --main original --branch update --chart ${{ github.event.client_payload.pr_number }}
-#
+      - name: Setup variables I
+        id: b1
+        run: |
+          echo ${{ github.event_name }}
+          echo ${{ github.event.client_payload.pr_number }}
+          echo ${{ github.event.client_payload.gsha }}
+          echo ${{ github.event.client_payload.commit }}
+          echo "git+https://github.com/freelawproject/reporters-db.git@${{ github.event.client_payload.commit }}"
+          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
+          poetry install --with benchmark --without dev
+          poetry run python benchmark/benchmark.py --branch original
+          poetry run pip install "git+https://github.com/freelawproject/reporters-db.git@${{ github.event.client_payload.commit }}"
+          poetry run python benchmark/benchmark.py --branch update
+          poetry run python benchmark/benchmark.py --main original --branch update --chart ${{ github.event.client_payload.pr_number }}
+
       - name: Add or Update PR Comment from Generated Report
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           recreate: true
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
-#          path: benchmark/report.md
-          message: "THIS IS A MESSAGE"
+          path: benchmark/report.md
           number: ${{ github.event.client_payload.pr_number }}
           repo: crosspingme
