@@ -44,6 +44,7 @@ jobs:
           poetry run python benchmark/benchmark.py --branch main
           poetry run python benchmark/benchmark.py --main main --branch branch --chart
           cat benchmark/report.md
+          echo ${{github.event.number}}
 
       - name: Upload and Post Files to PR
         uses: gavv/pull-request-artifacts@v1.0.0

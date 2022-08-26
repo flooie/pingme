@@ -197,6 +197,11 @@ class Benchmark(object):
         plt.ylabel("# Cites Found ", rotation="vertical")
         plt.savefig(self.get_filepath("chart.png"))
 
+        # Add header for time chart for PR comment
+        with open(self.get_filepath("report.md"), "a") as f:
+            # f.write("![image](https://github.com/freelawproject/eyecite/blob/artifacts/benchmark/pr${{github.event.number}}-time-comparison.png?raw=true)")
+            f.write("![image](https://raw.githubusercontent.com/flooie/pingme/artifacts/benchmark/pr13-chart.png)")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
