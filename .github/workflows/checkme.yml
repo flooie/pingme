@@ -1,6 +1,6 @@
 name: Check Me
 on:
-  push:
+  pull_request_review_comment:
 
 env:
   main_hash: "$(/usr/bin/git log -1 --format='https://github.com/freelawproject/pingme/blob/artifacts/benchmark/%H.csv?raw=true')"
