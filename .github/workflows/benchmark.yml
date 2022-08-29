@@ -53,7 +53,7 @@ jobs:
         run: |
           poetry install --with benchmark --without dev
           git stash pop
-          poetry run python benchmark/benchmark.py --branches ${{ steps.branch1.outputs.hash }} ${{ steps.branch2.outputs.hash }} --chart ${{ github.event.number }}
+          poetry run python benchmark/benchmark.py --branches ${{ steps.branch1.outputs.hash }} ${{ steps.branch2.outputs.hash }} --pr ${{ github.event.number }}
 
       - name: Upload and Post Files to PR
         uses: gavv/pull-request-artifacts@v1.0.0
