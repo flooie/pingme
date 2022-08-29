@@ -25,7 +25,7 @@ jobs:
         id: branch1
         run: |
           echo ${{ github.event.issue.pull_request }}
-          echo "::set-output name=filepath::benchmark/${{ env.main }}.csv"
+          echo "::set-output name=filepath::benchmark/${{ env.main }}.json"
           echo "::set-output name=hash::${{ env.main }}"
 
       - name: Curl and Install
@@ -46,7 +46,7 @@ jobs:
       - name: Setup variables II
         id: branch2
         run: |
-          echo "::set-output name=filepath::benchmark/${{ env.main }}.csv"
+          echo "::set-output name=filepath::benchmark/${{ env.main }}.json"
           echo "::set-output name=hash::${{ env.main }}"
 
       - name: Run second benchmark
