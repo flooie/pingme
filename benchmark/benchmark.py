@@ -198,7 +198,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     # reporters = args.reporters
-
     benchmark = Benchmark()
     if len(args.branches) == 1:
         benchmark.generate_branch_report(branch=args.branches[0])
