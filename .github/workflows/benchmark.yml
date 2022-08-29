@@ -9,22 +9,8 @@ env:
   main: "$(/usr/bin/git log -1 --format='%H')"
 
 jobs:
-
-  notbenchmark:
-    name: PR not comment
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v2
-      - uses: snok/install-poetry@v1
-        with:
-          version: 1.2.0rc1
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-
   benchmark:
     name: PR comment
-    if: ${{ github.event.issue.pull_request }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -38,6 +24,7 @@ jobs:
       - name: Setup variables I
         id: branch1
         run: |
+          echo ${{ github.event.issue.pull_request }}
           echo "::set-output name=filepath::benchmark/${{ env.main }}.csv"
           echo "::set-output name=hash::${{ env.main }}"
 
