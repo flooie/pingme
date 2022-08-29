@@ -52,9 +52,7 @@ pdoc3 = "^0.10.0"
 hyperscan = ">= 0.1.5"
 
 [tool.poetry.group.benchmark.dependencies]
-tabulate = "^0.8.10"
 matplotlib = "^3.5.3"
-pandas = "^1.4.3"
 
 [tool.black]
 include = '''.*\.pyi?$'''
