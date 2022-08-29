@@ -23,7 +23,7 @@ jobs:
           virtualenvs-in-project: true
 
       - name: Setup variables I
-        id: b1
+        id: branch1
         run: |
           echo "::set-output name=filepath::benchmark/${{ env.main }}.csv"
           echo "::set-output name=hash::${{ env.main }}"
@@ -35,7 +35,7 @@ jobs:
 
       - name: Run first benchmark
         run: |
-          poetry run python benchmark/benchmark.py --branch ${{ steps.b1.outputs.hash }}
+          poetry run python benchmark/benchmark.py --branches ${{ steps.branch1.outputs.hash }}
           git stash --include-untracked
 
       - uses: actions/checkout@v3
@@ -44,7 +44,7 @@ jobs:
           ref: main
 
       - name: Setup variables II
-        id: b2
+        id: branch2
         run: |
           echo "::set-output name=filepath::benchmark/${{ env.main }}.csv"
           echo "::set-output name=hash::${{ env.main }}"
@@ -53,8 +53,7 @@ jobs:
         run: |
           poetry install --with benchmark --without dev
           git stash pop
-          poetry run python benchmark/benchmark.py --branch ${{ steps.b2.outputs.hash }}
-          poetry run python benchmark/benchmark.py --main ${{ steps.b2.outputs.hash }} --branch ${{ steps.b1.outputs.hash }} --chart ${{ github.event.number }}
+          poetry run python benchmark/benchmark.py --branches ${{ steps.branch1.outputs.hash }} ${{ steps.branch2.outputs.hash }} --chart ${{ github.event.number }}
 
       - name: Upload and Post Files to PR
         uses: gavv/pull-request-artifacts@v1.0.0
@@ -68,8 +67,8 @@ jobs:
             benchmark/report.md
             benchmark/chart.png
             benchmark/output.csv
-            ${{ steps.b1.outputs.filepath }}
-            ${{ steps.b2.outputs.filepath }}
+            ${{ steps.branch1.outputs.filepath }}
+            ${{ steps.branch2.outputs.filepath }}
 
       - name: Add or Update PR Comment from Generated Report
         uses: marocchino/sticky-pull-request-comment@v2
@@ -91,15 +90,14 @@ jobs:
           virtualenvs-in-project: true
 
       - name: Setup variables I
-        id: b1
+        id: branch1
         run: |
           echo ${{ github.event.client_payload.pr_number }}
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
           poetry install --with benchmark --without dev
-          poetry run python benchmark/benchmark.py --branch original
+          poetry run python benchmark/benchmark.py --branches original
           poetry run pip install "git+https://github.com/freelawproject/reporters-db.git@${{ github.event.client_payload.commit }}"
-          poetry run python benchmark/benchmark.py --branch update
-          poetry run python benchmark/benchmark.py --main original --branch update --chart 1 --reporters
+          poetry run python benchmark/benchmark.py --branches original update --reporters --pr 1
 
       - name: Add or Update PR Comment from Generated Report
         uses: marocchino/sticky-pull-request-comment@v2
