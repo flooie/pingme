@@ -8,6 +8,7 @@ classifiers = [
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
@@ -28,7 +29,7 @@ include = ["eyecite/py.typed"]
 "Organisation Homepage" = "https://free.law/"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.7"
 reporters-db = "^3.2.2"
 lxml = "^4.6.3"
 pyahocorasick = ">= 1.2"
