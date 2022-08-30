@@ -24,7 +24,8 @@ Time Chart
 
 
 Generated Files
+---------
 
-[Branch 1 Output](https://raw.githubusercontent.com/flooie/pingme/artifacts/13/results/ade718b56e4809905ed8644c28b446dddf8ad427.json)
-[Branch 2 Output](https://raw.githubusercontent.com/flooie/pingme/artifacts/13/results/9c93192bd03815db07d948b6c0fcef18fb6773ab.json)
+[Branch 1 Output](https://raw.githubusercontent.com/flooie/pingme/artifacts/13/results/4552ef163c0a8beea0f6c2a5fabc2c30d3eb7a13.json)
+[Branch 2 Output](https://raw.githubusercontent.com/flooie/pingme/artifacts/13/results/f2173680ca5c00e1b83e48b85b04a2939f1766ba.json)
 [Full Output CSV ](https://raw.githubusercontent.com/flooie/pingme/artifacts/13/results/output.csv)
