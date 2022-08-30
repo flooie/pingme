@@ -67,7 +67,7 @@ class Benchmark(object):
         with open(self.get_filepath(f"{branch}.json"), "w") as f:
             json.dump(data, fp=f, indent=4)
 
-    def write_report(self, reporters, pr_number):
+    def write_report(self, repo, pr_number):
         """Begin building Report.MD file
 
         :return: None
@@ -132,38 +132,29 @@ class Benchmark(object):
         with open(self.get_filepath("report.md"), "a+") as f:
             f.write("\n\n</details>\n\n")
 
-        if not reporters:
-            # Add header for time chart for PR comment
-            with open(self.get_filepath("report.md"), "a") as f:
-                f.write("\n\nTime Chart\n")
-                f.write("---------\n")
+        # Add header for time chart for PR comment
+        with open(self.get_filepath("report.md"), "a") as f:
+            f.write("\n\nTime Chart\n")
+            f.write("---------\n")
 
         with open(self.get_filepath("report.md"), "a") as f:
             # Add header for time chart for PR comment
-
-            if reporters:
-                repo = "crosspingme"
-            else:
-                repo = "pingme"
 
             link = f"\n![image](https://raw.githubusercontent.com/flooie/{repo}/artifacts/{pr_number}/results/chart.png)\n"
             f.write(link)
 
-    def append_links(self, branch1, branch2, pr_number, reporters):
-        if reporters:
-            repo = "crosspingme"
-        else:
-            repo = "pingme"
+    def append_links(self, branch1, branch2, pr_number, repo):
 
         with open(self.get_filepath("report.md"), "a") as f:
+            f.write("\n\nGenerated Files\n\n")
             f.write(
-                f"[Branch 1 Output](https://raw.githubusercontent.com/flooie/{repo}/artifacts/{pr_number}/results/{branch1}.json).\n"
+                f"[Branch 1 Output](https://raw.githubusercontent.com/flooie/{repo}/artifacts/{pr_number}/results/{branch1}.json)\n"
             )
             f.write(
-                f"[Branch 2 Output](https://raw.githubusercontent.com/flooie/{repo}/artifacts/{pr_number}/results/{branch2}.json).\n"
+                f"[Branch 2 Output](https://raw.githubusercontent.com/flooie/{repo}/artifacts/{pr_number}/results/{branch2}.json)\n"
             )
             f.write(
-                f"[Full Output CSV ](https://raw.githubusercontent.com/flooie/{repo}/artifacts/{pr_number}/results/output.csv).\n"
+                f"[Full Output CSV ](https://raw.githubusercontent.com/flooie/{repo}/artifacts/{pr_number}/results/output.csv)\n"
             )
 
     def generate_time_chart(self, main, branch) -> None:
@@ -173,15 +164,15 @@ class Benchmark(object):
         """
 
         with open(f"benchmark/{main}.json", "r") as f:
-            main = json.load(f)
+            main_file = json.load(f)
         with open(f"benchmark/{branch}.json", "r") as b:
-            branch = json.load(b)
+            branch_file = json.load(b)
 
         with open("benchmark/output.csv", "w") as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow(["ID", "Gain", "Loss"])
 
-            for (m, b) in zip(main, branch):
+            for (m, b) in zip(main_file, branch_file):
                 if set(m["cites"]) == set(b["cites"]):
                     continue
 
@@ -195,16 +186,16 @@ class Benchmark(object):
                     writer.writerow([m["id"], gain, loss])
 
         plt.plot(
-            [x["time"] for x in main],
-            [x["total"] for x in main],
-            label=main,
+            [x["time"] for x in main_file],
+            [x["total"] for x in main_file],
+            label=f"Main/{main}",
         )
         plt.plot(
-            [x["time"] for x in branch],
-            [x["total"] for x in branch],
+            [x["time"] for x in branch_file],
+            [x["total"] for x in branch_file],
             label=branch,
         )
-        # plt.legend()
+        plt.legend(loc="upper left")
         plt.ylabel("# Cites Found ", rotation="vertical")
         plt.xlabel("Seconds")
         plt.title("Comparison of Branches")
@@ -219,13 +210,14 @@ if __name__ == "__main__":
     parser.add_argument("--reporters", action="store_true")
 
     args = parser.parse_args()
+    repo = "crosspingme" if args.reporters else "pingme"
     benchmark = Benchmark()
     if len(args.branches) == 1:
         benchmark.generate_branch_report(branch=args.branches[0])
     elif len(args.branches) == 2:
         benchmark.generate_branch_report(branch=args.branches[1])
         benchmark.generate_time_chart(args.branches[0], args.branches[1])
-        benchmark.write_report(reporters=args.reporters, pr_number=args.pr)
+        benchmark.write_report(repo=repo, pr_number=args.pr)
         benchmark.append_links(
-            args.branches[0], args.branches[1], args.pr, args.reporters
+            args.branches[0], args.branches[1], args.pr, repo
         )
