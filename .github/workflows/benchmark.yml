@@ -123,7 +123,7 @@ jobs:
 #          repo: crosspingme
 #
 
-  test:
+  dispatch:
     runs-on: ubuntu-latest
     steps:
       #----------------------------------------------
@@ -172,7 +172,24 @@ jobs:
           poetry run python benchmark/benchmark.py --branches original
           poetry run pip install "git+https://github.com/freelawproject/reporters-db.git@${{ github.event.client_payload.commit }}"
           poetry run python benchmark/benchmark.py --branches original update --reporters --pr ${{ github.event.client_payload.pr_number }}
-
+      #----------------------------------------------
+      #             Upload to Github PR
+      #----------------------------------------------
+      - name: Pushes test file
+        uses: dmnemec/copy_file_to_another_repo_action@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.TOKEN }}
+        with:
+          source_file: 'benchmark/chart.png'
+          destination_repo: 'flooie/crosspingme'
+          destination_folder: 'benchmark'
+          destination_branch: 'artifacts'
+          user_email: 'wpalin@gmail.com'
+          user_name: 'flooie'
+          commit_message: 'A custom message for the commit'
+      #----------------------------------------------
+      #             Upload to Github PR
+      #----------------------------------------------
       - name: Add or Update PR Comment from Generated Report
         uses: marocchino/sticky-pull-request-comment@v2
         with:
