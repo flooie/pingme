@@ -1,52 +1,39 @@
 name: Check Me
 on:
-  pull_request:
+  push:
+
+env:
+  main: "$(/usr/bin/git log -1 --format='%H')"
 
 jobs:
   benchmark:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Checkout tools repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+        with:
+          repository: flooie/pingme
+          ref: new-pr-ok
 
       - name: Run stuff for PR
-        env:
-          main_hash: "$(/usr/bin/git log -1 --format='%H')"
-
+        id: xyz
         run: |
-          echo "${{ env.main_hash }}"
+          echo ${{ env.main }}
+          echo "::set-output name=test::${{ env.main }}"
 
-      - name: More stuff
-        run: |
-          python benchmark/stuff.py
-          echo ${{ github.sha }}
-          echo ${{ github.ref }}
-          echo ${{ github.event.pull_request.head.sha }}
-          echo "GITHUB_SHA_SHORT=$(/usr/bin/git log -1 --format='%H')" >> GITHUB_ENV
-          python benchmark/stuff.py --something "$(/usr/bin/git log -1 --format='%H')"
-
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
+          repository: flooie/pingme
           ref: main
 
-      - name: Run Stuff for Main
+      - name: Run stuff for ABC
+        id: abc
         run: |
-          python benchmark/stuff.py --something 1234
-          python benchmark/stuff.py --something $GITHUB_SHA_SHORT
+          echo ${{ env.main }}
+          echo "$(/usr/bin/git log -1 --format='%H')"
+          echo ${{ steps.xyz.outputs.test }}
 
-#      - name: Show env
-#        on:
-#        push:
-#        branches:
-#        - '*'
-#        env:
-#        somevar: 'lastvar'
-#        jobs:
-#        show:
-#        runs-on: ubuntu-latest
-#        steps:
-#        - name: Is variable exported?
-#        run: |
-#        echo "${{ env.somevar }}"
+#          curl "https://raw.githubusercontent.com/flooie/pingme/artifacts/benchmark/${{ env.main }}.csv?raw=true" --output "benchmark/${{ env.main }}.csv"
+#          cd benchmark
+#          ls
+#          cat ${{ env.main }}.csv

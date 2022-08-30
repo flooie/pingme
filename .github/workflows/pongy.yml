@@ -1,10 +1,7 @@
 name: Benchmark Pull Request
 on:
-  pull_request:
-
-env:
-  main: "$(/usr/bin/git log -1 --format='%H')"
-
+  pull_request_review_comment:
+    types: [reporters-db-pr] # this is tagged event type to do the soemthing or other
 jobs:
   benchmark:
     runs-on: ubuntu-latest
