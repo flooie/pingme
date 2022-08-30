@@ -22,15 +22,8 @@ root = Path(__file__).parent.absolute()
 MAX_ROWS_IN_MD = 51
 
 
-# def get_filepath(self, filename):
-#     return Path.joinpath(root, filename)
-
-
 class Benchmark(object):
     """Benchmark the different eyecite branches"""
-
-    def __init__(self):
-        pass
 
     def get_filepath(self, filename):
         return Path.joinpath(root, filename)
@@ -107,6 +100,7 @@ class Benchmark(object):
                     f"entire list by downloading the output.csv "
                     f"file linked above.\n\n"
                 )
+            # Generate Markdown Table of Outputs up to 50 rows.
             row_count = 0
             with open("benchmark/output.csv", mode="r") as inp:
                 reader = csv.DictReader(inp)
@@ -138,23 +132,29 @@ class Benchmark(object):
             f.write("---------\n")
 
         with open(self.get_filepath("report.md"), "a") as f:
-            # Add header for time chart for PR comment
-
-            link = f"\n![image](https://raw.githubusercontent.com/flooie/{repo}/artifacts/{pr_number}/results/chart.png)\n"
+            # Add Link to Repository Chart image
+            link = f"\n![image](https://raw.githubusercontent.com/{repo}/artifacts/{pr_number}/results/chart.png)\n"
             f.write(link)
 
     def append_links(self, branch1, branch2, pr_number, repo):
+        """Add links to output in PR document report
 
+        :param branch1: Main branch name
+        :param branch2: Updated branch name
+        :param pr_number: PR # trigger
+        :param repo: The repository to upload to
+        :return: None
+        """
         with open(self.get_filepath("report.md"), "a") as f:
             f.write("\n\nGenerated Files\n---------\n\n")
             f.write(
-                f"[Branch 1 Output](https://raw.githubusercontent.com/flooie/{repo}/artifacts/{pr_number}/results/{branch1}.json)\n"
+                f"[Branch 1 Output](https://raw.githubusercontent.com/{repo}/artifacts/{pr_number}/results/{branch1}.json)\n"
             )
             f.write(
-                f"[Branch 2 Output](https://raw.githubusercontent.com/flooie/{repo}/artifacts/{pr_number}/results/{branch2}.json)\n"
+                f"[Branch 2 Output](https://raw.githubusercontent.com/{repo}/artifacts/{pr_number}/results/{branch2}.json)\n"
             )
             f.write(
-                f"[Full Output CSV ](https://raw.githubusercontent.com/flooie/{repo}/artifacts/{pr_number}/results/output.csv)\n"
+                f"[Full Output CSV ](https://raw.githubusercontent.com/{repo}/artifacts/{pr_number}/results/output.csv)\n"
             )
 
     def generate_time_chart(self, main, branch) -> None:
@@ -203,14 +203,15 @@ class Benchmark(object):
 
 
 if __name__ == "__main__":
-    """"""
     parser = argparse.ArgumentParser()
     parser.add_argument("--pr")
     parser.add_argument("--branches", nargs="+")
     parser.add_argument("--reporters", action="store_true")
 
     args = parser.parse_args()
-    repo = "crosspingme" if args.reporters else "pingme"
+    repo = (
+        "flooie/crosspingme" if args.reporters else "flooie/pingme"
+    )  # this will be updated to our branches
     benchmark = Benchmark()
     if len(args.branches) == 1:
         benchmark.generate_branch_report(branch=args.branches[0])
