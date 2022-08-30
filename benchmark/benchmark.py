@@ -142,11 +142,10 @@ class Benchmark(object):
             # Add header for time chart for PR comment
 
             if reporters:
-                link = f"![image](https://raw.githubusercontent.com/flooie/crosspingme/artifacts/benchmark/{pr_number}-chart.png)\n"
+                link = f"![image](https://raw.githubusercontent.com/flooie/crosspingme/artifacts/{pr_number}/results/chart.png)"
                 f.write(link)
-
             else:
-                link = f"![image](https://raw.githubusercontent.com/flooie/pingme/artifacts/benchmark/pr{pr_number}-chart.png)"
+                link = f"![image](https://raw.githubusercontent.com/flooie/pingme/artifacts/{pr_number}/results/chart.png)"
                 f.write(link)
 
         # Add header for time chart for PR comment
@@ -195,10 +194,7 @@ class Benchmark(object):
         plt.ylabel("# Cites Found ", rotation="vertical")
         plt.xlabel("Seconds")
         plt.title("Comparison of Branches")
-        if reporters:
-            plt.savefig(self.get_filepath("{pr}-chart.png"))
-        else:
-            plt.savefig(self.get_filepath("chart.png"))
+        plt.savefig(self.get_filepath("chart.png"))
 
 
 if __name__ == "__main__":

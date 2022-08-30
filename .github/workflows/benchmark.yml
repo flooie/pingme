@@ -56,20 +56,20 @@ jobs:
           git stash pop
           poetry run python benchmark/benchmark.py --branches ${{ steps.branch1.outputs.hash }} ${{ steps.branch2.outputs.hash }} --pr ${{ github.event.number }}
 
-      - name: Upload and Post Files to PR
-        uses: gavv/pull-request-artifacts@v1.0.0
-        with:
-          repo-token: ${{ secrets.TOKEN }}
-          commit: ${{ github.event.pull_request.head.sha }}
-          repo: pingme
-          artifacts-branch: artifacts
-          artifacts-dir: benchmark
-          artifacts: |
-            benchmark/report.md
-            benchmark/chart.png
-            benchmark/output.csv
-            ${{ steps.branch1.outputs.filepath }}
-            ${{ steps.branch2.outputs.filepath }}
+#      - name: Upload and Post Files to PR
+#        uses: gavv/pull-request-artifacts@v1.0.0
+#        with:
+#          repo-token: ${{ secrets.TOKEN }}
+#          commit: ${{ github.event.pull_request.head.sha }}
+#          repo: pingme
+#          artifacts-branch: artifacts
+#          artifacts-dir: benchmark
+#          artifacts: |
+#            benchmark/report.md
+#            benchmark/chart.png
+#            benchmark/output.csv
+#            ${{ steps.branch1.outputs.filepath }}
+#            ${{ steps.branch2.outputs.filepath }}
 
       - name: Add or Update PR Comment from Generated Report
         uses: marocchino/sticky-pull-request-comment@v2
@@ -173,7 +173,7 @@ jobs:
           poetry run pip install "git+https://github.com/freelawproject/reporters-db.git@${{ github.event.client_payload.commit }}"
           poetry run python benchmark/benchmark.py --branches original update --reporters --pr ${{ github.event.client_payload.pr_number }}
           mkdir results
-          mv benchmark/output.csv benchmark/original.json benchmark/update.json results/
+          mv benchmark/output.csv benchmark/original.json benchmark/update.json benchmark/report.md benchmark/chart.png results/
       #----------------------------------------------
       #             Upload to Github PR
       #----------------------------------------------
@@ -188,7 +188,7 @@ jobs:
           destination_repo: 'flooie/crosspingme'
           destination_folder: '${{ github.event.client_payload.pr_number }}'
           destination_branch: 'artifacts'
-          commit_message: 'Upload to benchmark'
+          commit_message: 'Upload to Repo'
       #----------------------------------------------
       #             Upload to Github PR
       #----------------------------------------------
