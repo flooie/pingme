@@ -121,7 +121,7 @@ jobs:
 #          path: benchmark/report.md
 #          number: ${{ github.event.client_payload.pr_number }}
 #          repo: crosspingme
-
+#
 
   test:
     runs-on: ubuntu-latest
@@ -160,11 +160,25 @@ jobs:
       # install dependencies if cache does not exist
       #----------------------------------------------
       - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit == 'true'
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --with benchmark --without dev
       #----------------------------------------------
       #              run test suite
       #----------------------------------------------
-      - name: Run tests
+      - name: Run Tests
         run: |
-          echo "TESTS RUN"
+          echo ${{ github.event.client_payload.pr_number }}
+          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
+          poetry run python benchmark/benchmark.py --branches original
+          poetry run pip install "git+https://github.com/freelawproject/reporters-db.git@${{ github.event.client_payload.commit }}"
+          poetry run python benchmark/benchmark.py --branches original update --reporters --pr ${{ github.event.client_payload.pr_number }}
+
+      - name: Add or Update PR Comment from Generated Report
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          recreate: true
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          path: benchmark/report.md
+          number: ${{ github.event.client_payload.pr_number }}
+          repo: crosspingme
+
