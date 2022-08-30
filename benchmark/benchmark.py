@@ -74,12 +74,7 @@ class Benchmark(object):
         """
         max_gain, max_loss = 6, 6
         gains, losses = 0, 0
-        if reporters:
-            fn = "benchmark/output-rdb.csv"
-        else:
-            fn = "benchmark/output.csv"
-
-        with open(fn, mode="r") as inp:
+        with open("benchmark/output.csv", mode="r") as inp:
             reader = csv.DictReader(inp)
             for row in reader:
                 if row["Gain"]:
@@ -113,7 +108,7 @@ class Benchmark(object):
                     f"file linked above.\n\n"
                 )
             row_count = 0
-            with open(fn, mode="r") as inp:
+            with open("benchmark/output.csv", mode="r") as inp:
                 reader = csv.DictReader(inp)
                 header = [
                     "id".center(10),
@@ -135,7 +130,7 @@ class Benchmark(object):
                         break
 
         with open(self.get_filepath("report.md"), "a+") as f:
-            f.write("\n\n</details>\n")
+            f.write("\n\n</details>\n\n")
 
         if not reporters:
             # Add header for time chart for PR comment
@@ -143,15 +138,18 @@ class Benchmark(object):
                 f.write("\n\nTime Chart\n")
                 f.write("---------\n")
 
-        # Add header for time chart for PR comment
         with open(self.get_filepath("report.md"), "a") as f:
-            if reporters:
-                link = f"![image](https://raw.githubusercontent.com/flooie/pingme/artifacts/benchmark/pr{pr_number}-chart-rdb.png)"
-            else:
-                link = f"![image](https://raw.githubusercontent.com/flooie/pingme/artifacts/benchmark/pr{pr_number}-chart.png)"
-            f.write(link)
+            # Add header for time chart for PR comment
 
-    def generate_time_chart(self, main, branch, reporters) -> None:
+            if reporters:
+                link = f"![image](https://raw.githubusercontent.com/flooie/crosspingme/artifacts/results/{pr_number}/chart.png)"
+                f.write(link)
+            else:
+                link = f"![image](https://raw.githubusercontent.com/flooie/pingme/artifacts/results/{pr_number}/chart.png)"
+                f.write(link)
+
+
+    def generate_time_chart(self, main, branch) -> None:
         """Generate time chart showing speed across branches
 
         return: None
@@ -162,12 +160,7 @@ class Benchmark(object):
         with open(f"benchmark/{branch}.json", "r") as b:
             branch = json.load(b)
 
-        if reporters:
-            fn = "benchmark/output-rdb.csv"
-        else:
-            fn = "benchmark/output.csv"
-
-        with open(fn, "w") as csvfile:
+        with open("benchmark/output.csv", "w") as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow(["ID", "Gain", "Loss"])
 
@@ -198,11 +191,7 @@ class Benchmark(object):
         plt.ylabel("# Cites Found ", rotation="vertical")
         plt.xlabel("Seconds")
         plt.title("Comparison of Branches")
-        if reporters:
-            fn = "chart-rdb.png"
-        else:
-            fn = "chart.png"
-        plt.savefig(self.get_filepath(fn))
+        plt.savefig(self.get_filepath("chart.png"))
 
 
 if __name__ == "__main__":
@@ -213,11 +202,11 @@ if __name__ == "__main__":
     parser.add_argument("--reporters", action="store_true")
 
     args = parser.parse_args()
-    reporters = args.reporters
+    # reporters = args.reporters
     benchmark = Benchmark()
     if len(args.branches) == 1:
         benchmark.generate_branch_report(branch=args.branches[0])
     elif len(args.branches) == 2:
         benchmark.generate_branch_report(branch=args.branches[1])
         benchmark.generate_time_chart(args.branches[0], args.branches[1])
-        benchmark.write_report(reporters=reporters, pr_number=args.pr)
+        benchmark.write_report(reporters=args.reporters, pr_number=args.pr)
