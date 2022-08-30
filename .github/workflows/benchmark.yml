@@ -31,7 +31,7 @@ jobs:
       - name: Curl and Install
         run: |
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
-          poetry install --with benchmark --without dev
+          poetry install --with benchmark --without dev --without x86
 
       - name: Run first benchmark
         run: |
