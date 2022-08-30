@@ -132,7 +132,7 @@ jobs:
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           recreate: true
-          path: benchmark/report.md
+          path: results/report.md
 
 #  dispatch:
 #    name: Reporters-DB-Dipatch
@@ -256,7 +256,7 @@ jobs:
         with:
           recreate: true
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
-          path: benchmark/report.md
+          path: results/report.md
           number: ${{ github.event.client_payload.pr_number }}
           repo: crosspingme
 
