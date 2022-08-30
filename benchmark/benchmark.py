@@ -121,7 +121,7 @@ class Benchmark(object):
                 for row in reader:
                     table = []
                     for value, whitespace_adjust in zip(
-                            list(row.values()), [10, max_gain, max_loss]
+                        list(row.values()), [10, max_gain, max_loss]
                     ):
                         table.append(value.center(whitespace_adjust))
                     f.write(f"| {' | '.join(table)} |\n")
