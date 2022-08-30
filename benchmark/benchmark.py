@@ -198,7 +198,7 @@ class Benchmark(object):
             [x["total"] for x in branch],
             label=branch,
         )
-        plt.legend()
+        # plt.legend()
         plt.ylabel("# Cites Found ", rotation="vertical")
         plt.xlabel("Seconds")
         plt.title("Comparison of Branches")
