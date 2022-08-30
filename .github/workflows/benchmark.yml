@@ -161,7 +161,7 @@ jobs:
       #----------------------------------------------
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --with benchmark --without dev --without x86
+        run: poetry install --with benchmark --without dev
       #----------------------------------------------
       #              run test suite
       #----------------------------------------------
