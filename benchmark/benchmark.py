@@ -130,7 +130,7 @@ class Benchmark(object):
                         break
 
         with open(self.get_filepath("report.md"), "a+") as f:
-            f.write("\n\n</details>\n")
+            f.write("\n\n</details>\n\n")
 
         if not reporters:
             # Add header for time chart for PR comment
@@ -142,17 +142,14 @@ class Benchmark(object):
             # Add header for time chart for PR comment
 
             if reporters:
-                link = f"![image](https://raw.githubusercontent.com/flooie/crosspingme/artifacts/{pr_number}/results/chart.png)"
+                link = f"![image](https://raw.githubusercontent.com/flooie/crosspingme/artifacts/results/{pr_number}/chart.png)"
                 f.write(link)
             else:
-                link = f"![image](https://raw.githubusercontent.com/flooie/pingme/artifacts/{pr_number}/results/chart.png)"
+                link = f"![image](https://raw.githubusercontent.com/flooie/pingme/artifacts/results/{pr_number}/chart.png)"
                 f.write(link)
 
-        # Add header for time chart for PR comment
-        # with open(self.get_filepath("report.md"), "a") as f:
-        #     f.write(link)
 
-    def generate_time_chart(self, main, branch, pr, reporters) -> None:
+    def generate_time_chart(self, main, branch) -> None:
         """Generate time chart showing speed across branches
 
         return: None
@@ -211,5 +208,5 @@ if __name__ == "__main__":
         benchmark.generate_branch_report(branch=args.branches[0])
     elif len(args.branches) == 2:
         benchmark.generate_branch_report(branch=args.branches[1])
-        benchmark.generate_time_chart(args.branches[0], args.branches[1], args.pr, args.reporters)
+        benchmark.generate_time_chart(args.branches[0], args.branches[1])
         benchmark.write_report(reporters=args.reporters, pr_number=args.pr)
