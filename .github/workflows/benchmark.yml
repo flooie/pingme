@@ -114,20 +114,20 @@ jobs:
           poetry run pip install "git+https://github.com/freelawproject/reporters-db.git@${{ github.event.client_payload.commit }}"
           poetry run python benchmark/benchmark.py --branches original update --reporters --pr ${{ github.event.client_payload.pr_number }}
 
-      - name: Upload and Post Files to PR
-        uses: gavv/pull-request-artifacts@v1.0.0
-        with:
-          repo-token: ${{ secrets.TOKEN }}
-          commit: ${{ github.event.pull_request.head.sha }}
-          repo: pingme
-          artifacts-branch: artifacts
-          artifacts-dir: benchmark
-          artifacts: |
-            benchmark/report.md
-            benchmark/chart-rdb.png
-            benchmark/output-rdb.csv
-            ${{ steps.branch1.outputs.filepath }}
-            ${{ steps.branch2.outputs.filepath }}
+#      - name: Upload and Post Files to PR
+#        uses: gavv/pull-request-artifacts@v1.0.0
+#        with:
+#          repo-token: ${{ secrets.TOKEN }}
+#          commit: ${{ github.event.pull_request.head.sha }}
+#          repo: pingme
+#          artifacts-branch: artifacts
+#          artifacts-dir: benchmark
+#          artifacts: |
+#            benchmark/report.md
+#            benchmark/chart-rdb.png
+#            benchmark/output-rdb.csv
+#            ${{ steps.branch1.outputs.filepath }}
+#            ${{ steps.branch2.outputs.filepath }}
 
       - name: Add or Update PR Comment from Generated Report
         uses: marocchino/sticky-pull-request-comment@v2
