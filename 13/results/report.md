@@ -19,4 +19,5 @@ There were 0 gains and 0 losses.
 
 Time Chart
 ---------
-![image](https://raw.githubusercontent.com/flooie/pingme/artifacts/results/13/chart.png)
+
+![image](https://raw.githubusercontent.com/flooie/pingme/artifacts/13/results/chart.png)
