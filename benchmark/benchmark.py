@@ -142,11 +142,12 @@ class Benchmark(object):
             # Add header for time chart for PR comment
 
             if reporters:
-                link = f"\n![image](https://raw.githubusercontent.com/flooie/crosspingme/artifacts/{pr_number}/results/chart.png)\n"
-                f.write(link)
+                repo = "crosspingme"
             else:
-                link = f"\n![image](https://raw.githubusercontent.com/flooie/pingme/artifacts/{pr_number}/results/chart.png)\n"
-                f.write(link)
+                repo = "pingme"
+
+            link = f"\n![image](https://raw.githubusercontent.com/flooie/{repo}/artifacts/{pr_number}/results/chart.png)\n"
+            f.write(link)
 
     def append_links(self, branch1, branch2, pr_number, reporters):
         if reporters:
@@ -156,8 +157,8 @@ class Benchmark(object):
 
         with open(self.get_filepath("report.md"), "a") as f:
             # Add header for time chart for PR comment
-                f.write(f"[Branch One](https://raw.githubusercontent.com/flooie/{repo}/artifacts/{pr_number}/results/{branch1}.json).\n")
-                f.write(f"[Branch One](https://raw.githubusercontent.com/flooie/{repo}/artifacts/{pr_number}/results/{branch2}.json).\n")
+                f.write(f"[Branch 1 Output](https://raw.githubusercontent.com/flooie/{repo}/artifacts/{pr_number}/results/{branch1}.json).\n")
+                f.write(f"[Branch 2 Ouptut](https://raw.githubusercontent.com/flooie/{repo}/artifacts/{pr_number}/results/{branch2}.json).\n")
 
 
     def generate_time_chart(self, main, branch) -> None:
