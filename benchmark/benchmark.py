@@ -138,13 +138,22 @@ class Benchmark(object):
                 f.write("\n\nTime Chart\n")
                 f.write("---------\n")
 
-        # Add header for time chart for PR comment
         with open(self.get_filepath("report.md"), "a") as f:
-            f.write(
-                f"![image](https://raw.githubusercontent.com/flooie/pingme/artifacts/benchmark/pr{pr_number}-chart.png)"
-            )
+            # Add header for time chart for PR comment
 
-    def generate_time_chart(self, main, branch) -> None:
+            if reporters:
+                link = f"![image](https://raw.githubusercontent.com/flooie/crosspingme/artifacts/benchmark/{pr_number}-chart.png)\n"
+                f.write(link)
+
+            else:
+                link = f"![image](https://raw.githubusercontent.com/flooie/pingme/artifacts/benchmark/pr{pr_number}-chart.png)"
+                f.write(link)
+
+        # Add header for time chart for PR comment
+        # with open(self.get_filepath("report.md"), "a") as f:
+        #     f.write(link)
+
+    def generate_time_chart(self, main, branch, pr, reporters) -> None:
         """Generate time chart showing speed across branches
 
         return: None
@@ -186,7 +195,10 @@ class Benchmark(object):
         plt.ylabel("# Cites Found ", rotation="vertical")
         plt.xlabel("Seconds")
         plt.title("Comparison of Branches")
-        plt.savefig(self.get_filepath("chart.png"))
+        if reporters:
+            plt.savefig(self.get_filepath("{pr}-chart.png"))
+        else:
+            plt.savefig(self.get_filepath("chart.png"))
 
 
 if __name__ == "__main__":
@@ -203,5 +215,5 @@ if __name__ == "__main__":
         benchmark.generate_branch_report(branch=args.branches[0])
     elif len(args.branches) == 2:
         benchmark.generate_branch_report(branch=args.branches[1])
-        benchmark.generate_time_chart(args.branches[0], args.branches[1])
-        benchmark.write_report(reporters=False, pr_number=args.pr)
+        benchmark.generate_time_chart(args.branches[0], args.branches[1], args.pr, args.reporters)
+        benchmark.write_report(reporters=args.reporters, pr_number=args.pr)
