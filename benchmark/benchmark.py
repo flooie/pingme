@@ -142,10 +142,10 @@ class Benchmark(object):
             # Add header for time chart for PR comment
 
             if reporters:
-                link = f"![image](https://raw.githubusercontent.com/flooie/crosspingme/artifacts/results/{pr_number}/chart.png)"
+                link = f"\n![image](https://raw.githubusercontent.com/flooie/crosspingme/artifacts/{pr_number}/results/chart.png)\n"
                 f.write(link)
             else:
-                link = f"![image](https://raw.githubusercontent.com/flooie/pingme/artifacts/results/{pr_number}/chart.png)"
+                link = f"\n![image](https://raw.githubusercontent.com/flooie/pingme/artifacts/{pr_number}/results/chart.png)\n"
                 f.write(link)
 
 
