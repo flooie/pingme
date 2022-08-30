@@ -24,7 +24,10 @@ jobs:
       - name: Setup variables I
         id: branch1
         run: |
+          echo "event name is:" ${{ github.event_name }} 
+          echo "event type is:" ${{ github.event.action }} 
           echo ${{ github.event.issue.pull_request }}
+          echo ${{ github.event.issue.repository_dispatch }}
           echo "::set-output name=filepath::benchmark/${{ env.main }}.json"
           echo "::set-output name=hash::${{ env.main }}"
 
