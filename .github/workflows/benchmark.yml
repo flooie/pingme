@@ -63,12 +63,6 @@ jobs:
       - name: Run first benchmark
         run: |
           poetry run python benchmark/benchmark.py --branches ${{ steps.branch1.outputs.hash }}
-          git stash --include-untracked
-
-      - uses: actions/checkout@v3
-        with:
-          repository: freelawproject/eyecite
-          ref: baseline-benchmarking
 
       - name: Load cached venv 2
         id: cached-poetry-dependencies2
