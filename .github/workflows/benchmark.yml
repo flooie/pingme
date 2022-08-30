@@ -4,6 +4,7 @@ on:
   repository_dispatch:
     types: [ reporters-db-pr ]
 
+
 env:
   main: "$(/usr/bin/git log -1 --format='%H')"
 
@@ -51,7 +52,7 @@ jobs:
 
       - name: Run second benchmark
         run: |
-          poetry install --with benchmark --without dev
+          poetry install --with benchmark --without dev --without x86
           git stash pop
           poetry run python benchmark/benchmark.py --branches ${{ steps.branch1.outputs.hash }} ${{ steps.branch2.outputs.hash }} --pr ${{ github.event.number }}
 
@@ -94,7 +95,7 @@ jobs:
         run: |
           echo ${{ github.event.client_payload.pr_number }}
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
-          poetry install --with benchmark --without dev
+          poetry install --with benchmark --without dev --without x86
           poetry run python benchmark/benchmark.py --branches original
           poetry run pip install "git+https://github.com/freelawproject/reporters-db.git@${{ github.event.client_payload.commit }}"
           poetry run python benchmark/benchmark.py --branches original update --reporters --pr ${{ github.event.client_payload.pr_number }}
