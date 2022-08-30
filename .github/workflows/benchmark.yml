@@ -24,7 +24,10 @@ jobs:
       - name: Setup variables I
         id: branch1
         run: |
+          echo "event name is:" ${{ github.event_name }} 
+          echo "event type is:" ${{ github.event.action }} 
           echo ${{ github.event.issue.pull_request }}
+          echo ${{ github.event.issue.repository_dispatch }}
           echo "::set-output name=filepath::benchmark/${{ env.main }}.json"
           echo "::set-output name=hash::${{ env.main }}"
 
@@ -89,21 +92,40 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
 
-      - name: Setup variables I
-        id: branch1
+      - name: Create simple file
         run: |
-          echo ${{ github.event.client_payload.pr_number }}
-          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
-          poetry install --with benchmark --without dev
-          poetry run python benchmark/benchmark.py --branches original
-          poetry run pip install "git+https://github.com/freelawproject/reporters-db.git@${{ github.event.client_payload.commit }}"
-          poetry run python benchmark/benchmark.py --branches original update --reporters --pr 1
+          touch benchmark/newfile.txt 
+          cd benchmark 
+          ls
+          cd ..
 
-      - name: Add or Update PR Comment from Generated Report
-        uses: marocchino/sticky-pull-request-comment@v2
+      - name: Upload and Post Files to PR
+        uses: gavv/pull-request-artifacts@v1.0.0
         with:
-          recreate: true
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
-          path: benchmark/report.md
-          number: ${{ github.event.client_payload.pr_number }}
+          repo-token: ${{ secrets.TOKEN }}
+          commit: ${{ github.event.pull_request.head.sha }}
           repo: crosspingme
+          artifacts-branch: artifacts
+          artifacts-dir: benchmark
+          artifacts: |
+            benchmark/newfile.txt 
+
+
+#      - name: Setup variables I
+#        id: branch1
+#        run: |
+#          echo ${{ github.event.client_payload.pr_number }}
+#          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
+#          poetry install --with benchmark --without dev
+#          poetry run python benchmark/benchmark.py --branches original
+#          poetry run pip install "git+https://github.com/freelawproject/reporters-db.git@${{ github.event.client_payload.commit }}"
+#          poetry run python benchmark/benchmark.py --branches original update --reporters --pr 1
+#
+#      - name: Add or Update PR Comment from Generated Report
+#        uses: marocchino/sticky-pull-request-comment@v2
+#        with:
+#          recreate: true
+#          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+#          path: benchmark/report.md
+#          number: ${{ github.event.client_payload.pr_number }}
+#          repo: crosspingme
