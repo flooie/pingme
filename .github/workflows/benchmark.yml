@@ -72,6 +72,18 @@ jobs:
           repository: flooie/pingme
           ref: main
 
+      - name: Load cached venv 2
+        id: cached-poetry-dependencies
+        uses: actions/cache@v2
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+      #----------------------------------------------
+      # install dependencies if cache does not exist
+      #----------------------------------------------
+      - name: Install dependencies 2
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --with benchmark --without dev
       - name: Setup variables II
         id: branch2
         run: |
@@ -80,7 +92,6 @@ jobs:
 
       - name: Run second benchmark
         run: |
-          poetry install --with benchmark --without dev --without x86
           git stash pop
           poetry run python benchmark/benchmark.py --branches ${{ steps.branch1.outputs.hash }} ${{ steps.branch2.outputs.hash }} --pr ${{ github.event.number }}
           mkdir results
