@@ -14,13 +14,41 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v2
-      - uses: snok/install-poetry@v1
+      #----------------------------------------------
+      #       check-out repo and set-up python
+      #----------------------------------------------
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: Set up python
+        id: setup-python
+        uses: actions/setup-python@v2
         with:
-          version: 1.2.0rc1
+          python-version: 3.9
+      #----------------------------------------------
+      #  -----  install & configure poetry  -----
+      #----------------------------------------------
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
           virtualenvs-create: true
           virtualenvs-in-project: true
+          installer-parallel: true
+          version: 1.2.0rc2
+      #----------------------------------------------
+      #       load cached venv if cache exists
+      #----------------------------------------------
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v2
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+      #----------------------------------------------
+      # install dependencies if cache does not exist
+      #----------------------------------------------
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --with benchmark --without dev
 
       - name: Setup variables I
         id: branch1
@@ -32,7 +60,7 @@ jobs:
       - name: Curl and Install
         run: |
           curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
-          poetry install --with benchmark --without dev --without x86
+#          poetry install --with benchmark --without dev
 
       - name: Run first benchmark
         run: |
@@ -55,65 +83,24 @@ jobs:
           poetry install --with benchmark --without dev --without x86
           git stash pop
           poetry run python benchmark/benchmark.py --branches ${{ steps.branch1.outputs.hash }} ${{ steps.branch2.outputs.hash }} --pr ${{ github.event.number }}
-
-      - name: Upload and Post Files to PR
-        uses: gavv/pull-request-artifacts@v1.0.0
-        with:
-          repo-token: ${{ secrets.TOKEN }}
-          commit: ${{ github.event.pull_request.head.sha }}
-          repo: pingme
-          artifacts-branch: artifacts
-          artifacts-dir: benchmark
-          artifacts: |
-            benchmark/report.md
-            benchmark/chart.png
-            benchmark/output.csv
-            ${{ steps.branch1.outputs.filepath }}
-            ${{ steps.branch2.outputs.filepath }}
-
-      - name: Add or Update PR Comment from Generated Report
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          recreate: true
-          path: benchmark/report.md
-
-  dispatch:
-    name: Reporters-DB-Dipatch
-    if: github.event_name == 'repository_dispatch'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v2
-      - uses: snok/install-poetry@v1
-        with:
-          version: 1.2.0rc1
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-          virtualenvs-path: {cache-dir}/virtualenvs
-          installer-parallel: true
-
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v2
-        with:
-          path: .venv
-          key: venv-${{ hashFiles('**/poetry.lock') }}
+          mkdir results
+          mv benchmark/output.csv benchmark/${{ steps.branch1.outputs.hash }}.json benchmark/${{ steps.branch2.outputs.hash }}.json benchmark/report.md benchmark/chart.png results/
 
       #----------------------------------------------
-      # install dependencies if cache does not exist
+      #             Upload to Github PR
       #----------------------------------------------
-      - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --with benchmark --without dev --without x86
-
-      - name: Setup variables I
-        id: branch1
-        run: |
-          echo ${{ github.event.client_payload.pr_number }}
-          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
-          poetry run python benchmark/benchmark.py --branches original
-          poetry run pip install "git+https://github.com/freelawproject/reporters-db.git@${{ github.event.client_payload.commit }}"
-          poetry run python benchmark/benchmark.py --branches original update --reporters --pr ${{ github.event.client_payload.pr_number }}
+      - name: Pushes test file
+        uses: dmnemec/copy_file_to_another_repo_action@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.TOKEN }}
+        with:
+          user_email: 'bill@free.law'
+          user_name: 'flooie'
+          source_file: 'results/'
+          destination_repo: 'flooie/pingme'
+          destination_folder: '${{ github.event.number }}'
+          destination_branch: 'artifacts'
+          commit_message: 'Upload to Repo'
 
 #      - name: Upload and Post Files to PR
 #        uses: gavv/pull-request-artifacts@v1.0.0
@@ -125,8 +112,8 @@ jobs:
 #          artifacts-dir: benchmark
 #          artifacts: |
 #            benchmark/report.md
-#            benchmark/chart-rdb.png
-#            benchmark/output-rdb.csv
+#            benchmark/chart.png
+#            benchmark/output.csv
 #            ${{ steps.branch1.outputs.filepath }}
 #            ${{ steps.branch2.outputs.filepath }}
 
@@ -134,13 +121,55 @@ jobs:
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           recreate: true
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
           path: benchmark/report.md
-          number: ${{ github.event.client_payload.pr_number }}
-          repo: crosspingme
 
+#  dispatch:
+#    name: Reporters-DB-Dipatch
+#    if: github.event_name == 'repository_dispatch'
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#      - uses: actions/setup-python@v2
+#      - uses: snok/install-poetry@v1
+#        with:
+#          version: 1.2.0rc1
+#          virtualenvs-create: true
+#          virtualenvs-in-project: true
+#
+#      - name: Load cached venv
+#        id: cached-poetry-dependencies
+#        uses: actions/cache@v2
+#        with:
+#          path: .venv
+#          key: venv-${{ hashFiles('**/poetry.lock') }}
+#
+#      #----------------------------------------------
+#      # install dependencies if cache does not exist
+#      #----------------------------------------------
+#      - name: Install dependencies
+#        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+#        run: poetry install --with benchmark --without dev --without x86
+#
+#      - name: Setup variables I
+#        id: branch1
+#        run: |
+#          echo ${{ github.event.client_payload.pr_number }}
+#          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
+#          poetry run python benchmark/benchmark.py --branches original
+#          poetry run pip install "git+https://github.com/freelawproject/reporters-db.git@${{ github.event.client_payload.commit }}"
+#          poetry run python benchmark/benchmark.py --branches original update --reporters --pr ${{ github.event.client_payload.pr_number }}
+#
+#      - name: Add or Update PR Comment from Generated Report
+#        uses: marocchino/sticky-pull-request-comment@v2
+#        with:
+#          recreate: true
+#          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+#          path: benchmark/report.md
+#          number: ${{ github.event.client_payload.pr_number }}
+#          repo: crosspingme
+#
 
-  test:
+  dispatch:
     runs-on: ubuntu-latest
     steps:
       #----------------------------------------------
@@ -162,6 +191,7 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
           installer-parallel: true
+          version: 1.2.0rc2
 
       #----------------------------------------------
       #       load cached venv if cache exists
@@ -177,10 +207,43 @@ jobs:
       #----------------------------------------------
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --with benchmark --without dev --without x86
+        run: poetry install --with benchmark --without dev
       #----------------------------------------------
       #              run test suite
       #----------------------------------------------
-      - name: Run tests
+      - name: Run Tests
         run: |
-          echo "TESTS RUN"
+          echo ${{ github.event.client_payload.pr_number }}
+          curl https://storage.courtlistener.com/bulk-data/eyecite/tests/one-percent.csv.bz2 --output benchmark/bulk-file.csv.bz2
+          poetry run python benchmark/benchmark.py --branches original
+          poetry run pip install "git+https://github.com/freelawproject/reporters-db.git@${{ github.event.client_payload.commit }}"
+          poetry run python benchmark/benchmark.py --branches original update --reporters --pr ${{ github.event.client_payload.pr_number }}
+          mkdir results
+          mv benchmark/output.csv benchmark/original.json benchmark/update.json benchmark/report.md benchmark/chart.png results/
+      #----------------------------------------------
+      #             Upload to Github PR
+      #----------------------------------------------
+      - name: Pushes test file
+        uses: dmnemec/copy_file_to_another_repo_action@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.TOKEN }}
+        with:
+          user_email: 'bill@free.law'
+          user_name: 'flooie'
+          source_file: 'results/'
+          destination_repo: 'flooie/crosspingme'
+          destination_folder: '${{ github.event.client_payload.pr_number }}'
+          destination_branch: 'artifacts'
+          commit_message: 'Upload to Repo'
+      #----------------------------------------------
+      #             Upload to Github PR
+      #----------------------------------------------
+      - name: Add or Update PR Comment from Generated Report
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          recreate: true
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          path: benchmark/report.md
+          number: ${{ github.event.client_payload.pr_number }}
+          repo: crosspingme
+
