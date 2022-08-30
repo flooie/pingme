@@ -180,13 +180,11 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{ secrets.TOKEN }}
         with:
-          source_file: 'benchmark/chart.png'
+          source_file: 'benchmark/'
           destination_repo: 'flooie/crosspingme'
           destination_folder: 'benchmark'
           destination_branch: 'artifacts'
-          user_email: 'wpalin@gmail.com'
-          user_name: 'flooie'
-          commit_message: 'A custom message for the commit'
+          commit_message: 'Upload to benchmark'
       #----------------------------------------------
       #             Upload to Github PR
       #----------------------------------------------
