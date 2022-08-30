@@ -180,6 +180,8 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{ secrets.TOKEN }}
         with:
+          user_email: 'bill@free.law'
+          user_name: 'flooie'
           source_file: 'benchmark/'
           destination_repo: 'flooie/crosspingme'
           destination_folder: 'benchmark'
