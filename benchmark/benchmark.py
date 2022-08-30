@@ -156,10 +156,15 @@ class Benchmark(object):
             repo = "pingme"
 
         with open(self.get_filepath("report.md"), "a") as f:
-            # Add header for time chart for PR comment
-                f.write(f"[Branch 1 Output](https://raw.githubusercontent.com/flooie/{repo}/artifacts/{pr_number}/results/{branch1}.json).\n")
-                f.write(f"[Branch 2 Ouptut](https://raw.githubusercontent.com/flooie/{repo}/artifacts/{pr_number}/results/{branch2}.json).\n")
-
+            f.write(
+                f"[Branch 1 Output](https://raw.githubusercontent.com/flooie/{repo}/artifacts/{pr_number}/results/{branch1}.json).\n"
+            )
+            f.write(
+                f"[Branch 2 Output](https://raw.githubusercontent.com/flooie/{repo}/artifacts/{pr_number}/results/{branch2}.json).\n"
+            )
+            f.write(
+                f"[Full Output CSV ](https://raw.githubusercontent.com/flooie/{repo}/artifacts/{pr_number}/results/output.csv).\n"
+            )
 
     def generate_time_chart(self, main, branch) -> None:
         """Generate time chart showing speed across branches
@@ -210,7 +215,7 @@ if __name__ == "__main__":
     """"""
     parser = argparse.ArgumentParser()
     parser.add_argument("--pr")
-    parser.add_argument("--branches", nargs='+')
+    parser.add_argument("--branches", nargs="+")
     parser.add_argument("--reporters", action="store_true")
 
     args = parser.parse_args()
@@ -221,4 +226,6 @@ if __name__ == "__main__":
         benchmark.generate_branch_report(branch=args.branches[1])
         benchmark.generate_time_chart(args.branches[0], args.branches[1])
         benchmark.write_report(reporters=args.reporters, pr_number=args.pr)
-        benchmark.append_links(args.branches[0], args.branches[1], args.pr, args.reporters)
+        benchmark.append_links(
+            args.branches[0], args.branches[1], args.pr, args.reporters
+        )
