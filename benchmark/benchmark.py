@@ -148,6 +148,17 @@ class Benchmark(object):
                 link = f"\n![image](https://raw.githubusercontent.com/flooie/pingme/artifacts/{pr_number}/results/chart.png)\n"
                 f.write(link)
 
+    def append_links(self, branch1, branch2, pr_number, reporters):
+        if reporters:
+            repo = "crosspingme"
+        else:
+            repo = "pingme"
+
+        with open(self.get_filepath("report.md"), "a") as f:
+            # Add header for time chart for PR comment
+                f.write(f"[Branch One](https://raw.githubusercontent.com/flooie/{repo}/artifacts/{pr_number}/results/{branch1}.json).\n")
+                f.write(f"[Branch One](https://raw.githubusercontent.com/flooie/{repo}/artifacts/{pr_number}/results/{branch2}.json).\n")
+
 
     def generate_time_chart(self, main, branch) -> None:
         """Generate time chart showing speed across branches
@@ -202,7 +213,6 @@ if __name__ == "__main__":
     parser.add_argument("--reporters", action="store_true")
 
     args = parser.parse_args()
-    # reporters = args.reporters
     benchmark = Benchmark()
     if len(args.branches) == 1:
         benchmark.generate_branch_report(branch=args.branches[0])
@@ -210,3 +220,4 @@ if __name__ == "__main__":
         benchmark.generate_branch_report(branch=args.branches[1])
         benchmark.generate_time_chart(args.branches[0], args.branches[1])
         benchmark.write_report(reporters=args.reporters, pr_number=args.pr)
+        benchmark.append_links(args.branches[0], args.branches[1], args.pr, args.reporters)
