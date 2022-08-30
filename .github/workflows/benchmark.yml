@@ -11,6 +11,7 @@ env:
 jobs:
   benchmark:
     name: PR comment
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -108,7 +109,7 @@ jobs:
           artifacts-branch: artifacts
           artifacts-dir: benchmark
           artifacts: |
-            benchmark/report-rdb.md
+            benchmark/report.md
             benchmark/chart-rdb.png
             benchmark/output-rdb.csv
             ${{ steps.branch1.outputs.filepath }}
