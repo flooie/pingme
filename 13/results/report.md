@@ -21,5 +21,6 @@ Time Chart
 ---------
 
 ![image](https://raw.githubusercontent.com/flooie/pingme/artifacts/13/results/chart.png)
-[Branch 1 Output](https://raw.githubusercontent.com/flooie/pingme/artifacts/13/results/4b49746db2138f951dba13f2309e8636d46b30e0.json).
-[Branch 2 Ouptut](https://raw.githubusercontent.com/flooie/pingme/artifacts/13/results/119ec56c27cb92199520edfbc63dc17932e0cff7.json).
+[Branch 1 Output](https://raw.githubusercontent.com/flooie/pingme/artifacts/13/results/629b45179199138f6400610e82f39ae5c01aa226.json).
+[Branch 2 Output](https://raw.githubusercontent.com/flooie/pingme/artifacts/13/results/8094670a4193eea2ec324790bbcd45deac2b3f6a.json).
+[Full Output CSV ](https://raw.githubusercontent.com/flooie/pingme/artifacts/13/results/output.csv).
