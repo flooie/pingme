@@ -172,6 +172,8 @@ jobs:
           poetry run python benchmark/benchmark.py --branches original
           poetry run pip install "git+https://github.com/freelawproject/reporters-db.git@${{ github.event.client_payload.commit }}"
           poetry run python benchmark/benchmark.py --branches original update --reporters --pr ${{ github.event.client_payload.pr_number }}
+          mkdir results
+          mv benchmark/output.csv benchmark/original.json benchmark/update.json results/
       #----------------------------------------------
       #             Upload to Github PR
       #----------------------------------------------
@@ -182,9 +184,9 @@ jobs:
         with:
           user_email: 'bill@free.law'
           user_name: 'flooie'
-          source_file: 'benchmark/'
+          source_file: 'results/'
           destination_repo: 'flooie/crosspingme'
-          destination_folder: 'benchmark'
+          destination_folder: '${{ github.event.client_payload.pr_number }}'
           destination_branch: 'artifacts'
           commit_message: 'Upload to benchmark'
       #----------------------------------------------
