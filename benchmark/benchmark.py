@@ -146,7 +146,7 @@ class Benchmark(object):
     def append_links(self, branch1, branch2, pr_number, repo):
 
         with open(self.get_filepath("report.md"), "a") as f:
-            f.write("\n\nGenerated Files\n\n")
+            f.write("\n\nGenerated Files\n---------\n\n")
             f.write(
                 f"[Branch 1 Output](https://raw.githubusercontent.com/flooie/{repo}/artifacts/{pr_number}/results/{branch1}.json)\n"
             )
