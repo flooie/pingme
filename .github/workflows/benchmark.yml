@@ -73,7 +73,7 @@ jobs:
           ref: main
 
       - name: Load cached venv 2
-        id: cached-poetry-dependencies
+        id: cached-poetry-dependencies2
         uses: actions/cache@v2
         with:
           path: .venv
@@ -82,7 +82,7 @@ jobs:
       # install dependencies if cache does not exist
       #----------------------------------------------
       - name: Install dependencies 2
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        if: steps.cached-poetry-dependencies2.outputs.cache-hit != 'true'
         run: poetry install --with benchmark --without dev
       - name: Setup variables II
         id: branch2
