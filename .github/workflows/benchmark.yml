@@ -94,7 +94,7 @@ jobs:
       - name: Pushes test file
         uses: dmnemec/copy_file_to_another_repo_action@main
         env:
-          API_TOKEN_GITHUB: ${{ secrets.TOKEN }}
+          API_TOKEN_GITHUB: ${{ secrets.TOKEN2 }}
         with:
           user_email: 'bill@free.law'
           user_name: 'flooie'
@@ -172,7 +172,7 @@ jobs:
       - name: Pushes test file
         uses: dmnemec/copy_file_to_another_repo_action@main
         env:
-          API_TOKEN_GITHUB: ${{ secrets.TOKEN }}
+          API_TOKEN_GITHUB: ${{ secrets.TOKEN2 }}
         with:
           user_email: 'bill@free.law'
           user_name: 'flooie'
@@ -188,7 +188,7 @@ jobs:
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           recreate: true
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN2 }}
           path: results/report.md
           number: ${{ github.event.client_payload.pr_number }}
           repo: crosspingme
